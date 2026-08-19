@@ -1,0 +1,58 @@
+@model Ecommerce.Models.ViewModels.DashboardVM
+@{
+    ViewData["Title"] = "Overview";
+}
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+    <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <p class="font-label-caps text-label-caps text-tertiary">Total Users</p>
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalUsers</h3>
+            </div>
+            <div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant">group</span>
+            </div>
+        </div>
+    </div>
+    <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <p class="font-label-caps text-label-caps text-tertiary">Total Products</p>
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalProducts</h3>
+            </div>
+            <div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant">inventory_2</span>
+            </div>
+        </div>
+    </div>
+    <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <p class="font-label-caps text-label-caps text-tertiary">Total Categories</p>
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalCategories</h3>
+            </div>
+            <div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant">category</span>
+            </div>
+        </div>
+    </div>
+    <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <p class="font-label-caps text-label-caps text-tertiary">Total Orders</p>
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalOrders</h3>
+            </div>
+            <div class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-primary-fixed">shopping_bag</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts / recent orders — arrive once Products & Orders exist -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded p-10 text-center mt-6">
+    <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">bar_chart</span>
+    <p class="font-body-md text-body-md text-tertiary">Charts and the recent-orders table will appear here once Products and Orders exist (later phases).</p>
+</div>

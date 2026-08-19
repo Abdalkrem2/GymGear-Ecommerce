@@ -1,0 +1,77 @@
+@model Ecommerce.Models.ViewModels.AboutVM
+@{
+    ViewData["Title"] = "About";
+}
+
+<!-- About Hero -->
+<section class="w-full bg-inverse-surface text-on-primary py-section-padding px-margin-mobile md:px-margin-desktop text-center">
+    <span class="font-label-caps text-label-caps text-primary-container mb-4 block">OUR STORY</span>
+    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-primary mb-6">
+        Built for people who train hard
+    </h1>
+    <p class="font-body-lg text-body-lg text-tertiary-fixed-dim max-w-xl mx-auto">
+        Gym Gear &amp; Activewear started with one goal: give athletes and everyday gym-goers apparel
+        that keeps up with them. Every piece is tested against real training, not just a photoshoot.
+    </p>
+</section>
+
+<!-- Testimonials -->
+<section class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
+    <div class="flex justify-between items-end mb-12 border-b border-outline-variant pb-4">
+        <h2 class="font-headline-md text-headline-md text-on-surface">What our customers say</h2>
+    </div>
+
+    @if (Model.Testimonials != null && Model.Testimonials.Any())
+    {
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+            @foreach (var t in Model.Testimonials)
+            {
+                <div class="bg-surface-container-low p-6 rounded-sm border border-outline-variant">
+                    <p class="font-body-md text-body-md text-on-surface mb-4">&ldquo;@t.Text&rdquo;</p>
+                    <p class="font-label-caps text-label-caps text-on-surface">@t.UserFullName</p>
+                    <p class="font-label-caps text-label-caps text-tertiary mt-1">@t.CreatedAt.ToString("MMM yyyy")</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="w-full text-center py-16 border border-dashed border-outline-variant rounded-sm">
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">rate_review</span>
+            <p class="font-body-md text-body-md text-tertiary">No approved testimonials yet — be the first to share your experience below.</p>
+        </div>
+    }
+</section>
+
+<!-- Submit Testimonial -->
+<section class="w-full bg-surface-container-low py-section-padding px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-[560px] mx-auto text-center">
+        <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Share your experience</h2>
+        <p class="font-body-md text-body-md text-tertiary mb-8">Your testimonial will be reviewed before it appears publicly.</p>
+
+        @if (User.Identity == null || !User.Identity.IsAuthenticated)
+        {
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-sm p-6">
+                <p class="font-body-md text-body-md text-on-surface">
+                    Please <a asp-controller="Account" asp-action="Login" class="text-primary-container font-bold">sign in</a> to leave a testimonial.
+                </p>
+            </div>
+        }
+        else
+        {
+            <form asp-controller="Home" asp-action="SubmitTestimonial" method="post" class="text-left">
+                <label asp-for="NewTestimonial.Text" class="font-label-caps text-label-caps text-tertiary mb-2 block">YOUR MESSAGE</label>
+                <textarea asp-for="NewTestimonial.Text" class="input-field" rows="4" placeholder="Tell us about your experience..."></textarea>
+                <span asp-validation-for="NewTestimonial.Text" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+
+                <button type="submit" class="w-full mt-4 inline-flex items-center justify-center bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all">
+                    SUBMIT FOR REVIEW
+                </button>
+            </form>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

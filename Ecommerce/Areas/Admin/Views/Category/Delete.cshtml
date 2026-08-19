@@ -1,0 +1,28 @@
+@model Ecommerce.Models.ViewModels.CategoryVM
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm p-8 max-w-[560px]">
+    <span class="font-label-caps text-label-caps text-primary-container mb-2 block">CONFIRM DELETE</span>
+    <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">Delete "@Model.Name"?</h2>
+    <p class="font-body-md text-body-md text-tertiary mb-6">
+        This action cannot be undone.
+        @if (Model.ProductCount > 0)
+        {
+            <span>This category currently has <strong class="text-on-surface">@Model.ProductCount</strong> product(s) linked to it.</span>
+        }
+    </p>
+
+    <form asp-area="Admin" asp-controller="Category" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <div class="flex gap-3">
+            <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:opacity-90 transition-opacity font-bold">
+                Yes, Delete
+            </button>
+            <a asp-area="Admin" asp-controller="Category" asp-action="Index"
+               class="border border-outline-variant text-on-surface font-label-caps text-label-caps px-8 py-3 rounded hover:bg-surface-container-low transition-colors flex items-center">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>

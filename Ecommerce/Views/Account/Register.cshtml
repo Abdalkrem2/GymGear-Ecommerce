@@ -1,0 +1,52 @@
+@model Ecommerce.Models.ViewModels.RegisterVM
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<section class="w-full bg-surface-container-low min-h-[70vh] flex items-center justify-center px-margin-mobile py-section-padding">
+    <div class="w-full max-w-[420px] bg-surface-container-lowest border border-outline-variant rounded-sm p-10">
+        <h1 class="font-headline-md text-headline-md text-on-surface mb-2">Create your account</h1>
+        <p class="font-body-md text-body-md text-tertiary mb-8">Join Gym Gear &amp; Activewear — it only takes a minute.</p>
+
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-primary-container font-label-caps text-label-caps mb-4"></div>
+
+            <div class="mb-5">
+                <label asp-for="FullName" class="font-label-caps text-label-caps text-tertiary mb-2 block">FULL NAME</label>
+                <input asp-for="FullName" class="input-field" placeholder="Jane Doe" />
+                <span asp-validation-for="FullName" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+
+            <div class="mb-5">
+                <label asp-for="Email" class="font-label-caps text-label-caps text-tertiary mb-2 block">EMAIL</label>
+                <input asp-for="Email" class="input-field" placeholder="you@example.com" />
+                <span asp-validation-for="Email" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+
+            <div class="mb-5">
+                <label asp-for="Password" class="font-label-caps text-label-caps text-tertiary mb-2 block">PASSWORD</label>
+                <input asp-for="Password" class="input-field" placeholder="At least 6 characters" />
+                <span asp-validation-for="Password" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+
+            <div class="mb-6">
+                <label asp-for="ConfirmPassword" class="font-label-caps text-label-caps text-tertiary mb-2 block">CONFIRM PASSWORD</label>
+                <input asp-for="ConfirmPassword" class="input-field" placeholder="Re-enter your password" />
+                <span asp-validation-for="ConfirmPassword" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+
+            <button type="submit" class="w-full inline-flex items-center justify-center bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all">
+                CREATE ACCOUNT
+            </button>
+        </form>
+
+        <div class="text-center font-label-caps text-label-caps text-tertiary my-6">OR</div>
+        <div class="text-center font-body-md text-body-md text-on-surface">
+            Already have an account? <a asp-controller="Account" asp-action="Login" class="text-primary-container font-bold">Sign in</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

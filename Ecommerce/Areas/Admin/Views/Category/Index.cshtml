@@ -1,0 +1,71 @@
+@model List<Ecommerce.Models.ViewModels.CategoryVM>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="flex justify-between items-center mb-2">
+    <div></div>
+    <a asp-area="Admin" asp-controller="Category" asp-action="Create"
+       class="bg-primary-container text-on-primary font-label-caps text-label-caps px-6 py-3 rounded flex items-center gap-2 hover:opacity-90 transition-opacity font-bold">
+        <span class="material-symbols-outlined text-sm font-bold">add</span>
+        New Category
+    </a>
+</div>
+
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm overflow-hidden flex flex-col">
+    @if (Model != null && Model.Any())
+    {
+        <div class="overflow-x-auto w-full">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-surface-variant bg-surface-container-low">
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary w-16">Image</th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary">Name</th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary">Description</th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary">Products</th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-surface-variant">
+                    @foreach (var cat in Model)
+                    {
+                        <tr class="hover:bg-surface transition-colors group">
+                            <td class="p-4">
+                                <div class="w-12 h-12 bg-surface-container rounded border border-surface-variant overflow-hidden flex items-center justify-center">
+                                    @if (!string.IsNullOrEmpty(cat.ImagePath))
+                                    {
+                                        <img class="w-full h-full object-cover" src="@cat.ImagePath" alt="@cat.Name" />
+                                    }
+                                    else
+                                    {
+                                        <span class="material-symbols-outlined text-tertiary text-sm">image</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="p-4"><p class="font-body-md text-on-surface font-medium">@cat.Name</p></td>
+                            <td class="p-4 font-body-md text-sm text-tertiary">@cat.Description</td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container-high text-on-surface">
+                                    @cat.ProductCount products
+                                </span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <a asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@cat.Id"
+                                   class="font-label-caps text-label-caps text-on-surface hover:text-primary-container mr-4">Edit</a>
+                                <a asp-area="Admin" asp-controller="Category" asp-action="Delete" asp-route-id="@cat.Id"
+                                   class="font-label-caps text-label-caps text-primary-container hover:opacity-70">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-16">
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">category</span>
+            <p class="font-body-md text-body-md text-tertiary">No categories yet. Click "New Category" to create the first one.</p>
+        </div>
+    }
+</div>

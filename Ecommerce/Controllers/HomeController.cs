@@ -1,4 +1,5 @@
 using Ecommerce.Models;
+using Ecommerce.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,7 +9,16 @@ namespace Ecommerce.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            // TEMP (Phase 1): returns an empty HomeVM so the View doesn't break.
+            // Belal replaces this with real category-fetching logic.
+            return View(new HomeVM());
+        }
+
+        public IActionResult About()
+        {
+            // TEMP (Phase 1): returns an empty AboutVM so the View doesn't break.
+            // Belal replaces this with real testimonial-fetching logic.
+            return View(new AboutVM());
         }
 
         public IActionResult Privacy()

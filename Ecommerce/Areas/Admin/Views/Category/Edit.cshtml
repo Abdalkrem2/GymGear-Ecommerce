@@ -1,0 +1,54 @@
+@model Ecommerce.Models.ViewModels.CategoryFormVM
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm p-8 max-w-[560px]">
+    <form asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-primary-container font-label-caps text-label-caps mb-4"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ExistingImagePath" />
+
+        @if (!string.IsNullOrEmpty(Model.ExistingImagePath))
+        {
+            <div class="mb-5">
+                <label class="font-label-caps text-label-caps text-tertiary mb-2 block">CURRENT IMAGE</label>
+                <div class="w-20 h-20 bg-surface-container rounded border border-surface-variant overflow-hidden">
+                    <img class="w-full h-full object-cover" src="@Model.ExistingImagePath" alt="@Model.Name" />
+                </div>
+            </div>
+        }
+
+        <div class="mb-5">
+            <label asp-for="Name" class="font-label-caps text-label-caps text-tertiary mb-2 block">CATEGORY NAME</label>
+            <input asp-for="Name" class="input-field" />
+            <span asp-validation-for="Name" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+        </div>
+
+        <div class="mb-5">
+            <label asp-for="Description" class="font-label-caps text-label-caps text-tertiary mb-2 block">DESCRIPTION</label>
+            <textarea asp-for="Description" class="input-field" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+        </div>
+
+        <div class="mb-6">
+            <label asp-for="ImageFile" class="font-label-caps text-label-caps text-tertiary mb-2 block">REPLACE IMAGE (OPTIONAL)</label>
+            <input asp-for="ImageFile" type="file" accept="image/*" class="input-field" />
+            <span asp-validation-for="ImageFile" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+        </div>
+
+        <div class="flex gap-3">
+            <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:opacity-90 transition-opacity font-bold">
+                Save Changes
+            </button>
+            <a asp-area="Admin" asp-controller="Category" asp-action="Index"
+               class="border border-outline-variant text-on-surface font-label-caps text-label-caps px-8 py-3 rounded hover:bg-surface-container-low transition-colors flex items-center">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

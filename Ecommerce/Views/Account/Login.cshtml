@@ -1,0 +1,47 @@
+@model Ecommerce.Models.ViewModels.LoginVM
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<section class="w-full bg-surface-container-low min-h-[70vh] flex items-center justify-center px-margin-mobile py-section-padding">
+    <div class="w-full max-w-[420px] bg-surface-container-lowest border border-outline-variant rounded-sm p-10">
+        <h1 class="font-headline-md text-headline-md text-on-surface mb-2">Sign in to your account</h1>
+        <p class="font-body-md text-body-md text-tertiary mb-8">Welcome back — enter your details below.</p>
+
+        <form asp-controller="Account" asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-primary-container font-label-caps text-label-caps mb-4"></div>
+
+            <div class="mb-5">
+                <label asp-for="Email" class="font-label-caps text-label-caps text-tertiary mb-2 block">EMAIL</label>
+                <input asp-for="Email" class="input-field" placeholder="you@example.com" />
+                <span asp-validation-for="Email" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+
+            <div class="mb-5">
+                <label asp-for="Password" class="font-label-caps text-label-caps text-tertiary mb-2 block">PASSWORD</label>
+                <input asp-for="Password" class="input-field" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" />
+                <span asp-validation-for="Password" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+
+            <div class="flex justify-between items-center mb-6">
+                <label class="flex items-center gap-2 font-body-md text-body-md text-on-surface">
+                    <input asp-for="RememberMe" class="text-primary focus:ring-primary h-4 w-4" /> Remember me
+                </label>
+                <a href="#" class="font-label-caps text-label-caps text-tertiary hover:text-primary-container">FORGOT PASSWORD?</a>
+            </div>
+
+            <button type="submit" class="w-full inline-flex items-center justify-center bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all">
+                SIGN IN
+            </button>
+        </form>
+
+        <div class="text-center font-label-caps text-label-caps text-tertiary my-6">OR</div>
+        <div class="text-center font-body-md text-body-md text-on-surface">
+            Don't have an account? <a asp-controller="Account" asp-action="Register" class="text-primary-container font-bold">Create one</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
