@@ -1,0 +1,118 @@
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<!-- Poppins + Inter (Court & Field type system) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config — exact "Court & Field" design tokens from court_field/DESIGN.md -->
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "secondary-container": "#e2e2e5",
+                "on-tertiary": "#ffffff",
+                "primary-fixed-dim": "#ffb3b0",
+                "on-error-container": "#93000a",
+                "on-tertiary-fixed-variant": "#43474c",
+                "on-surface": "#1a1c1c",
+                "on-secondary-fixed": "#1a1c1e",
+                "on-primary-fixed": "#410006",
+                "on-surface-variant": "#5c403e",
+                "on-primary": "#ffffff",
+                "secondary-fixed-dim": "#c6c6c9",
+                "outline": "#906f6d",
+                "on-primary-fixed-variant": "#93001a",
+                "primary-container": "#d31e32",
+                "primary-fixed": "#ffdad8",
+                "surface-dim": "#dadad9",
+                "on-tertiary-fixed": "#181c21",
+                "tertiary": "#50555a",
+                "on-secondary-fixed-variant": "#454749",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#eeeeed",
+                "on-error": "#ffffff",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed-dim": "#c3c7cd",
+                "on-background": "#1a1c1c",
+                "surface-variant": "#e2e2e2",
+                "surface": "#f9f9f8",
+                "inverse-surface": "#2f3130",
+                "outline-variant": "#e5bdbb",
+                "inverse-on-surface": "#f1f1f0",
+                "tertiary-container": "#696d72",
+                "surface-container-low": "#f4f4f3",
+                "surface-tint": "#be0526",
+                "secondary-fixed": "#e2e2e5",
+                "error": "#ba1a1a",
+                "surface-container-high": "#e8e8e7",
+                "on-tertiary-container": "#eceff6",
+                "tertiary-fixed": "#dfe3e9",
+                "surface-container-highest": "#e2e2e2",
+                "background": "#f9f9f8",
+                "primary": "#ac0020",
+                "inverse-primary": "#ffb3b0",
+                "secondary": "#5d5e61",
+                "error-container": "#ffdad6",
+                "on-secondary-container": "#636467",
+                "surface-bright": "#f9f9f8",
+                "on-primary-container": "#ffeae8"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "section-padding": "80px",
+                "gutter": "24px",
+                "margin-mobile": "16px",
+                "margin-desktop": "40px",
+                "container-max": "1280px",
+                "base": "4px"
+        },
+        "fontFamily": {
+                "label-caps": ["Inter", "sans-serif"],
+                "display-lg-mobile": ["Poppins", "sans-serif"],
+                "body-lg": ["Inter", "sans-serif"],
+                "body-md": ["Inter", "sans-serif"],
+                "price-display": ["Poppins", "sans-serif"],
+                "headline-md": ["Poppins", "sans-serif"],
+                "display-lg": ["Poppins", "sans-serif"],
+                "headline-sm": ["Poppins", "sans-serif"]
+        },
+        "fontSize": {
+                "label-caps": ["11px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                "display-lg-mobile": ["32px", { "lineHeight": "1.1", "letterSpacing": "-0.01em", "fontWeight": "800" }],
+                "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                "price-display": ["20px", { "lineHeight": "1", "fontWeight": "700" }],
+                "headline-md": ["24px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                "headline-sm": ["20px", { "lineHeight": "1.2", "fontWeight": "700" }]
+        }
+      }
+    }
+  }
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    [data-weight="fill"] { font-variation-settings: 'FILL' 1; }
+    .input-field {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #eeeeed;
+        border-radius: 0.125rem;
+        background-color: #ffffff;
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        color: #1a1c1c;
+        transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: #1a1c1c; }
+    .input-field.field-error { border-color: #d31e32; }
+</style>

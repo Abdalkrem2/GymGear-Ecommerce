@@ -73,6 +73,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages(); // needed if you use Identity's scaffolded Razor Pages for Login/Register
+//app.MapRazorPages(); // needed if you use Identity's scaffolded Razor Pages for Login/Register
 
 app.Run();
