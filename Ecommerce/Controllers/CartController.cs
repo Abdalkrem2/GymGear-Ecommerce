@@ -1,5 +1,5 @@
 ﻿using Ecommerce.Data;
-using Ecommerce.Models.Entities;
+
 using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
 using GymGear.Web.Models.Entities;
