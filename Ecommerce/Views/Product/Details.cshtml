@@ -65,7 +65,10 @@
             <div class="flex gap-3 mb-8">
                 <button class="flex-1 bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all flex items-center justify-center gap-2" @(Model.Stock == 0 ? "disabled" : "")>
                     <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
-                    ADD TO CART
+                    <form asp-controller="Cart" asp-action="Add" method="post">
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <button type="submit" class="...">ADD TO CART</button>
+                    </form>
                 </button>
                 <button class="w-14 h-14 border border-outline-variant rounded-sm flex items-center justify-center hover:border-on-surface transition-colors">
                     <span class="material-symbols-outlined">favorite</span>
