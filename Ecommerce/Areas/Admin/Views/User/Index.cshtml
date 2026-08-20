@@ -1,0 +1,48 @@
+@model List<Ecommerce.Models.ViewModels.UserListItemVM>
+@{
+    ViewData["Title"] = "Registered Users";
+}
+
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm overflow-hidden flex flex-col">
+    @if (Model != null && Model.Any())
+    {
+        <div class="overflow-x-auto w-full">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-surface-variant bg-surface-container-low">
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary w-16"></th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary">Name</th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary">Email</th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary">Joined</th>
+                        <th class="p-4 font-label-caps text-label-caps text-tertiary">Orders</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-surface-variant">
+                    @foreach (var u in Model)
+                    {
+                        <tr class="hover:bg-surface transition-colors">
+                            <td class="p-4">
+                                <div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-on-surface-variant text-[18px]">person</span>
+                                </div>
+                            </td>
+                            <td class="p-4 font-body-md text-on-surface font-medium">@u.FullName</td>
+                            <td class="p-4 font-body-md text-sm text-tertiary">@u.Email</td>
+                            <td class="p-4 font-body-md text-sm text-tertiary">@(u.JoinDate?.ToString("MMM d, yyyy") ?? "—")</td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container-high text-on-surface">@u.OrderCount</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-16">
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">group</span>
+            <p class="font-body-md text-body-md text-tertiary">No registered users yet.</p>
+        </div>
+    }
+</div>

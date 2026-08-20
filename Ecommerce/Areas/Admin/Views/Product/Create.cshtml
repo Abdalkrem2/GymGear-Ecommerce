@@ -1,0 +1,69 @@
+@model Ecommerce.Models.ViewModels.ProductFormVM
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm p-8 max-w-[680px]">
+    <form asp-area="Admin" asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-primary-container font-label-caps text-label-caps mb-4"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <div>
+                <label asp-for="Name" class="font-label-caps text-label-caps text-tertiary mb-2 block">PRODUCT NAME</label>
+                <input asp-for="Name" class="input-field" placeholder="e.g. Compression Tee" />
+                <span asp-validation-for="Name" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+            <div>
+                <label asp-for="CategoryId" class="font-label-caps text-label-caps text-tertiary mb-2 block">CATEGORY</label>
+                <select asp-for="CategoryId" class="input-field">
+                    <option value="">-- Select category --</option>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <option value="@cat.Id">@cat.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <label asp-for="Description" class="font-label-caps text-label-caps text-tertiary mb-2 block">DESCRIPTION</label>
+            <textarea asp-for="Description" class="input-field" rows="4" placeholder="Product description shown to customers"></textarea>
+            <span asp-validation-for="Description" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <div>
+                <label asp-for="Price" class="font-label-caps text-label-caps text-tertiary mb-2 block">PRICE ($)</label>
+                <input asp-for="Price" type="number" step="0.01" class="input-field" placeholder="0.00" />
+                <span asp-validation-for="Price" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+            <div>
+                <label asp-for="Stock" class="font-label-caps text-label-caps text-tertiary mb-2 block">STOCK QUANTITY</label>
+                <input asp-for="Stock" type="number" class="input-field" placeholder="0" />
+                <span asp-validation-for="Stock" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label asp-for="ImageFiles" class="font-label-caps text-label-caps text-tertiary mb-2 block">PRODUCT IMAGES (MULTIPLE)</label>
+            <input asp-for="ImageFiles" type="file" accept="image/*" multiple class="input-field" />
+            <span asp-validation-for="ImageFiles" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            <p class="font-body-md text-sm text-tertiary mt-1">Images only. The first image uploaded is used as the main product image.</p>
+        </div>
+
+        <div class="flex gap-3">
+            <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:opacity-90 transition-opacity font-bold">
+                Save Product
+            </button>
+            <a asp-area="Admin" asp-controller="Product" asp-action="Index"
+               class="border border-outline-variant text-on-surface font-label-caps text-label-caps px-8 py-3 rounded hover:bg-surface-container-low transition-colors flex items-center">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
