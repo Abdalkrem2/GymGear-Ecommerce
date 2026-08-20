@@ -28,7 +28,7 @@ namespace GymGear.Web.Data
             const string adminPassword = "Admin@123"; // change after first login
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
-            if (adminUser == null)
+            if (adminUser == null) 
             {
                 adminUser = new ApplicationUser
                 {
