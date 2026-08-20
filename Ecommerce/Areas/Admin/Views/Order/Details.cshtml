@@ -71,9 +71,9 @@
             <form asp-area="Admin" asp-controller="Order" asp-action="UpdateStatus" method="post" class="flex flex-col gap-3">
                 <input type="hidden" name="orderId" value="@Model.Id" />
                 <select name="status" class="input-field">
-                    <option value="Processing" @(Model.Status == "Processing" ? "selected" : "")>Processing</option>
-                    <option value="Completed" @(Model.Status == "Completed" ? "selected" : "")>Completed</option>
-                    <option value="Cancelled" @(Model.Status == "Cancelled" ? "selected" : "")>Cancelled</option>
+                    <option value="Processing" selected="@(Model.Status == "Processing" ? "selected" : null)">Processing</option>
+                    <option value="Completed" selected="@(Model.Status == "Completed" ? "selected" : null)">Completed</option>
+                    <option value="Cancelled" selected="@(Model.Status == "Cancelled" ? "selected" : null)">Cancelled</option>
                 </select>
                 <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps py-3 rounded hover:opacity-90 transition-opacity">
                     Update Status

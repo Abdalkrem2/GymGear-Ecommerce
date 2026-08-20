@@ -42,9 +42,9 @@
                 <h3 class="font-label-caps text-label-caps text-on-surface mb-3">Sort By</h3>
                 <select name="sort" class="input-field text-sm">
                     <option value="">Recommended</option>
-                    <option value="price_asc" @(Model.SortBy == "price_asc" ? "selected" : "")>Price: Low to High</option>
-                    <option value="price_desc" @(Model.SortBy == "price_desc" ? "selected" : "")>Price: High to Low</option>
-                    <option value="newest" @(Model.SortBy == "newest" ? "selected" : "")>Newest</option>
+                    <option value="price_asc" selected="@(Model.SortBy == "price_asc" ? "selected" : null)">Price: Low to High</option>
+                    <option value="price_desc" selected="@(Model.SortBy == "price_desc" ? "selected" : null)">Price: High to Low</option>
+                    <option value="newest" selected="@(Model.SortBy == "newest" ? "selected" : null)">Newest</option>
                 </select>
             </div>
 

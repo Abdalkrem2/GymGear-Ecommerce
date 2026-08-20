@@ -7,6 +7,9 @@ namespace Ecommerce.Models.ViewModels
         public int? SelectedCategoryId { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; } = 1;
+        public decimal? MinPrice { get; set; }
+        public decimal? MaxPrice { get; set; }
+        public string SortBy { get; set; }
     }
 
     public class ProductCardVM
