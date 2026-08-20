@@ -1,0 +1,128 @@
+@model Ecommerce.Models.ViewModels.CheckoutVM
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <!-- Left Column: Shipping Form -->
+        <div class="lg:col-span-8 flex flex-col gap-8">
+            <form asp-controller="Checkout" asp-action="Index" method="post" id="checkoutForm">
+                <section class="bg-surface-container-lowest border border-outline-variant rounded p-6">
+                    <h2 class="font-headline-sm text-headline-sm text-on-surface mb-6 uppercase border-b border-surface-container pb-2">Shipping Information</h2>
+                    <div asp-validation-summary="ModelOnly" class="text-primary-container font-label-caps text-label-caps mb-4"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label asp-for="FirstName" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">First Name</label>
+                            <input asp-for="FirstName" class="input-field" placeholder="First Name" />
+                            <span asp-validation-for="FirstName" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div>
+                            <label asp-for="LastName" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Last Name</label>
+                            <input asp-for="LastName" class="input-field" placeholder="Last Name" />
+                            <span asp-validation-for="LastName" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label asp-for="Email" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Email Address</label>
+                            <input asp-for="Email" class="input-field" placeholder="Email Address" />
+                            <span asp-validation-for="Email" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label asp-for="StreetAddress" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Street Address</label>
+                            <input asp-for="StreetAddress" class="input-field" placeholder="Street Address" />
+                            <span asp-validation-for="StreetAddress" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div>
+                            <label asp-for="City" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">City</label>
+                            <input asp-for="City" class="input-field" placeholder="City" />
+                            <span asp-validation-for="City" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div>
+                            <label asp-for="State" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">State / Province</label>
+                            <input asp-for="State" class="input-field" placeholder="State / Province" />
+                            <span asp-validation-for="State" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div>
+                            <label asp-for="ZipCode" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">ZIP / Postal Code</label>
+                            <input asp-for="ZipCode" class="input-field" placeholder="ZIP Code" />
+                            <span asp-validation-for="ZipCode" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div>
+                            <label asp-for="PhoneNumber" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Phone Number</label>
+                            <input asp-for="PhoneNumber" class="input-field" placeholder="Phone Number" />
+                            <span asp-validation-for="PhoneNumber" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-surface-container-lowest border border-outline-variant rounded p-6 mt-8">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        <h2 class="font-headline-sm text-headline-sm text-on-surface uppercase">Payment</h2>
+                        <span class="font-label-caps text-label-caps text-tertiary ml-auto uppercase tracking-widest">Added in Phase 5</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-tertiary">Payment integration will be added in a later phase. Placing an order now completes it directly.</p>
+                </section>
+
+                <button type="submit" form="checkoutForm" class="lg:hidden w-full mt-8 bg-primary-container text-on-primary font-label-caps text-label-caps py-4 rounded hover:bg-primary transition-colors">
+                    PLACE ORDER
+                </button>
+            </form>
+        </div>
+
+        <!-- Right Column: Order Summary -->
+        <div class="lg:col-span-4">
+            <div class="bg-surface-container-lowest border border-outline-variant p-6 rounded sticky top-[100px] flex flex-col gap-6">
+                <h3 class="font-headline-sm text-headline-sm border-b border-surface-container pb-4">Order Summary</h3>
+
+                <div class="flex flex-col gap-4">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="flex items-center gap-3">
+                            <div class="w-14 h-14 bg-surface-container rounded overflow-hidden shrink-0">
+                                @if (!string.IsNullOrEmpty(item.MainImagePath))
+                                {
+                                    <img class="w-full h-full object-cover" src="@item.MainImagePath" alt="@item.ProductName" />
+                                }
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-body-md text-sm text-on-surface font-medium">@item.ProductName</p>
+                                <p class="font-label-caps text-label-caps text-tertiary">QTY: @item.Quantity</p>
+                            </div>
+                            <span class="font-price-display text-[15px] text-on-surface">@item.LineTotal.ToString("C")</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="border-t border-surface-container pt-4 flex flex-col gap-2">
+                    <div class="flex justify-between text-secondary font-body-md text-body-md">
+                        <span>Subtotal</span>
+                        <span class="text-on-surface">@Model.Subtotal.ToString("C")</span>
+                    </div>
+                    <div class="flex justify-between text-secondary font-body-md text-body-md">
+                        <span>Shipping</span>
+                        <span class="text-on-surface">Free</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-surface-container pt-4 flex justify-between items-center">
+                    <span class="font-headline-sm text-headline-sm">Total</span>
+                    <span class="font-price-display text-price-display text-primary-container">@Model.Subtotal.ToString("C")</span>
+                </div>
+
+                <button type="submit" form="checkoutForm"
+                        class="hidden lg:flex w-full bg-primary-container text-on-primary font-label-caps text-label-caps py-4 rounded hover:bg-primary transition-colors items-center justify-center gap-2">
+                    PLACE ORDER
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+                <p class="font-label-caps text-label-caps text-tertiary text-center">By placing your order you agree to our Terms &amp; Conditions.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

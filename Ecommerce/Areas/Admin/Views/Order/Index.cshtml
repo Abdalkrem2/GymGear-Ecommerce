@@ -16,6 +16,7 @@
                         <th class="p-4 font-normal">Items</th>
                         <th class="p-4 font-normal">Amount</th>
                         <th class="p-4 font-normal">Status</th>
+                        <th class="p-4 font-normal text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="font-body-md text-body-md">
@@ -37,6 +38,10 @@
                                     };
                                 }
                                 <span class="inline-flex items-center px-2 py-1 rounded @badgeClass font-label-caps text-label-caps">@o.Status</span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-id="@o.Id"
+                                   class="font-label-caps text-label-caps text-on-surface hover:text-primary-container">View</a>
                             </td>
                         </tr>
                     }

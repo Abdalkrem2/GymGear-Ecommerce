@@ -63,16 +63,20 @@
             <p class="font-body-md text-body-md text-tertiary mb-8">@Model.Description</p>
 
             <div class="flex gap-3 mb-8">
-                <button class="flex-1 bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all flex items-center justify-center gap-2" @(Model.Stock == 0 ? "disabled" : "")>
-                    <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
-                    <form asp-controller="Cart" asp-action="Add" method="post">
-                        <input type="hidden" name="productId" value="@Model.Id" />
-                        <button type="submit" class="...">ADD TO CART</button>
-                    </form>
-                </button>
-                <button class="w-14 h-14 border border-outline-variant rounded-sm flex items-center justify-center hover:border-on-surface transition-colors">
-                    <span class="material-symbols-outlined">favorite</span>
-                </button>
+                <form asp-controller="Cart" asp-action="Add" method="post" class="flex-1">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="w-full bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all flex items-center justify-center gap-2" @(Model.Stock == 0 ? "disabled" : "")>
+                        <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+                        ADD TO CART
+                    </button>
+                </form>
+                <form asp-controller="Wishlist" asp-action="Add" method="post">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <button type="submit" class="w-14 h-14 border border-outline-variant rounded-sm flex items-center justify-center hover:border-on-surface transition-colors">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                </form>
             </div>
 
             <div class="border-t border-outline-variant pt-6">

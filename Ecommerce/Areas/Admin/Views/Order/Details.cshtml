@@ -1,0 +1,89 @@
+@model Ecommerce.Models.ViewModels.OrderDetailsAdminVM
+@{
+    ViewData["Title"] = $"Order #{Model.Id:D4}";
+}
+
+<div class="flex flex-col lg:flex-row gap-gutter">
+    <!-- Order Items -->
+    <div class="flex-1 flex flex-col gap-6">
+        <div class="bg-surface-container-lowest border border-surface-variant rounded p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-headline-sm text-headline-sm text-on-surface">Order #ORD-@Model.Id.ToString("D4")</h2>
+                @{
+                    var badgeClass = Model.Status switch
+                    {
+                        "Completed" => "bg-[#1a1c1c] text-white",
+                        "Cancelled" => "bg-[#e2e2e5] text-on-surface",
+                        _ => "bg-[#ac0020] text-white"
+                    };
+                }
+                <span class="inline-flex items-center px-3 py-1 rounded @badgeClass font-label-caps text-label-caps">@Model.Status</span>
+            </div>
+            <p class="font-body-md text-sm text-tertiary">Placed on @Model.OrderDate.ToString("MMM d, yyyy 'at' h:mm tt")</p>
+        </div>
+
+        <div class="bg-surface-container-lowest border border-surface-variant rounded overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-surface-container-low font-label-caps text-label-caps text-tertiary border-b border-surface-variant">
+                        <th class="p-4 font-normal">Product</th>
+                        <th class="p-4 font-normal">Qty</th>
+                        <th class="p-4 font-normal">Unit Price</th>
+                        <th class="p-4 font-normal text-right">Line Total</th>
+                    </tr>
+                </thead>
+                <tbody class="font-body-md text-body-md">
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr class="border-b border-surface-variant">
+                            <td class="p-4 text-on-surface font-medium">@item.ProductName</td>
+                            <td class="p-4 text-tertiary">@item.Quantity</td>
+                            <td class="p-4 text-tertiary">@item.UnitPrice.ToString("C")</td>
+                            <td class="p-4 text-right font-price-display text-[15px]">@item.LineTotal.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="p-4 flex justify-end border-t border-surface-variant">
+                <div class="text-right">
+                    <span class="font-label-caps text-label-caps text-tertiary block">TOTAL</span>
+                    <span class="font-price-display text-price-display text-primary-container">@Model.Total.ToString("C")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar: Customer + Status -->
+    <div class="w-full lg:w-80 flex flex-col gap-6">
+        <div class="bg-surface-container-lowest border border-surface-variant rounded p-6">
+            <h3 class="font-label-caps text-label-caps text-tertiary mb-3">CUSTOMER</h3>
+            <p class="font-body-md text-body-md text-on-surface font-medium">@Model.CustomerName</p>
+            <p class="font-body-md text-sm text-tertiary">@Model.CustomerEmail</p>
+        </div>
+
+        <div class="bg-surface-container-lowest border border-surface-variant rounded p-6">
+            <h3 class="font-label-caps text-label-caps text-tertiary mb-3">SHIPPING ADDRESS</h3>
+            <p class="font-body-md text-body-md text-on-surface">@Model.ShippingAddress</p>
+        </div>
+
+        <div class="bg-surface-container-lowest border border-surface-variant rounded p-6">
+            <h3 class="font-label-caps text-label-caps text-tertiary mb-3">UPDATE STATUS</h3>
+            <form asp-area="Admin" asp-controller="Order" asp-action="UpdateStatus" method="post" class="flex flex-col gap-3">
+                <input type="hidden" name="orderId" value="@Model.Id" />
+                <select name="status" class="input-field">
+                    <option value="Processing" @(Model.Status == "Processing" ? "selected" : "")>Processing</option>
+                    <option value="Completed" @(Model.Status == "Completed" ? "selected" : "")>Completed</option>
+                    <option value="Cancelled" @(Model.Status == "Cancelled" ? "selected" : "")>Cancelled</option>
+                </select>
+                <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps py-3 rounded hover:opacity-90 transition-opacity">
+                    Update Status
+                </button>
+            </form>
+        </div>
+
+        <a asp-area="Admin" asp-controller="Order" asp-action="Index"
+           class="text-center border border-outline-variant text-on-surface font-label-caps text-label-caps px-8 py-3 rounded hover:bg-surface-container-low transition-colors">
+            ← Back to Orders
+        </a>
+    </div>
+</div>
