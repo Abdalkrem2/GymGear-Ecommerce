@@ -18,7 +18,6 @@ namespace Ecommerce.Controllers
         }
 
         // GET: /Product
-        // GET: /Product?categoryId=3&minPrice=10&maxPrice=100&sort=price_asc&page=1
         [HttpGet]
         public async Task<IActionResult> Index(
             int? categoryId,
@@ -28,7 +27,9 @@ namespace Ecommerce.Controllers
             int page = 1)
         {
             if (page < 1)
+            {
                 page = 1;
+            }
 
             var query = _context.Products
                 .AsNoTracking()
@@ -36,23 +37,20 @@ namespace Ecommerce.Controllers
 
             if (categoryId.HasValue)
             {
-                query = query.Where(
-                    product =>
-                        product.CategoryId == categoryId.Value);
+                query = query.Where(product =>
+                    product.CategoryId == categoryId.Value);
             }
 
             if (minPrice.HasValue)
             {
-                query = query.Where(
-                    product =>
-                        product.Price >= minPrice.Value);
+                query = query.Where(product =>
+                    product.Price >= minPrice.Value);
             }
 
             if (maxPrice.HasValue)
             {
-                query = query.Where(
-                    product =>
-                        product.Price <= maxPrice.Value);
+                query = query.Where(product =>
+                    product.Price <= maxPrice.Value);
             }
 
             var totalCount = await query.CountAsync();
@@ -63,7 +61,9 @@ namespace Ecommerce.Controllers
                     totalCount / (double)PageSize));
 
             if (page > totalPages)
+            {
                 page = totalPages;
+            }
 
             query = sort switch
             {
@@ -71,12 +71,10 @@ namespace Ecommerce.Controllers
                     query.OrderBy(product => product.Price),
 
                 "price_desc" =>
-                    query.OrderByDescending(
-                        product => product.Price),
+                    query.OrderByDescending(product => product.Price),
 
                 "newest" =>
-                    query.OrderByDescending(
-                        product => product.CreatedAt),
+                    query.OrderByDescending(product => product.CreatedAt),
 
                 _ =>
                     query.OrderBy(product => product.Name)
@@ -90,16 +88,14 @@ namespace Ecommerce.Controllers
                     Id = product.Id,
                     Name = product.Name,
 
-                    CategoryName =
-                        product.Category != null
-                            ? product.Category.Name
-                            : string.Empty,
+                    CategoryName = product.Category != null
+                        ? product.Category.Name
+                        : string.Empty,
 
                     Price = product.Price,
 
                     MainImagePath = product.Images
-                        .OrderByDescending(
-                            image => image.IsMain)
+                        .OrderByDescending(image => image.IsMain)
                         .ThenBy(image => image.Id)
                         .Select(image => image.ImagePath)
                         .FirstOrDefault() ?? string.Empty
@@ -140,31 +136,45 @@ namespace Ecommerce.Controllers
                 .Include(product => product.Category)
                 .Include(product => product.Images)
                 .Where(product => product.IsActive)
-                .FirstOrDefaultAsync(
-                    product => product.Id == id);
+                .FirstOrDefaultAsync(product => product.Id == id);
 
             if (product == null)
+            {
                 return NotFound();
+            }
+
+            var reviews = await _context.Comments
+                .AsNoTracking()
+                .Where(comment =>
+                    comment.ProductId == id &&
+                    comment.IsApproved)
+                .OrderByDescending(comment => comment.CreatedAt)
+                .Select(comment => new CommentVM
+                {
+                    UserFullName = comment.User != null
+                        ? comment.User.FullName
+                        : string.Empty,
+
+                    Rating = comment.Rating,
+                    Text = comment.Text,
+                    CreatedAt = comment.CreatedAt
+                })
+                .ToListAsync();
 
             var model = new ProductDetailsVM
             {
                 Id = product.Id,
                 Name = product.Name,
-
-                Description =
-                    product.Description ?? string.Empty,
-
+                Description = product.Description ?? string.Empty,
                 Price = product.Price,
                 Stock = product.Stock,
 
-                CategoryName =
-                    product.Category != null
-                        ? product.Category.Name
-                        : string.Empty,
+                CategoryName = product.Category != null
+                    ? product.Category.Name
+                    : string.Empty,
 
                 Images = product.Images
-                    .OrderByDescending(
-                        image => image.IsMain)
+                    .OrderByDescending(image => image.IsMain)
                     .ThenBy(image => image.Id)
                     .Select(image => new ProductImageVM
                     {
@@ -172,7 +182,19 @@ namespace Ecommerce.Controllers
                         ImagePath = image.ImagePath,
                         IsMain = image.IsMain
                     })
-                    .ToList()
+                    .ToList(),
+
+                AverageRating = reviews.Count > 0
+                    ? reviews.Average(review => review.Rating)
+                    : 0,
+
+                ReviewCount = reviews.Count,
+                Reviews = reviews,
+
+                NewComment = new CommentSubmitVM
+                {
+                    ProductId = product.Id
+                }
             };
 
             return View(model);
