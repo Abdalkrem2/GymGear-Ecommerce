@@ -1,0 +1,59 @@
+@model List<Ecommerce.Models.ViewModels.OrderAdminVM>
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm overflow-hidden flex flex-col">
+    @if (Model != null && Model.Any())
+    {
+        <div class="overflow-x-auto w-full">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-surface-container-low font-label-caps text-label-caps text-tertiary border-b border-surface-variant">
+                        <th class="p-4 font-normal">Order ID</th>
+                        <th class="p-4 font-normal">Customer</th>
+                        <th class="p-4 font-normal">Date</th>
+                        <th class="p-4 font-normal">Items</th>
+                        <th class="p-4 font-normal">Amount</th>
+                        <th class="p-4 font-normal">Status</th>
+                        <th class="p-4 font-normal text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="font-body-md text-body-md">
+                    @foreach (var o in Model)
+                    {
+                        <tr class="border-b border-surface-variant hover:bg-surface transition-colors">
+                            <td class="p-4 font-medium text-on-surface">#ORD-@o.Id.ToString("D4")</td>
+                            <td class="p-4 text-tertiary">@o.CustomerName</td>
+                            <td class="p-4 text-tertiary">@o.OrderDate.ToString("MMM d, yyyy")</td>
+                            <td class="p-4 text-tertiary">@o.ItemCount</td>
+                            <td class="p-4 font-price-display text-[16px]">@o.Total.ToString("C")</td>
+                            <td class="p-4">
+                                @{
+                                    var badgeClass = o.Status switch
+                                    {
+                                        "Completed" => "bg-[#1a1c1c] text-white",
+                                        "Cancelled" => "bg-[#e2e2e5] text-on-surface",
+                                        _ => "bg-[#ac0020] text-white"
+                                    };
+                                }
+                                <span class="inline-flex items-center px-2 py-1 rounded @badgeClass font-label-caps text-label-caps">@o.Status</span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-id="@o.Id"
+                                   class="font-label-caps text-label-caps text-on-surface hover:text-primary-container">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-16">
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">shopping_bag</span>
+            <p class="font-body-md text-body-md text-tertiary">No orders yet — they'll appear here once customers start checking out (Phase 4).</p>
+        </div>
+    }
+</div>

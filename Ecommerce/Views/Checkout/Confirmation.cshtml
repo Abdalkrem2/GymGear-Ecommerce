@@ -1,0 +1,33 @@
+@model Ecommerce.Models.ViewModels.OrderConfirmationVM
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="w-full max-w-[600px] mx-auto px-margin-mobile py-section-padding text-center">
+    <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-on-primary text-[32px]">check</span>
+    </div>
+    <h1 class="font-headline-md text-headline-md text-on-surface mb-2">Order placed successfully</h1>
+    <p class="font-body-md text-body-md text-tertiary mb-8">Thanks for your order — a confirmation has been recorded.</p>
+
+    <div class="bg-surface-container-lowest border border-outline-variant rounded p-6 text-left mb-8">
+        <div class="flex justify-between py-2 border-b border-surface-container">
+            <span class="font-label-caps text-label-caps text-tertiary">ORDER NUMBER</span>
+            <span class="font-body-md text-body-md text-on-surface font-medium">#ORD-@Model.OrderId.ToString("D4")</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-surface-container">
+            <span class="font-label-caps text-label-caps text-tertiary">DATE</span>
+            <span class="font-body-md text-body-md text-on-surface">@Model.OrderDate.ToString("MMM d, yyyy")</span>
+        </div>
+        <div class="flex justify-between py-2">
+            <span class="font-label-caps text-label-caps text-tertiary">TOTAL</span>
+            <span class="font-price-display text-price-display text-primary-container">@Model.Total.ToString("C")</span>
+        </div>
+    </div>
+
+    <div class="flex gap-3 justify-center">
+        <a asp-controller="Product" asp-action="Index" class="bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:opacity-90 transition-opacity">
+            CONTINUE SHOPPING
+        </a>
+    </div>
+</div>

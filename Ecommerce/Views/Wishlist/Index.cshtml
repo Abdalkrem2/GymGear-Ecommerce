@@ -1,0 +1,58 @@
+@model Ecommerce.Models.ViewModels.WishlistVM
+@{
+    ViewData["Title"] = "Your Wishlist";
+}
+
+<div class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
+    <h1 class="font-headline-md text-headline-md text-on-surface mb-8">Your Wishlist</h1>
+
+    @if (Model.Items != null && Model.Items.Any())
+    {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+            @foreach (var item in Model.Items)
+            {
+                <div class="group bg-surface-container-lowest border border-surface-container hover:border-surface-variant hover:shadow-sm transition-all duration-300 relative flex flex-col">
+                    <form asp-controller="Wishlist" asp-action="Remove" method="post" class="absolute top-3 right-3 z-10">
+                        <input type="hidden" name="wishlistItemId" value="@item.WishlistItemId" />
+                        <button type="submit" class="w-8 h-8 rounded-full bg-surface-container-lowest border border-outline-variant flex items-center justify-center hover:bg-primary-container hover:text-on-primary transition-colors">
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        </button>
+                    </form>
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId" class="relative aspect-[4/5] bg-surface-container-low overflow-hidden block">
+                        @if (!string.IsNullOrEmpty(item.MainImagePath))
+                        {
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@item.MainImagePath" alt="@item.ProductName" />
+                        }
+                        else
+                        {
+                            <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-label-caps">NO IMAGE</div>
+                        }
+                    </a>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <span class="font-label-caps text-label-caps text-tertiary mb-1">@item.CategoryName?.ToUpper()</span>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">@item.ProductName</h3>
+                        <div class="mt-auto flex items-center justify-between">
+                            <span class="font-price-display text-price-display text-on-surface">@item.Price.ToString("C")</span>
+                            <form asp-controller="Cart" asp-action="Add" method="post">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="text-on-surface hover:text-primary-container transition-colors">
+                                    <span class="material-symbols-outlined">shopping_cart</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="w-full text-center py-24 border border-dashed border-outline-variant rounded-sm">
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">favorite</span>
+            <p class="font-body-md text-body-md text-tertiary mb-4">No items in your wishlist yet.</p>
+            <a asp-controller="Product" asp-action="Index" class="inline-block bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:bg-surface-tint transition-all">
+                BROWSE PRODUCTS
+            </a>
+        </div>
+    }
+</div>

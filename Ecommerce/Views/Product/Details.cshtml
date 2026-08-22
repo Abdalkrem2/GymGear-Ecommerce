@@ -1,0 +1,94 @@
+@model Ecommerce.Models.ViewModels.ProductDetailsVM
+@{
+    ViewData["Title"] = Model.Name;
+    var mainImage = Model.Images != null && Model.Images.Any() ? Model.Images.First().ImagePath : null;
+}
+
+<div class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
+
+    <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-sm text-tertiary mb-6">
+        <a asp-controller="Home" asp-action="Index" class="hover:text-on-surface">Home</a>
+        <span>/</span>
+        <a asp-controller="Product" asp-action="Index" class="hover:text-on-surface">@Model.CategoryName</a>
+        <span>/</span>
+        <span class="text-on-surface">@Model.Name</span>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+        <!-- Gallery -->
+        <div>
+            <div class="aspect-square bg-surface-container-low border border-outline-variant rounded-sm overflow-hidden mb-4">
+                @if (!string.IsNullOrEmpty(mainImage))
+                {
+                    <img class="w-full h-full object-cover" src="@mainImage" alt="@Model.Name" id="mainProductImage" />
+                }
+                else
+                {
+                    <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-label-caps">NO IMAGE</div>
+                }
+            </div>
+            @if (Model.Images != null && Model.Images.Count > 1)
+            {
+                <div class="grid grid-cols-4 gap-3">
+                    @foreach (var img in Model.Images)
+                    {
+                        <button type="button" onclick="document.getElementById('mainProductImage').src='@img.ImagePath'"
+                                class="aspect-square bg-surface-container-low border border-outline-variant rounded-sm overflow-hidden">
+                            <img class="w-full h-full object-cover" src="@img.ImagePath" alt="@Model.Name" />
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Info Panel -->
+        <div>
+            <span class="font-label-caps text-label-caps text-primary-container mb-2 block">@Model.CategoryName?.ToUpper()</span>
+            <h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-4">@Model.Name</h1>
+            <span class="font-price-display text-price-display text-on-surface block mb-4">@Model.Price.ToString("C")</span>
+
+            @if (Model.Stock == 0)
+            {
+                <p class="font-label-caps text-label-caps text-primary-container mb-6">OUT OF STOCK</p>
+            }
+            else if (Model.Stock <= 5)
+            {
+                <p class="font-label-caps text-label-caps text-primary-container mb-6">ONLY @Model.Stock LEFT — ORDER SOON</p>
+            }
+            else
+            {
+                <p class="font-label-caps text-label-caps text-tertiary mb-6">IN STOCK</p>
+            }
+
+            <p class="font-body-md text-body-md text-tertiary mb-8">@Model.Description</p>
+
+            <div class="flex gap-3 mb-8">
+                <form asp-controller="Cart" asp-action="Add" method="post" class="flex-1">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="w-full bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all flex items-center justify-center gap-2" @(Model.Stock == 0 ? "disabled" : "")>
+                        <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+                        ADD TO CART
+                    </button>
+                </form>
+                <form asp-controller="Wishlist" asp-action="Add" method="post">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <button type="submit" class="w-14 h-14 border border-outline-variant rounded-sm flex items-center justify-center hover:border-on-surface transition-colors">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="border-t border-outline-variant pt-6">
+                <div class="flex border-b border-outline-variant mb-6">
+                    <button class="flex-1 py-4 font-label-caps text-label-caps text-on-surface border-b-2 border-on-surface">Description</button>
+                    <button class="flex-1 py-4 font-label-caps text-label-caps text-tertiary">Reviews</button>
+                </div>
+                <div class="w-full text-center py-8 border border-dashed border-outline-variant rounded-sm">
+                    <span class="material-symbols-outlined text-tertiary text-[24px] mb-1 block">rate_review</span>
+                    <p class="font-body-md text-sm text-tertiary">Reviews &amp; ratings will appear here (Phase 5).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

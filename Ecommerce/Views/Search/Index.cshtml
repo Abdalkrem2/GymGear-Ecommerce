@@ -1,0 +1,51 @@
+@model Ecommerce.Models.ViewModels.SearchResultsVM
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<div class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
+    <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-sm text-tertiary mb-2">
+        <a asp-controller="Home" asp-action="Index" class="hover:text-on-surface">Home</a>
+        <span>/</span>
+        <span class="text-on-surface">Search</span>
+    </nav>
+    <h1 class="font-headline-md text-headline-md text-on-surface mb-2">Search Results</h1>
+    <p class="font-body-md text-body-md text-tertiary mb-8">
+        Showing results for &ldquo;<span class="text-on-surface font-medium">@Model.Query</span>&rdquo;
+        — @Model.Results.Count found
+    </p>
+
+    @if (Model.Results != null && Model.Results.Any())
+    {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+            @foreach (var p in Model.Results)
+            {
+                <a asp-controller="Product" asp-action="Details" asp-route-id="@p.Id"
+                   class="group bg-surface-container-lowest border border-surface-container hover:border-surface-variant hover:shadow-sm transition-all duration-300 relative flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                        @if (!string.IsNullOrEmpty(p.MainImagePath))
+                        {
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@p.MainImagePath" alt="@p.Name" />
+                        }
+                        else
+                        {
+                            <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-label-caps">NO IMAGE</div>
+                        }
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <span class="font-label-caps text-label-caps text-tertiary mb-1">@p.CategoryName?.ToUpper()</span>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">@p.Name</h3>
+                        <span class="font-price-display text-price-display text-on-surface mt-auto">@p.Price.ToString("C")</span>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="w-full text-center py-24 border border-dashed border-outline-variant rounded-sm">
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">search_off</span>
+            <p class="font-body-md text-body-md text-tertiary">No products matched your search. Try a different keyword.</p>
+        </div>
+    }
+</div>

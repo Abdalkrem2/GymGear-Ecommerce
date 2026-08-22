@@ -1,0 +1,119 @@
+@model Ecommerce.Models.ViewModels.ProductListVM
+@{
+    ViewData["Title"] = "Shop";
+}
+
+<div class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding flex flex-col md:flex-row gap-gutter">
+
+    <!-- Sidebar Filters -->
+    <aside class="w-full md:w-64 shrink-0 flex flex-col gap-8">
+        <form asp-controller="Product" asp-action="Index" method="get" class="flex flex-col gap-8">
+            <div class="flex justify-between items-center">
+                <h2 class="font-headline-sm text-headline-sm text-on-surface">Filters</h2>
+                <a asp-controller="Product" asp-action="Index" class="font-label-caps text-label-caps text-tertiary hover:text-primary-container">Clear</a>
+            </div>
+
+            <div>
+                <h3 class="font-label-caps text-label-caps text-on-surface mb-2">Categories</h3>
+                <div class="flex flex-col gap-2">
+                    <label class="flex items-center gap-2 font-body-md text-body-md text-tertiary">
+                        <input type="radio" name="categoryId" value="" class="text-primary-container" @(Model.SelectedCategoryId == null ? "checked" : "") />
+                        All Products
+                    </label>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <label class="flex items-center gap-2 font-body-md text-body-md text-tertiary">
+                            <input type="radio" name="categoryId" value="@cat.Id" class="text-primary-container" @(Model.SelectedCategoryId == cat.Id ? "checked" : "") />
+                            @cat.Name
+                        </label>
+                    }
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-label-caps text-label-caps text-on-surface mb-3">Price Range</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="number" name="minPrice" placeholder="Min $" value="@Model.MinPrice" class="input-field text-sm" />
+                    <input type="number" name="maxPrice" placeholder="Max $" value="@Model.MaxPrice" class="input-field text-sm" />
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-label-caps text-label-caps text-on-surface mb-3">Sort By</h3>
+                <select name="sort" class="input-field text-sm">
+                    <option value="">Recommended</option>
+                    <option value="price_asc" selected="@(Model.SortBy == "price_asc" ? "selected" : null)">Price: Low to High</option>
+                    <option value="price_desc" selected="@(Model.SortBy == "price_desc" ? "selected" : null)">Price: High to Low</option>
+                    <option value="newest" selected="@(Model.SortBy == "newest" ? "selected" : null)">Newest</option>
+                </select>
+            </div>
+
+            <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps py-3 rounded hover:opacity-90 transition-opacity">
+                APPLY FILTERS
+            </button>
+        </form>
+    </aside>
+
+    <!-- Product Grid -->
+    <main class="flex-1 flex flex-col">
+        <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-sm text-tertiary mb-2">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-on-surface">Home</a>
+            <span>/</span>
+            <span class="text-on-surface">Shop</span>
+        </nav>
+        <h1 class="font-headline-md text-headline-md text-on-surface mb-6">
+            @(Model.SelectedCategoryId != null ? Model.Categories.FirstOrDefault(c => c.Id == Model.SelectedCategoryId)?.Name : "All Products")
+        </h1>
+
+        @if (Model.Products != null && Model.Products.Any())
+        {
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter mb-12">
+                @foreach (var p in Model.Products)
+                {
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@p.Id"
+                       class="group bg-surface-container-lowest border border-surface-container hover:border-surface-variant hover:shadow-sm transition-all duration-300 relative flex flex-col">
+                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                            @if (!string.IsNullOrEmpty(p.MainImagePath))
+                            {
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@p.MainImagePath" alt="@p.Name" />
+                            }
+                            else
+                            {
+                                <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-label-caps">NO IMAGE</div>
+                            }
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <span class="font-label-caps text-label-caps text-tertiary mb-1">@p.CategoryName?.ToUpper()</span>
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">@p.Name</h3>
+                            <div class="mt-auto flex items-center justify-between">
+                                <span class="font-price-display text-price-display text-on-surface">@p.Price.ToString("C")</span>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <div class="flex justify-center items-center gap-2 mt-auto border-t border-surface-container pt-8">
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <a asp-controller="Product" asp-action="Index"
+                           asp-route-page="@i" asp-route-categoryId="@Model.SelectedCategoryId"
+                           asp-route-minPrice="@Model.MinPrice" asp-route-maxPrice="@Model.MaxPrice" asp-route-sort="@Model.SortBy"
+                           class="w-10 h-10 flex items-center justify-center font-bold border @(i == Model.CurrentPage ? "bg-on-surface text-on-primary border-on-surface" : "border-surface-container text-tertiary hover:border-on-surface hover:text-on-surface transition-colors")">
+                            @i
+                        </a>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="w-full text-center py-24 border border-dashed border-outline-variant rounded-sm">
+                <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">inventory_2</span>
+                <p class="font-body-md text-body-md text-tertiary">No products match your filters.</p>
+            </div>
+        }
+    </main>
+</div>
