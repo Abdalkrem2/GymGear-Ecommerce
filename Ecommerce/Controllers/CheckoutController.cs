@@ -1,8 +1,8 @@
 ﻿using Ecommerce.Data;
-using Ecommerce.Models.ViewModels;
-using GymGear.Web.Data;
 using Ecommerce.Models.Entities;
 using Ecommerce.Models.Enums;
+using Ecommerce.Models.ViewModels;
+using GymGear.Web.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -112,10 +112,25 @@ namespace Ecommerce.Controllers
 
             _context.Orders.Add(order);
 
-            // 5. Clear the cart.
+            // 5. Simulated/test-mode payment — no real gateway integration, per Phase 5 contract.
+            //    Save now so order.Id is populated before we reference it on the Payment row.
+            await _context.SaveChangesAsync();
+
+            var payment = new Payment
+            {
+                OrderId = order.Id,
+                Provider = "Test Gateway",
+                Status = "Paid",
+                TransactionId = Guid.NewGuid().ToString(),
+                Amount = order.Total,
+                PaidAt = DateTime.UtcNow
+            };
+            _context.Payments.Add(payment);
+
+            // 6. Clear the cart.
             _context.CartItems.RemoveRange(cartItems);
 
-            // 6. Save everything atomically, then redirect to confirmation.
+            // 7. Save the payment + cart clearing, then redirect to confirmation.
             await _context.SaveChangesAsync();
 
             TempData["ToastMessage"] = "Order placed successfully!";
