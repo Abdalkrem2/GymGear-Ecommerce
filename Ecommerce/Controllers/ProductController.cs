@@ -1,7 +1,8 @@
 ﻿using Ecommerce.Models.ViewModels;
-using GymGear.Web.Data;
+using Ecommerce.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GymGear.Web.Data;
 
 namespace Ecommerce.Controllers
 {
