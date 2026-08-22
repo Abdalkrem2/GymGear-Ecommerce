@@ -19,6 +19,15 @@ namespace Ecommerce.Models.ViewModels
         [Required, StringLength(200)]
         public string StreetAddress { get; set; }
 
+        [Required, CreditCard] 
+        public string CardNumber { get; set; }
+
+        [Required, StringLength(5)] 
+        public string ExpiryDate { get; set; }
+
+        [Required, StringLength(4)] 
+        public string CVC { get; set; }
+
         [Required, StringLength(100)]
         public string City { get; set; }
 

@@ -1,4 +1,4 @@
-namespace GymGear.Web.Models.Entities
+namespace Ecommerce.Models.Entities
 {
     public class ProductImage
     {

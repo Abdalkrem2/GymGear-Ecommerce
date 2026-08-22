@@ -58,12 +58,38 @@
                 </section>
 
                 <section class="bg-surface-container-lowest border border-outline-variant rounded p-6 mt-8">
-                    <div class="flex items-center gap-2 mb-4">
+                    <div class="flex items-center gap-2 mb-6 border-b border-surface-container pb-2">
                         <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">lock</span>
-                        <h2 class="font-headline-sm text-headline-sm text-on-surface uppercase">Payment</h2>
-                        <span class="font-label-caps text-label-caps text-tertiary ml-auto uppercase tracking-widest">Added in Phase 5</span>
+                        <h2 class="font-headline-sm text-headline-sm text-on-surface uppercase">Payment Method</h2>
+                        <span class="font-label-caps text-label-caps text-tertiary ml-auto uppercase tracking-widest">Secure Checkout</span>
                     </div>
-                    <p class="font-body-md text-body-md text-tertiary">Payment integration will be added in a later phase. Placing an order now completes it directly.</p>
+
+                    <label class="flex items-center justify-between p-4 border border-outline-variant rounded cursor-pointer bg-surface mb-4">
+                        <div class="flex items-center gap-3">
+                            <input checked type="radio" name="payment" class="text-primary focus:ring-primary h-4 w-4" />
+                            <span class="font-body-md text-body-md font-bold text-on-surface">Credit Card</span>
+                        </div>
+                        <span class="material-symbols-outlined text-tertiary">credit_card</span>
+                    </label>
+
+                    <div class="pl-1 grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label asp-for="CardNumber" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Card Number</label>
+                            <input asp-for="CardNumber" class="input-field" placeholder="0000 0000 0000 0000" />
+                            <span asp-validation-for="CardNumber" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div>
+                            <label asp-for="ExpiryDate" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Expiry Date</label>
+                            <input asp-for="ExpiryDate" class="input-field" placeholder="MM/YY" />
+                            <span asp-validation-for="ExpiryDate" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                        <div>
+                            <label asp-for="CVC" class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">CVC</label>
+                            <input asp-for="CVC" class="input-field" placeholder="123" />
+                            <span asp-validation-for="CVC" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+                        </div>
+                    </div>
+                    <p class="font-label-caps text-label-caps text-tertiary mt-4">Test mode — no real charge is made.</p>
                 </section>
 
                 <button type="submit" form="checkoutForm" class="lg:hidden w-full mt-8 bg-primary-container text-on-primary font-label-caps text-label-caps py-4 rounded hover:bg-primary transition-colors">

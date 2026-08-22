@@ -1,7 +1,7 @@
 using Ecommerce.Data;
 using System.ComponentModel.DataAnnotations;
 
-namespace GymGear.Web.Models.Entities
+namespace Ecommerce.Models.Entities
 {
     public class Testimonial
     {

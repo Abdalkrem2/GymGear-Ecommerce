@@ -45,6 +45,20 @@
         <div>
             <span class="font-label-caps text-label-caps text-primary-container mb-2 block">@Model.CategoryName?.ToUpper()</span>
             <h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-4">@Model.Name</h1>
+
+            @if (Model.ReviewCount > 0)
+            {
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="flex items-center text-primary-container">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' @(i <= Math.Round(Model.AverageRating) ? 1 : 0);">star</span>
+                        }
+                    </div>
+                    <a href="#reviews" class="text-sm text-tertiary hover:text-on-surface underline transition-colors">@Model.ReviewCount Review@(Model.ReviewCount == 1 ? "" : "s")</a>
+                </div>
+            }
+
             <span class="font-price-display text-price-display text-on-surface block mb-4">@Model.Price.ToString("C")</span>
 
             @if (Model.Stock == 0)
@@ -79,15 +93,69 @@
                 </form>
             </div>
 
-            <div class="border-t border-outline-variant pt-6">
+            <div class="border-t border-outline-variant pt-6" id="reviews">
                 <div class="flex border-b border-outline-variant mb-6">
                     <button class="flex-1 py-4 font-label-caps text-label-caps text-on-surface border-b-2 border-on-surface">Description</button>
-                    <button class="flex-1 py-4 font-label-caps text-label-caps text-tertiary">Reviews</button>
+                    <button class="flex-1 py-4 font-label-caps text-label-caps text-tertiary">Reviews (@Model.ReviewCount)</button>
                 </div>
-                <div class="w-full text-center py-8 border border-dashed border-outline-variant rounded-sm">
-                    <span class="material-symbols-outlined text-tertiary text-[24px] mb-1 block">rate_review</span>
-                    <p class="font-body-md text-sm text-tertiary">Reviews &amp; ratings will appear here (Phase 5).</p>
-                </div>
+
+                @if (Model.Reviews != null && Model.Reviews.Any())
+                {
+                    <div class="flex flex-col gap-5 mb-8">
+                        @foreach (var r in Model.Reviews)
+                        {
+                            <div class="border-b border-outline-variant pb-5">
+                                <div class="flex justify-between items-start mb-2">
+                                    <p class="font-body-md text-on-surface font-medium">@r.UserFullName</p>
+                                    <div class="flex items-center text-primary-container">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' @(i <= r.Rating ? 1 : 0);">star</span>
+                                        }
+                                    </div>
+                                </div>
+                                <p class="font-body-md text-sm text-tertiary mb-2">@r.CreatedAt.ToString("MMM d, yyyy")</p>
+                                <p class="font-body-md text-body-md text-on-surface">@r.Text</p>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="w-full text-center py-8 border border-dashed border-outline-variant rounded-sm mb-8">
+                        <span class="material-symbols-outlined text-tertiary text-[24px] mb-1 block">rate_review</span>
+                        <p class="font-body-md text-sm text-tertiary">No reviews yet — be the first to leave one.</p>
+                    </div>
+                }
+
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <form asp-controller="Comment" asp-action="Add" method="post" class="bg-surface-container-low rounded p-5">
+                        <input type="hidden" name="ProductId" value="@Model.Id" />
+                        <label class="font-label-caps text-label-caps text-tertiary mb-2 block">YOUR RATING</label>
+                        <select name="Rating" class="input-field mb-3" style="max-width:120px;">
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Good</option>
+                            <option value="3">3 - Average</option>
+                            <option value="2">2 - Poor</option>
+                            <option value="1">1 - Terrible</option>
+                        </select>
+                        <label class="font-label-caps text-label-caps text-tertiary mb-2 block">YOUR REVIEW</label>
+                        <textarea name="Text" class="input-field mb-3" rows="3" placeholder="Share your thoughts on this product..." required></textarea>
+                        <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps px-6 py-3 rounded hover:opacity-90 transition-opacity">
+                            SUBMIT REVIEW
+                        </button>
+                        <p class="font-label-caps text-label-caps text-tertiary mt-2">Reviews are published after admin approval.</p>
+                    </form>
+                }
+                else
+                {
+                    <div class="bg-surface-container-low rounded p-5 text-center">
+                        <p class="font-body-md text-body-md text-on-surface">
+                            <a asp-controller="Account" asp-action="Login" class="text-primary-container font-bold">Sign in</a> to leave a review.
+                        </p>
+                    </div>
+                }
             </div>
         </div>
     </div>

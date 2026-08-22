@@ -1,0 +1,47 @@
+@model Ecommerce.Models.ViewModels.MyOrderListVM
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="w-full max-w-[1000px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
+    <h1 class="font-headline-md text-headline-md text-on-surface mb-8">My Orders</h1>
+
+    @if (Model.Orders != null && Model.Orders.Any())
+    {
+        <div class="flex flex-col gap-4">
+            @foreach (var o in Model.Orders)
+            {
+                <div class="bg-surface-container-lowest border border-surface-variant rounded p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <p class="font-body-md text-on-surface font-medium">Order #ORD-@o.Id.ToString("D4")</p>
+                        <p class="font-label-caps text-label-caps text-tertiary">@o.OrderDate.ToString("MMM d, yyyy") &middot; @o.ItemCount item@(o.ItemCount == 1 ? "" : "s")</p>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        @{
+                            var badgeClass = o.Status switch
+                            {
+                                "Completed" => "bg-[#1a1c1c] text-white",
+                                "Cancelled" => "bg-[#e2e2e5] text-on-surface",
+                                _ => "bg-[#ac0020] text-white"
+                            };
+                        }
+                        <span class="inline-flex items-center px-3 py-1 rounded @badgeClass font-label-caps text-label-caps">@o.Status</span>
+                        <span class="font-price-display text-[16px] text-on-surface">@o.Total.ToString("C")</span>
+                        <a asp-controller="Order" asp-action="Invoice" asp-route-id="@o.Id"
+                           class="font-label-caps text-label-caps text-primary-container hover:underline">View Invoice</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="w-full text-center py-24 border border-dashed border-outline-variant rounded-sm">
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">receipt_long</span>
+            <p class="font-body-md text-body-md text-tertiary mb-4">You haven't placed any orders yet.</p>
+            <a asp-controller="Product" asp-action="Index" class="inline-block bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:bg-surface-tint transition-all">
+                START SHOPPING
+            </a>
+        </div>
+    }
+</div>

@@ -3,7 +3,7 @@ using Ecommerce.Data;
 using Ecommerce.Models;
 using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
-using GymGear.Web.Models.Entities;
+using Ecommerce.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

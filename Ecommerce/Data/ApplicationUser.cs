@@ -1,4 +1,4 @@
-using GymGear.Web.Models.Entities;
+using Ecommerce.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 namespace Ecommerce.Data;
 // Add profile data for application users by adding properties to the ApplicationUser class

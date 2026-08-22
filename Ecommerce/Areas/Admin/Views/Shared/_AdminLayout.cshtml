@@ -42,22 +42,26 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-3 text-tertiary-fixed-dim hover:text-on-primary px-4 py-3 font-label-caps text-label-caps hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                <a asp-area="Admin" asp-controller="Product" asp-action="Index"
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Product" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">inventory_2</span> Products
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-3 text-tertiary-fixed-dim hover:text-on-primary px-4 py-3 font-label-caps text-label-caps hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                <a asp-area="Admin" asp-controller="Order" asp-action="Index"
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Order" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">shopping_bag</span> Orders
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-3 text-tertiary-fixed-dim hover:text-on-primary px-4 py-3 font-label-caps text-label-caps hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                <a asp-area="Admin" asp-controller="User" asp-action="Index"
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "User" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">group</span> Users
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-3 text-tertiary-fixed-dim hover:text-on-primary px-4 py-3 font-label-caps text-label-caps hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                <a asp-area="Admin" asp-controller="Moderation" asp-action="Index"
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Moderation" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">gavel</span> Moderation
                 </a>
             </li>

@@ -1,4 +1,4 @@
-namespace GymGear.Web.Models.Enums
+namespace Ecommerce.Models.Enums
 {
     public enum OrderStatus
     {

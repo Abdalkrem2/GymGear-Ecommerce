@@ -1,0 +1,79 @@
+@model Ecommerce.Models.ViewModels.InvoiceVM
+@{
+    ViewData["Title"] = $"Invoice #{Model.Id:D4}";
+    Layout = "_Layout";
+}
+
+<div class="w-full max-w-[800px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding" id="invoiceArea">
+    <div class="flex justify-between items-start mb-10 print:hidden">
+        <a asp-controller="Order" asp-action="Index" class="font-label-caps text-label-caps text-tertiary hover:text-on-surface">&larr; Back to My Orders</a>
+        <button onclick="window.print()" class="bg-primary-container text-on-primary font-label-caps text-label-caps px-6 py-3 rounded hover:opacity-90 transition-opacity flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">print</span>
+            PRINT INVOICE
+        </button>
+    </div>
+
+    <div class="bg-surface-container-lowest border border-outline-variant rounded p-10">
+        <div class="flex justify-between items-start mb-10 pb-6 border-b border-surface-container">
+            <div>
+                <h1 class="font-headline-md text-headline-md text-on-surface">GYM<span class="text-primary-container">GEAR</span></h1>
+                <p class="font-body-md text-sm text-tertiary mt-1">Performance Activewear</p>
+            </div>
+            <div class="text-right">
+                <h2 class="font-headline-sm text-headline-sm text-on-surface">INVOICE</h2>
+                <p class="font-body-md text-sm text-tertiary">#ORD-@Model.Id.ToString("D4")</p>
+                <p class="font-body-md text-sm text-tertiary">@Model.OrderDate.ToString("MMM d, yyyy")</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 mb-10">
+            <div>
+                <p class="font-label-caps text-label-caps text-tertiary mb-1">SHIP TO</p>
+                <p class="font-body-md text-body-md text-on-surface">@Model.ShippingAddress</p>
+            </div>
+            <div class="text-right">
+                <p class="font-label-caps text-label-caps text-tertiary mb-1">STATUS</p>
+                <p class="font-body-md text-body-md text-on-surface font-medium">@Model.Status</p>
+            </div>
+        </div>
+
+        <table class="w-full text-left border-collapse mb-8">
+            <thead>
+                <tr class="border-b-2 border-on-surface">
+                    <th class="py-3 font-label-caps text-label-caps text-tertiary">Product</th>
+                    <th class="py-3 font-label-caps text-label-caps text-tertiary">Qty</th>
+                    <th class="py-3 font-label-caps text-label-caps text-tertiary">Unit Price</th>
+                    <th class="py-3 font-label-caps text-label-caps text-tertiary text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr class="border-b border-surface-container">
+                        <td class="py-3 font-body-md text-body-md text-on-surface">@item.ProductName</td>
+                        <td class="py-3 font-body-md text-body-md text-tertiary">@item.Quantity</td>
+                        <td class="py-3 font-body-md text-body-md text-tertiary">@item.UnitPrice.ToString("C")</td>
+                        <td class="py-3 font-body-md text-body-md text-on-surface text-right">@item.LineTotal.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="flex justify-end">
+            <div class="w-64">
+                <div class="flex justify-between py-2 border-t-2 border-on-surface">
+                    <span class="font-headline-sm text-headline-sm">TOTAL</span>
+                    <span class="font-price-display text-price-display text-primary-container">@Model.Total.ToString("C")</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-center font-label-caps text-label-caps text-tertiary mt-12">Thank you for shopping with Gym Gear &amp; Activewear.</p>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        header, nav, footer, .gg-topbar, .gg-subnav { display: none !important; }
+    }
+</style>

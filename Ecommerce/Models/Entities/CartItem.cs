@@ -1,6 +1,6 @@
 using Ecommerce.Data;
 
-namespace GymGear.Web.Models.Entities
+namespace Ecommerce.Models.Entities
 {
     // Supports both guest carts (via SessionId) and logged-in users (via UserId).
     // On login, merge SessionId rows into the user's rows (increment quantity, no duplicates).

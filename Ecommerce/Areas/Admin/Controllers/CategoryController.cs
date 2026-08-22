@@ -1,9 +1,11 @@
 ﻿using Ecommerce.Models.ViewModels;
-using GymGear.Web.Data;
-using GymGear.Web.Models.Entities;
+using Ecommerce.Data;
+using Ecommerce.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GymGear.Web.Data;
+
 
 namespace Ecommerce.Areas.Admin.Controllers
 {

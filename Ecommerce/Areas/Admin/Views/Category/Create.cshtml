@@ -1,39 +1,88 @@
 @model Ecommerce.Models.ViewModels.CategoryFormVM
+
 @{
     ViewData["Title"] = "Add Category";
 }
 
 <div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm p-8 max-w-[560px]">
-    <form asp-area="Admin" asp-controller="Category" asp-action="Create" method="post" enctype="multipart/form-data">
-        <div asp-validation-summary="ModelOnly" class="text-primary-container font-label-caps text-label-caps mb-4"></div>
 
-        <div class="mb-5">
-            <label asp-for="Name" class="font-label-caps text-label-caps text-tertiary mb-2 block">CATEGORY NAME</label>
-            <input asp-for="Name" class="input-field" placeholder="e.g. Men's Activewear" />
-            <span asp-validation-for="Name" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+    <form asp-area="Admin"
+          asp-controller="Category"
+          asp-action="Create"
+          method="post"
+          enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="All"
+             class="text-danger mb-4">
         </div>
 
         <div class="mb-5">
-            <label asp-for="Description" class="font-label-caps text-label-caps text-tertiary mb-2 block">DESCRIPTION</label>
-            <textarea asp-for="Description" class="input-field" rows="3" placeholder="Short description shown to customers"></textarea>
-            <span asp-validation-for="Description" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            <label asp-for="Name"
+                   class="font-label-caps text-label-caps text-tertiary mb-2 block">
+                CATEGORY NAME
+            </label>
+
+            <input asp-for="Name"
+                   class="input-field"
+                   placeholder="e.g. Men's Activewear" />
+
+            <span asp-validation-for="Name"
+                  class="text-danger block mt-1">
+            </span>
+        </div>
+
+        <div class="mb-5">
+            <label asp-for="Description"
+                   class="font-label-caps text-label-caps text-tertiary mb-2 block">
+                DESCRIPTION
+            </label>
+
+            <textarea asp-for="Description"
+                      class="input-field"
+                      rows="3"
+                      placeholder="Short description shown to customers"></textarea>
+
+            <span asp-validation-for="Description"
+                  class="text-danger block mt-1">
+            </span>
         </div>
 
         <div class="mb-6">
-            <label asp-for="ImageFile" class="font-label-caps text-label-caps text-tertiary mb-2 block">CATEGORY IMAGE</label>
-            <input asp-for="ImageFile" type="file" accept="image/*" class="input-field" />
-            <span asp-validation-for="ImageFile" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            <label asp-for="ImageFile"
+                   class="font-label-caps text-label-caps text-tertiary mb-2 block">
+                CATEGORY IMAGE
+            </label>
+
+            <input asp-for="ImageFile"
+                   type="file"
+                   accept=".jpg,.jpeg,.png,.webp"
+                   class="input-field" />
+
+            <span asp-validation-for="ImageFile"
+                  class="text-danger block mt-1">
+            </span>
+
+            <small class="text-muted">
+                Allowed: JPG, JPEG, PNG or WEBP. Maximum size: 5 MB.
+            </small>
         </div>
 
         <div class="flex gap-3">
-            <button type="submit" class="bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:opacity-90 transition-opacity font-bold">
+            <button type="submit"
+                    class="bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:opacity-90 transition-opacity font-bold">
                 Save Category
             </button>
-            <a asp-area="Admin" asp-controller="Category" asp-action="Index"
+
+            <a asp-area="Admin"
+               asp-controller="Category"
+               asp-action="Index"
                class="border border-outline-variant text-on-surface font-label-caps text-label-caps px-8 py-3 rounded hover:bg-surface-container-low transition-colors flex items-center">
                 Cancel
             </a>
         </div>
+
     </form>
 </div>
 

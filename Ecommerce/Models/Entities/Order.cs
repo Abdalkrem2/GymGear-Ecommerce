@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Ecommerce.Data;
-using GymGear.Web.Models.Enums;
+using Ecommerce.Models.Enums;
 
-namespace GymGear.Web.Models.Entities
+namespace Ecommerce.Models.Entities
 {
     public class Order
     {

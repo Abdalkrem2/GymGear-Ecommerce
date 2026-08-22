@@ -30,5 +30,10 @@ namespace Ecommerce.Models.ViewModels
         public int Stock { get; set; }
         public string CategoryName { get; set; }
         public List<ProductImageVM> Images { get; set; } = new();
+
+        public double AverageRating { get; set; }
+        public int ReviewCount { get; set; }
+        public List<CommentVM> Reviews { get; set; } = new();
+        public CommentSubmitVM NewComment { get; set; } = new();
     }
 }

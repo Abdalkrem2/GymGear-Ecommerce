@@ -1,6 +1,6 @@
 using Ecommerce.Data;
 
-namespace GymGear.Web.Models.Entities
+namespace Ecommerce.Models.Entities
 {
     public class WishlistItem
     {
