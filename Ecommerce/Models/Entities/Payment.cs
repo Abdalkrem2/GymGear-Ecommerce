@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GymGear.Web.Models.Entities
+namespace Ecommerce.Models.Entities
 {
     public class Payment
     {

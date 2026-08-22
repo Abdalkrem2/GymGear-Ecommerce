@@ -1,7 +1,7 @@
 ﻿using Ecommerce.Data;
 using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
-using GymGear.Web.Models.Enums;
+using Ecommerce.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

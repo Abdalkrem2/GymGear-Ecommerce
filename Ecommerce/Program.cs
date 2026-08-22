@@ -1,5 +1,5 @@
 using GymGear.Web.Data;
-using GymGear.Web.Models.Entities;
+using Ecommerce.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ecommerce.Data;

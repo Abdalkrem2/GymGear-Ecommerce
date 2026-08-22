@@ -46,18 +46,18 @@
                     <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">person</span>
                 </a>
             }
-            <a href="#" class="p-2 hover:bg-surface-variant rounded-full transition-colors group">
-                <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">favorite</span>
-            </a>
-            <a href="#" class="p-2 hover:bg-surface-variant rounded-full transition-colors group relative">
-                <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">shopping_cart</span>
-            </a>
+                <a asp-controller="Wishlist" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group">
+                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">favorite</span>
+                </a>
+                <a asp-controller="Cart" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group relative">
+                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">shopping_cart</span>
+                </a>
         </div>
     </div>
     <div class="w-full hidden md:flex items-center justify-center gap-8 h-[48px] px-margin-desktop">
         <a asp-controller="Home" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Home</a>
-        <a href="#" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Shop</a>
-        <a href="#" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Categories</a>
+            <a asp-controller="Product" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Shop</a>
+            <a asp-controller="Product" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Categories</a>
         <a asp-controller="Home" asp-action="About" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">About</a>
     </div>
 </nav>
