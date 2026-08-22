@@ -1,5 +1,4 @@
-﻿using Ecommerce.Data;
-using Ecommerce.Models.ViewModels;
+﻿using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,97 +17,164 @@ namespace Ecommerce.Controllers
         }
 
         // GET: /Product
-        // GET: /Product?categoryId=3&page=2
-        public async Task<IActionResult> Index(int? categoryId, int page = 1)
+        // GET: /Product?categoryId=3&minPrice=10&maxPrice=100&sort=price_asc&page=1
+        [HttpGet]
+        public async Task<IActionResult> Index(
+            int? categoryId,
+            decimal? minPrice,
+            decimal? maxPrice,
+            string? sort,
+            int page = 1)
         {
             if (page < 1)
-            {
                 page = 1;
-            }
 
             var query = _context.Products
-                .Where(p => p.IsActive)
-                .AsQueryable();
+                .AsNoTracking()
+                .Where(product => product.IsActive);
 
             if (categoryId.HasValue)
             {
-                query = query.Where(p => p.CategoryId == categoryId.Value);
+                query = query.Where(
+                    product =>
+                        product.CategoryId == categoryId.Value);
+            }
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(
+                    product =>
+                        product.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(
+                    product =>
+                        product.Price <= maxPrice.Value);
             }
 
             var totalCount = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling(totalCount / (double)PageSize);
-            if (totalPages < 1)
+
+            var totalPages = Math.Max(
+                1,
+                (int)Math.Ceiling(
+                    totalCount / (double)PageSize));
+
+            if (page > totalPages)
+                page = totalPages;
+
+            query = sort switch
             {
-                totalPages = 1;
-            }
+                "price_asc" =>
+                    query.OrderBy(product => product.Price),
+
+                "price_desc" =>
+                    query.OrderByDescending(
+                        product => product.Price),
+
+                "newest" =>
+                    query.OrderByDescending(
+                        product => product.CreatedAt),
+
+                _ =>
+                    query.OrderBy(product => product.Name)
+            };
 
             var products = await query
-                .OrderBy(p => p.Name)
                 .Skip((page - 1) * PageSize)
                 .Take(PageSize)
-                .Select(p => new ProductCardVM
+                .Select(product => new ProductCardVM
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    CategoryName = p.Category != null ? p.Category.Name : string.Empty,
-                    Price = p.Price,
-                    MainImagePath = p.Images
-                        .Where(i => i.IsMain)
-                        .Select(i => i.ImagePath)
-                        .FirstOrDefault()
-                        ?? p.Images.Select(i => i.ImagePath).FirstOrDefault()
+                    Id = product.Id,
+                    Name = product.Name,
+
+                    CategoryName =
+                        product.Category != null
+                            ? product.Category.Name
+                            : string.Empty,
+
+                    Price = product.Price,
+
+                    MainImagePath = product.Images
+                        .OrderByDescending(
+                            image => image.IsMain)
+                        .ThenBy(image => image.Id)
+                        .Select(image => image.ImagePath)
+                        .FirstOrDefault() ?? string.Empty
                 })
                 .ToListAsync();
 
-            var vm = new ProductListVM
+            var categories = await _context.Categories
+                .AsNoTracking()
+                .OrderBy(category => category.Name)
+                .Select(category => new CategoryNavVM
+                {
+                    Id = category.Id,
+                    Name = category.Name
+                })
+                .ToListAsync();
+
+            var model = new ProductListVM
             {
                 Products = products,
-                Categories = await _context.Categories
-                    .OrderBy(c => c.Name)
-                    .Select(c => new CategoryNavVM { Id = c.Id, Name = c.Name })
-                    .ToListAsync(),
+                Categories = categories,
                 SelectedCategoryId = categoryId,
                 CurrentPage = page,
-                TotalPages = totalPages
+                TotalPages = totalPages,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice,
+                SortBy = sort
             };
 
-            return View(vm);
+            return View(model);
         }
 
         // GET: /Product/Details/{id}
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var product = await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.Images)
-                .Where(p => p.IsActive)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .AsNoTracking()
+                .Include(product => product.Category)
+                .Include(product => product.Images)
+                .Where(product => product.IsActive)
+                .FirstOrDefaultAsync(
+                    product => product.Id == id);
 
             if (product == null)
-            {
                 return NotFound();
-            }
 
-            var vm = new ProductDetailsVM
+            var model = new ProductDetailsVM
             {
                 Id = product.Id,
                 Name = product.Name,
-                Description = product.Description,
+
+                Description =
+                    product.Description ?? string.Empty,
+
                 Price = product.Price,
                 Stock = product.Stock,
-                CategoryName = product.Category != null ? product.Category.Name : string.Empty,
+
+                CategoryName =
+                    product.Category != null
+                        ? product.Category.Name
+                        : string.Empty,
+
                 Images = product.Images
-                    .OrderByDescending(i => i.IsMain)
-                    .Select(i => new ProductImageVM
+                    .OrderByDescending(
+                        image => image.IsMain)
+                    .ThenBy(image => image.Id)
+                    .Select(image => new ProductImageVM
                     {
-                        Id = i.Id,
-                        ImagePath = i.ImagePath,
-                        IsMain = i.IsMain
+                        Id = image.Id,
+                        ImagePath = image.ImagePath,
+                        IsMain = image.IsMain
                     })
                     .ToList()
             };
 
-            return View(vm);
+            return View(model);
         }
     }
 }
