@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Ecommerce.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // 1) EF Core + SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
