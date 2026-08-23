@@ -16,90 +16,205 @@
 </div>
 
 <!-- TopNavBar -->
-<nav class="sticky top-0 w-full z-50 flex flex-col bg-surface border-b border-outline-variant shadow-sm transition-all duration-300" id="main-nav">
-    <div class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop h-[72px] flex items-center justify-between">
-        <div class="flex-1 flex items-center">
-            <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center gap-2 max-w-[260px] w-full">
-                <span class="material-symbols-outlined text-on-surface shrink-0">search</span>
-                <input type="text" name="q" placeholder="Search products or categories…"
-                       class="bg-transparent border-b border-outline-variant focus:border-primary-container focus:outline-none text-sm w-full py-1 placeholder:text-tertiary transition-colors" />
+    <nav class="sticky top-0 w-full z-50 flex flex-col bg-surface border-b border-outline-variant shadow-sm transition-all duration-300" id="main-nav">
+        <!-- Main Top Bar -->
+        <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
+
+            <!-- Mobile Menu Toggle Button & Brand -->
+            <div class="flex items-center gap-3">
+                <button type="button"
+                        id="mobile-menu-toggle"
+                        class="md:hidden p-2 text-on-surface hover:bg-surface-variant rounded-full transition-colors focus:outline-none"
+                        aria-label="Toggle Navigation">
+                    <span class="material-symbols-outlined block" id="menu-icon">menu</span>
+                </button>
+
+                <a asp-controller="Home" asp-action="Index" class="font-display-lg text-display-lg text-primary tracking-tighter shrink-0" style="font-size:24px; line-height:1;">
+                    GYM<span style="color:#1a1c1c;">GEAR</span>
+                </a>
+            </div>
+
+            <!-- Desktop Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-[320px] mx-6 items-center">
+                <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center gap-2 w-full">
+                    <span class="material-symbols-outlined text-on-surface shrink-0 text-[20px]">search</span>
+                    <input type="text" name="q" placeholder="Search products or categories…"
+                           class="bg-transparent border-b border-outline-variant focus:border-primary focus:outline-none text-sm w-full py-1 placeholder:text-tertiary transition-colors" />
+                </form>
+            </div>
+
+            <!-- Action Icons -->
+            <div class="flex items-center gap-1 sm:gap-2">
+                <!-- Mobile Search Toggle -->
+                <button type="button"
+                        id="mobile-search-toggle"
+                        class="md:hidden p-2 hover:bg-surface-variant rounded-full transition-colors text-on-surface"
+                        aria-label="Toggle Search">
+                    <span class="material-symbols-outlined text-[22px]">search</span>
+                </button>
+
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <span class="font-label-caps text-label-caps text-tertiary mr-2 hidden lg:inline">Hi, @User.Identity.Name</span>
+
+                    <a asp-controller="Order" asp-action="Index" class="hidden sm:inline-flex p-2 hover:bg-surface-variant rounded-full transition-colors group" title="My Orders">
+                        <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">receipt_long</span>
+                    </a>
+
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="hidden sm:inline-block">
+                        <button type="submit" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="Sign out">
+                            <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">logout</span>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="Sign in">
+                        <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">person</span>
+                    </a>
+                }
+
+                <a asp-controller="Wishlist" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="Wishlist">
+                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">favorite</span>
+                </a>
+                <a asp-controller="Cart" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group relative" title="Shopping Cart">
+                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">shopping_cart</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile Search Dropdown Bar (Hidden by default) -->
+        <div id="mobile-search-bar" class="hidden md:hidden px-4 pb-3 pt-1 border-t border-outline-variant bg-surface">
+            <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center gap-2 w-full bg-surface-variant px-3 py-1.5 rounded-lg">
+                <span class="material-symbols-outlined text-tertiary shrink-0 text-[20px]">search</span>
+                <input type="text" name="q" placeholder="Search gear, categories…"
+                       class="bg-transparent focus:outline-none text-sm w-full placeholder:text-tertiary text-on-surface" />
             </form>
         </div>
-        <div class="flex-none flex items-center justify-center">
-            <a asp-controller="Home" asp-action="Index" class="font-display-lg text-display-lg text-primary tracking-tighter" style="font-size:28px;line-height:1;">
-                GYM<span style="color:#1a1c1c;">GEAR</span>
-            </a>
+
+        <!-- Desktop Navigation Links -->
+        <div class="w-full hidden md:flex items-center justify-center gap-8 h-[48px] px-margin-desktop border-t border-outline-variant/30">
+            <a asp-controller="Home" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Home</a>
+            <a asp-controller="Product" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Shop</a>
+            <a asp-controller="Home" asp-action="About" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">About</a>
         </div>
-        <div class="flex-1 flex items-center justify-end gap-2">
+
+        <!-- Mobile Navigation Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden flex-col border-t border-outline-variant bg-surface px-4 py-3 space-y-2">
+            <a asp-controller="Home" asp-action="Index" class="block py-2 text-on-surface font-medium hover:text-primary transition-colors">Home</a>
+            <a asp-controller="Product" asp-action="Index" class="block py-2 text-on-surface font-medium hover:text-primary transition-colors">Shop</a>
+            <a asp-controller="Home" asp-action="About" class="block py-2 text-on-surface font-medium hover:text-primary transition-colors">About</a>
+
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                <span class="font-label-caps text-label-caps text-tertiary mr-2 hidden md:inline">Hi, @User.Identity.Name</span>
-                <a asp-controller="Order" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="My Orders">
-                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">receipt_long</span>
+                <hr class="border-outline-variant my-2" />
+                <div class="py-1 text-xs text-tertiary font-medium">Account</div>
+                <a asp-controller="Order" asp-action="Index" class="flex items-center gap-2 py-2 text-on-surface hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">receipt_long</span> My Orders
                 </a>
-                <form asp-controller="Account" asp-action="Logout" method="post">
-                    <button type="submit" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="Sign out">
-                        <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">logout</span>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="w-full">
+                    <button type="submit" class="flex items-center gap-2 py-2 text-on-surface hover:text-error transition-colors w-full text-left">
+                        <span class="material-symbols-outlined text-[20px]">logout</span> Sign Out
                     </button>
                 </form>
             }
-            else
-            {
-                <a asp-controller="Account" asp-action="Login" class="p-2 hover:bg-surface-variant rounded-full transition-colors group">
-                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">person</span>
-                </a>
-            }
-                <a asp-controller="Wishlist" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group">
-                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">favorite</span>
-                </a>
-                <a asp-controller="Cart" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group relative">
-                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">shopping_cart</span>
-                </a>
         </div>
-    </div>
-    <div class="w-full hidden md:flex items-center justify-center gap-8 h-[48px] px-margin-desktop">
-        <a asp-controller="Home" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Home</a>
-            <a asp-controller="Product" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Shop</a>
- 
-        <a asp-controller="Home" asp-action="About" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">About</a>
-    </div>
-</nav>
+    </nav>
+
+    <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const menuToggle = document.getElementById("mobile-menu-toggle");
+                const mobileMenu = document.getElementById("mobile-menu");
+                const searchToggle = document.getElementById("mobile-search-toggle");
+                    const searchBar = document.getElementById("mobile-search-bar");
+
+                    if (menuToggle && mobileMenu) {
+                        menuToggle.addEventListener("click", () => {
+                            mobileMenu.classList.toggle("hidden");
+                            mobileMenu.classList.toggle("flex");
+                            if (searchBar && !searchBar.classList.contains("hidden")) {
+                                searchBar.classList.add("hidden");
+                            }
+                        });
+                    }
+
+                    if (searchToggle && searchBar) {
+                        searchToggle.addEventListener("click", () => {
+                            searchBar.classList.toggle("hidden");
+                            if (mobileMenu && !mobileMenu.classList.contains("hidden")) {
+                                mobileMenu.classList.add("hidden");
+                                mobileMenu.classList.remove("flex");
+                            }
+                        });
+                    }
+                });
+    </script>
 
 <main>
     @RenderBody()
 </main>
 
-<!-- Footer nnnn-->
-<footer class="bg-inverse-surface text-on-primary w-full py-section-padding px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter border-t border-tertiary">
-    <div class="col-span-1 md:col-span-2 flex flex-col justify-between">
-        <div>
-            <a asp-controller="Home" asp-action="Index" class="font-headline-sm text-headline-sm font-bold text-on-primary mb-4 block">GYM GEAR &amp; ACTIVEWEAR</a>
-            <p class="font-body-md text-body-md text-tertiary-fixed-dim max-w-sm">
-                Performance activewear for people who train hard and live harder. Worldwide shipping, no compromise on quality.
-            </p>
+<!-- Footer -->
+    <footer class="bg-inverse-surface text-on-primary w-full border-t border-outline-variant/30">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop py-12 md:py-16">
+            <!-- Main Footer Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12">
+
+                <!-- Brand Column -->
+                <div class="md:col-span-2 space-y-4">
+                    <a asp-controller="Home" asp-action="Index" class="font-display-lg text-xl md:text-2xl font-black text-on-primary tracking-tight block">
+                        GYM<span class="text-primary">GEAR</span>
+                    </a>
+                    <p class="text-tertiary-fixed-dim text-sm md:text-base leading-relaxed max-w-sm">
+                        Performance activewear for athletes who train without compromise. Engineered for durability, comfort, and speed.
+                    </p>
+                </div>
+
+                <!-- Navigation / Support Column -->
+                <div class="flex flex-col space-y-3">
+                    <span class="text-xs font-bold tracking-widest text-on-primary uppercase mb-1">Quick Links</span>
+                    <a asp-controller="Product" asp-action="Index" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Shop All Gear</a>
+                    <a asp-controller="Home" asp-action="About" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">About Us</a>
+                    <a href="#" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Shipping &amp; Delivery</a>
+                    <a href="#" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Returns &amp; Exchanges</a>
+                    <a href="#" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Contact Support</a>
+                </div>
+
+                <!-- Newsletter Column -->
+                <div class="flex flex-col space-y-3">
+                    <span class="text-xs font-bold tracking-widest text-on-primary uppercase mb-1">Stay Connected</span>
+                    <p class="text-sm text-tertiary-fixed-dim">
+                        Get first access to limited drops and exclusive training gear.
+                    </p>
+                    <form onsubmit="event.preventDefault();" class="mt-2">
+                        <div class="relative flex items-center">
+                            <input type="email"
+                                   placeholder="Enter your email"
+                                   class="w-full bg-surface-container-lowest/10 border border-outline-variant/40 rounded px-3.5 py-2.5 text-sm text-on-primary placeholder:text-tertiary focus:outline-none focus:border-primary transition-colors" />
+                            <button type="submit"
+                                    class="absolute right-1.5 p-1.5 text-primary hover:text-on-primary hover:bg-primary/20 rounded transition-colors"
+                                    aria-label="Subscribe">
+                                <span class="material-symbols-outlined text-[20px] block">arrow_forward</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Bottom Copyright Row -->
+            <div class="mt-12 pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-tertiary">
+                <div>
+                    &copy; @DateTime.Now.Year GYMGEAR ACTIVEWEAR. All rights reserved.
+                </div>
+                <div class="flex items-center gap-6">
+                    <a asp-controller="Home" asp-action="Privacy" class="hover:text-on-primary transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-on-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
         </div>
-        <div class="mt-12 font-label-caps text-label-caps text-tertiary-fixed-dim">
-            &copy; @DateTime.Now.Year GYM GEAR &amp; ACTIVEWEAR. ENGINEERED FOR PERFORMANCE.
-        </div>
-    </div>
-    <div class="col-span-1 flex flex-col gap-4">
-        <span class="font-label-caps text-label-caps text-tertiary mb-2">SUPPORT</span>
-        <a href="#" class="font-body-md text-body-md text-tertiary-fixed-dim hover:text-on-primary underline transition-all">Contact Us</a>
-        <a href="#" class="font-body-md text-body-md text-tertiary-fixed-dim hover:text-on-primary underline transition-all">Shipping</a>
-        <a href="#" class="font-body-md text-body-md text-tertiary-fixed-dim hover:text-on-primary underline transition-all">Returns</a>
-        <a asp-controller="Home" asp-action="About" class="font-body-md text-body-md text-tertiary-fixed-dim hover:text-on-primary underline transition-all">About Us</a>
-    </div>
-    <div class="col-span-1 flex flex-col gap-4">
-        <span class="font-label-caps text-label-caps text-tertiary mb-2">STAY SHARP</span>
-        <p class="font-body-md text-body-md text-tertiary-fixed-dim text-sm mb-2">Join our list for exclusive drops.</p>
-        <div class="flex w-full">
-            <input class="bg-transparent border-b border-tertiary text-on-primary font-body-md focus:border-primary-container focus:ring-0 focus:outline-none w-full py-2 placeholder:text-tertiary transition-colors" placeholder="EMAIL ADDRESS" type="email" />
-            <button class="text-primary-container ml-2 p-2 hover:text-on-primary transition-colors">
-                <span class="material-symbols-outlined">arrow_forward</span>
-            </button>
-        </div>
-    </div>
-</footer>
+    </footer>
+
 
 <script>
     window.addEventListener('scroll', () => {
