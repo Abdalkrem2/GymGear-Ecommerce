@@ -1,58 +1,341 @@
+@using System.Text.Json
 @model Ecommerce.Models.ViewModels.DashboardVM
+
 @{
     ViewData["Title"] = "Overview";
+
+    var chartLabels =
+        JsonSerializer.Serialize(Model.OrderChartLabels);
+
+    var chartValues =
+        JsonSerializer.Serialize(Model.OrderChartValues);
 }
 
 <!-- Stat Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+
+    <!-- Users -->
     <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
-        <div class="flex justify-between items-start mb-4">
+
+        <div class="flex justify-between items-start">
+
             <div>
-                <p class="font-label-caps text-label-caps text-tertiary">Total Users</p>
-                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalUsers</h3>
+                <p class="font-label-caps text-label-caps text-tertiary">
+                    Total Users
+                </p>
+
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">
+                    @Model.TotalUsers
+                </h3>
             </div>
+
             <div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
-                <span class="material-symbols-outlined text-on-surface-variant">group</span>
+                <span class="material-symbols-outlined text-on-surface-variant">
+                    group
+                </span>
             </div>
         </div>
     </div>
+
+    <!-- Products -->
     <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
-        <div class="flex justify-between items-start mb-4">
+
+        <div class="flex justify-between items-start">
+
             <div>
-                <p class="font-label-caps text-label-caps text-tertiary">Total Products</p>
-                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalProducts</h3>
+                <p class="font-label-caps text-label-caps text-tertiary">
+                    Total Products
+                </p>
+
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">
+                    @Model.TotalProducts
+                </h3>
             </div>
+
             <div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
-                <span class="material-symbols-outlined text-on-surface-variant">inventory_2</span>
+                <span class="material-symbols-outlined text-on-surface-variant">
+                    inventory_2
+                </span>
             </div>
         </div>
     </div>
+
+    <!-- Categories -->
     <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
-        <div class="flex justify-between items-start mb-4">
+
+        <div class="flex justify-between items-start">
+
             <div>
-                <p class="font-label-caps text-label-caps text-tertiary">Total Categories</p>
-                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalCategories</h3>
+                <p class="font-label-caps text-label-caps text-tertiary">
+                    Total Categories
+                </p>
+
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">
+                    @Model.TotalCategories
+                </h3>
             </div>
+
             <div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
-                <span class="material-symbols-outlined text-on-surface-variant">category</span>
+                <span class="material-symbols-outlined text-on-surface-variant">
+                    category
+                </span>
             </div>
         </div>
     </div>
+
+    <!-- Orders -->
     <div class="bg-surface-container-lowest p-6 rounded border border-surface-variant hover:border-primary transition-colors duration-200">
-        <div class="flex justify-between items-start mb-4">
+
+        <div class="flex justify-between items-start">
+
             <div>
-                <p class="font-label-caps text-label-caps text-tertiary">Total Orders</p>
-                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">@Model.TotalOrders</h3>
+                <p class="font-label-caps text-label-caps text-tertiary">
+                    Total Orders
+                </p>
+
+                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">
+                    @Model.TotalOrders
+                </h3>
             </div>
+
             <div class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center">
-                <span class="material-symbols-outlined text-on-primary-fixed">shopping_bag</span>
+                <span class="material-symbols-outlined text-on-primary-fixed">
+                    shopping_bag
+                </span>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Charts / recent orders — arrive once Products & Orders exist -->
-<div class="bg-surface-container-lowest border border-surface-variant rounded p-10 text-center mt-6">
-    <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">bar_chart</span>
-    <p class="font-body-md text-body-md text-tertiary">Charts and the recent-orders table will appear here once Products and Orders exist (later phases).</p>
+<!-- Chart and Recent Orders -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+
+    <!-- Orders Chart -->
+    <div class="xl:col-span-2 bg-surface-container-lowest border border-surface-variant rounded shadow-sm p-6">
+
+        <div class="flex items-start justify-between mb-6">
+
+            <div>
+                <h2 class="font-headline-sm text-headline-sm text-on-surface">
+                    Orders Overview
+                </h2>
+
+                <p class="font-body-md text-sm text-tertiary mt-1">
+                    Orders placed during the last 7 days
+                </p>
+            </div>
+
+            <div class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-primary-fixed">
+                    monitoring
+                </span>
+            </div>
+        </div>
+
+        <div class="relative w-full h-[320px]">
+            <canvas id="ordersChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm overflow-hidden">
+
+        <div class="p-6 border-b border-surface-variant flex items-center justify-between">
+
+            <div>
+                <h2 class="font-headline-sm text-headline-sm text-on-surface">
+                    Recent Orders
+                </h2>
+
+                <p class="font-body-md text-sm text-tertiary mt-1">
+                    Latest customer orders
+                </p>
+            </div>
+
+            <a asp-area="Admin"
+               asp-controller="Order"
+               asp-action="Index"
+               class="font-label-caps text-label-caps text-primary-container hover:underline">
+
+                VIEW ALL
+            </a>
+        </div>
+
+        @if (Model.RecentOrders != null &&
+             Model.RecentOrders.Any())
+        {
+            <div class="divide-y divide-surface-variant">
+
+                @foreach (var order in Model.RecentOrders)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Details"
+                       asp-route-id="@order.Id"
+                       class="flex items-center justify-between gap-4 p-4 hover:bg-surface transition-colors">
+
+                        <div class="min-w-0">
+
+                            <p class="font-body-md text-on-surface font-medium">
+                                #ORD-@order.Id.ToString("D4")
+                            </p>
+
+                            <p class="font-body-md text-sm text-tertiary truncate">
+                                @order.CustomerName
+                            </p>
+                        </div>
+
+                        <div class="text-right shrink-0">
+
+                            <p class="font-price-display text-[15px] text-on-surface">
+                                @order.Total.ToString("C")
+                            </p>
+
+                            @{
+                                var statusClass =
+                                    order.Status switch
+                                    {
+                                        "Completed" =>
+                                            "text-[#1a1c1c]",
+
+                                        "Cancelled" =>
+                                            "text-tertiary",
+
+                                        "CancellationRequested" =>
+                                            "text-[#f59e0b]",
+
+                                        _ =>
+                                            "text-primary-container"
+                                    };
+                            }
+
+                            <p class="font-label-caps text-label-caps @statusClass">
+                                @order.Status
+                            </p>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-16 px-6">
+
+                <span class="material-symbols-outlined text-tertiary text-[30px] mb-2 block">
+                    shopping_bag
+                </span>
+
+                <p class="font-body-md text-body-md text-tertiary">
+                    No orders yet.
+                </p>
+            </div>
+        }
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ordersChartElement =
+        document.getElementById("ordersChart");
+
+    const orderLabels =
+            @Html.Raw(chartLabels);
+
+    const orderValues =
+            @Html.Raw(chartValues);
+
+    new Chart(ordersChartElement, {
+        type: "line",
+
+        data: {
+            labels: orderLabels,
+
+            datasets: [
+                {
+                    label: "Orders",
+                    data: orderValues,
+                    borderColor: "#c6002b",
+                    backgroundColor: "rgba(198, 0, 43, 0.10)",
+                    borderWidth: 3,
+                    pointBackgroundColor: "#c6002b",
+                    pointBorderColor: "#ffffff",
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: true,
+                    tension: 0.35
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            interaction: {
+                intersect: false,
+                mode: "index"
+            },
+
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    backgroundColor: "#1a1c1c",
+                    padding: 12,
+                    displayColors: false,
+
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed.y;
+
+                            return value === 1
+                                ? "1 order"
+                                : value + " orders";
+                        }
+                    }
+                }
+            },
+
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+
+                    border: {
+                        display: false
+                    },
+
+                    ticks: {
+                        color: "#6f6f73",
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        precision: 0,
+                        stepSize: 1,
+                        color: "#6f6f73"
+                    },
+
+                    grid: {
+                        color: "rgba(111, 111, 115, 0.12)"
+                    },
+
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
