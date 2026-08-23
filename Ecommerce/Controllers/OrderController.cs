@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Ecommerce.Models.Enums;
 
 namespace Ecommerce.Controllers
 {
@@ -95,6 +96,51 @@ namespace Ecommerce.Controllers
             };
 
             return View(model);
+        }
+
+        // POST: /Order/Cancel/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var currentUserId =
+                User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                return Challenge();
+            }
+
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(o =>
+                    o.Id == id &&
+                    o.UserId == currentUserId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (order.Status != OrderStatus.Processing)
+            {
+                TempData["ToastMessage"] =
+                    "Only processing orders can be cancelled.";
+
+                TempData["ToastType"] = "error";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            order.Status = OrderStatus.Cancelled;
+
+            await _context.SaveChangesAsync();
+
+            TempData["ToastMessage"] =
+                "Order cancelled successfully.";
+
+            TempData["ToastType"] = "success";
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

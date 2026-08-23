@@ -19,7 +19,7 @@ namespace Ecommerce.Models.ViewModels
         [Required, StringLength(200)]
         public string StreetAddress { get; set; }
 
- 
+    
 
         [Required, StringLength(100)]
         public string City { get; set; }

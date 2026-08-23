@@ -10,145 +10,118 @@
 <body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden"
       data-toast-message="@TempData["ToastMessage"]" data-toast-type="@TempData["ToastType"]">
 
-<!-- Utility Bar -->
-<div class="bg-inverse-surface text-inverse-on-surface py-2 px-margin-desktop flex justify-center items-center font-label-caps text-label-caps">
-    <span>FREE SHIPPING ON ORDERS OVER $150</span>
-</div>
 
 <!-- TopNavBar -->
-    <nav class="sticky top-0 w-full z-50 flex flex-col bg-surface border-b border-outline-variant shadow-sm transition-all duration-300" id="main-nav">
-        <!-- Main Top Bar -->
-        <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
+<nav id="main-nav" class="fixed top-0 w-full z-50 flex flex-col bg-transparent text-white border-b border-transparent transition-all duration-300">
+    <!-- Main Top Bar -->
+    <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
 
-            <!-- Mobile Menu Toggle Button & Brand -->
-            <div class="flex items-center gap-3">
-                <button type="button"
-                        id="mobile-menu-toggle"
-                        class="md:hidden p-2 text-on-surface hover:bg-surface-variant rounded-full transition-colors focus:outline-none"
-                        aria-label="Toggle Navigation">
-                    <span class="material-symbols-outlined block" id="menu-icon">menu</span>
-                </button>
+        <!-- Mobile Menu Toggle Button & Brand -->
+        <div class="flex items-center gap-3">
+            <button type="button" id="mobile-menu-toggle" class="md:hidden p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none" aria-label="Toggle Navigation">
+                <span class="material-symbols-outlined block text-current" id="menu-icon">menu</span>
+            </button>
 
-                <a asp-controller="Home" asp-action="Index" class="font-display-lg text-display-lg text-primary tracking-tighter shrink-0" style="font-size:24px; line-height:1;">
-                    GYM<span style="color:#1a1c1c;">GEAR</span>
-                </a>
-            </div>
-
-            <!-- Desktop Search Bar -->
-            <div class="hidden md:flex flex-1 max-w-[320px] mx-6 items-center">
-                <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center gap-2 w-full">
-                    <span class="material-symbols-outlined text-on-surface shrink-0 text-[20px]">search</span>
-                    <input type="text" name="q" placeholder="Search products or categories…"
-                           class="bg-transparent border-b border-outline-variant focus:border-primary focus:outline-none text-sm w-full py-1 placeholder:text-tertiary transition-colors" />
-                </form>
-            </div>
-
-            <!-- Action Icons -->
-            <div class="flex items-center gap-1 sm:gap-2">
-                <!-- Mobile Search Toggle -->
-                <button type="button"
-                        id="mobile-search-toggle"
-                        class="md:hidden p-2 hover:bg-surface-variant rounded-full transition-colors text-on-surface"
-                        aria-label="Toggle Search">
-                    <span class="material-symbols-outlined text-[22px]">search</span>
-                </button>
-
-                @if (User.Identity != null && User.Identity.IsAuthenticated)
-                {
-                    <span class="font-label-caps text-label-caps text-tertiary mr-2 hidden lg:inline">Hi, @User.Identity.Name</span>
-
-                    <a asp-controller="Order" asp-action="Index" class="hidden sm:inline-flex p-2 hover:bg-surface-variant rounded-full transition-colors group" title="My Orders">
-                        <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">receipt_long</span>
-                    </a>
-
-                    <form asp-controller="Account" asp-action="Logout" method="post" class="hidden sm:inline-block">
-                        <button type="submit" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="Sign out">
-                            <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">logout</span>
-                        </button>
-                    </form>
-                }
-                else
-                {
-                    <a asp-controller="Account" asp-action="Login" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="Sign in">
-                        <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">person</span>
-                    </a>
-                }
-
-                <a asp-controller="Wishlist" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group" title="Wishlist">
-                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">favorite</span>
-                </a>
-                <a asp-controller="Cart" asp-action="Index" class="p-2 hover:bg-surface-variant rounded-full transition-colors group relative" title="Shopping Cart">
-                    <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors text-[22px]">shopping_cart</span>
-                </a>
-            </div>
+            <a asp-controller="Home" asp-action="Index" class="font-display-lg text-display-lg tracking-tighter shrink-0 text-current" style="font-size:24px; line-height:1;">
+                GYM<span class="opacity-80">GEAR</span>
+            </a>
         </div>
 
-        <!-- Mobile Search Dropdown Bar (Hidden by default) -->
-        <div id="mobile-search-bar" class="hidden md:hidden px-4 pb-3 pt-1 border-t border-outline-variant bg-surface">
-            <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center gap-2 w-full bg-surface-variant px-3 py-1.5 rounded-lg">
-                <span class="material-symbols-outlined text-tertiary shrink-0 text-[20px]">search</span>
-                <input type="text" name="q" placeholder="Search gear, categories…"
-                       class="bg-transparent focus:outline-none text-sm w-full placeholder:text-tertiary text-on-surface" />
+        <!-- Desktop Search Bar -->
+        <div class="hidden md:flex flex-1 max-w-[320px] mx-6 items-center">
+            <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center gap-2 w-full">
+                <span class="material-symbols-outlined shrink-0 text-[20px] text-current">search</span>
+                <input type="text" name="q" placeholder="Search products or categories…"
+                       class="bg-transparent border-b border-current/50 focus:border-current focus:outline-none text-sm w-full py-1 placeholder:text-current/70 text-current transition-colors" />
             </form>
         </div>
 
-        <!-- Desktop Navigation Links -->
-        <div class="w-full hidden md:flex items-center justify-center gap-8 h-[48px] px-margin-desktop border-t border-outline-variant/30">
-            <a asp-controller="Home" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Home</a>
-            <a asp-controller="Product" asp-action="Index" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">Shop</a>
-            <a asp-controller="Home" asp-action="About" class="text-on-surface font-medium hover:text-primary transition-colors duration-200 font-label-caps text-label-caps">About</a>
-        </div>
-
-        <!-- Mobile Navigation Menu (Hidden by default) -->
-        <div id="mobile-menu" class="hidden md:hidden flex-col border-t border-outline-variant bg-surface px-4 py-3 space-y-2">
-            <a asp-controller="Home" asp-action="Index" class="block py-2 text-on-surface font-medium hover:text-primary transition-colors">Home</a>
-            <a asp-controller="Product" asp-action="Index" class="block py-2 text-on-surface font-medium hover:text-primary transition-colors">Shop</a>
-            <a asp-controller="Home" asp-action="About" class="block py-2 text-on-surface font-medium hover:text-primary transition-colors">About</a>
+        <!-- Action Icons -->
+        <div class="flex items-center gap-1 sm:gap-2">
+            <!-- Mobile Search Toggle -->
+            <button type="button" id="mobile-search-toggle" class="md:hidden p-2 hover:bg-white/10 rounded-full transition-colors">
+                <span class="material-symbols-outlined text-[22px] text-current">search</span>
+            </button>
 
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                <hr class="border-outline-variant my-2" />
-                <div class="py-1 text-xs text-tertiary font-medium">Account</div>
-                <a asp-controller="Order" asp-action="Index" class="flex items-center gap-2 py-2 text-on-surface hover:text-primary transition-colors">
-                    <span class="material-symbols-outlined text-[20px]">receipt_long</span> My Orders
+                <span class="font-label-caps text-label-caps mr-2 hidden lg:inline text-current/80">Hi, @User.Identity.Name</span>
+
+                <a asp-controller="Order" asp-action="Index" class="hidden sm:inline-flex p-2 hover:bg-white/10 rounded-full transition-colors group" title="My Orders">
+                    <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">receipt_long</span>
                 </a>
-                <form asp-controller="Account" asp-action="Logout" method="post" class="w-full">
-                    <button type="submit" class="flex items-center gap-2 py-2 text-on-surface hover:text-error transition-colors w-full text-left">
-                        <span class="material-symbols-outlined text-[20px]">logout</span> Sign Out
+
+                <form asp-controller="Account" asp-action="Logout" method="post" class="hidden sm:inline-block">
+                    <button type="submit" class="p-2 hover:bg-white/10 rounded-full transition-colors group" title="Sign out">
+                        <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">logout</span>
                     </button>
                 </form>
             }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login" class="p-2 hover:bg-white/10 rounded-full transition-colors group" title="Sign in">
+                    <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">person</span>
+                </a>
+            }
+
+            <a asp-controller="Wishlist" asp-action="Index" class="p-2 hover:bg-white/10 rounded-full transition-colors group" title="Wishlist">
+                <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">favorite</span>
+            </a>
+            <a asp-controller="Cart" asp-action="Index" class="p-2 hover:bg-white/10 rounded-full transition-colors group relative" title="Shopping Cart">
+                <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">shopping_cart</span>
+            </a>
         </div>
-    </nav>
+    </div>
 
-    <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const menuToggle = document.getElementById("mobile-menu-toggle");
-                const mobileMenu = document.getElementById("mobile-menu");
-                const searchToggle = document.getElementById("mobile-search-toggle");
-                    const searchBar = document.getElementById("mobile-search-bar");
+    <!-- Desktop Navigation Links -->
 
-                    if (menuToggle && mobileMenu) {
-                        menuToggle.addEventListener("click", () => {
-                            mobileMenu.classList.toggle("hidden");
-                            mobileMenu.classList.toggle("flex");
-                            if (searchBar && !searchBar.classList.contains("hidden")) {
-                                searchBar.classList.add("hidden");
-                            }
-                        });
-                    }
+    <!-- Mobile Navigation Menu (Hidden by default) -->
+    <!-- Note: Forced to use surface colors here so it's readable when opened -->
+    <div id="mobile-menu" class="hidden md:hidden flex-col border-t border-outline-variant bg-surface text-on-surface px-4 py-3 space-y-2">
+        <a asp-controller="Home" asp-action="Index" class="block py-2 font-medium hover:text-primary transition-colors">Home</a>
+        <a asp-controller="Product" asp-action="Index" class="block py-2 font-medium hover:text-primary transition-colors">Shop</a>
+        <a asp-controller="Home" asp-action="About" class="block py-2 font-medium hover:text-primary transition-colors">About</a>
+    </div>
+</nav>
 
-                    if (searchToggle && searchBar) {
-                        searchToggle.addEventListener("click", () => {
-                            searchBar.classList.toggle("hidden");
-                            if (mobileMenu && !mobileMenu.classList.contains("hidden")) {
-                                mobileMenu.classList.add("hidden");
-                                mobileMenu.classList.remove("flex");
-                            }
-                        });
-                    }
-                });
-    </script>
+<!-- JS Scripts at the bottom of _Layout.cshtml -->
+<script>
+    // Handle Navbar Scroll Effect
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('main-nav');
+        if (window.scrollY > 40) {
+            // Solid background on scroll
+            nav.classList.add('bg-surface', 'text-on-surface', 'border-outline-variant', 'shadow-md');
+            nav.classList.remove('bg-transparent', 'text-white', 'border-transparent');
+        } else {
+            // Transparent over video
+            nav.classList.add('bg-transparent', 'text-white', 'border-transparent');
+            nav.classList.remove('bg-surface', 'text-on-surface', 'border-outline-variant', 'shadow-md');
+        }
+    });
+
+    // Handle Mobile Menus
+    document.addEventListener("DOMContentLoaded", () => {
+        const menuToggle = document.getElementById("mobile-menu-toggle");
+        const mobileMenu = document.getElementById("mobile-menu");
+        
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+                mobileMenu.classList.toggle("flex");
+                
+                // Force navbar to solid mode when opening menu at top of page
+                const nav = document.getElementById('main-nav');
+                if (window.scrollY <= 40) {
+                    nav.classList.toggle('bg-surface');
+                    nav.classList.toggle('text-on-surface');
+                    nav.classList.toggle('text-white');
+                    nav.classList.toggle('bg-transparent');
+                }
+            });
+        }
+    });
+</script>
 
 <main>
     @RenderBody()

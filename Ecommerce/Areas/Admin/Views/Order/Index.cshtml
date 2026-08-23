@@ -1,47 +1,267 @@
+@using Ecommerce.Models.Enums
 @model List<Ecommerce.Models.ViewModels.OrderAdminVM>
+
 @{
     ViewData["Title"] = "Orders";
+
+    var currentSearch =
+        Context.Request.Query["search"].ToString();
+
+    var currentStatus =
+        Context.Request.Query["status"].ToString();
+
+    var currentFromDate =
+        Context.Request.Query["fromDate"].ToString();
+
+    var currentToDate =
+        Context.Request.Query["toDate"].ToString();
+
+    var currentSort =
+        Context.Request.Query["sort"].ToString();
 }
 
-<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm overflow-hidden flex flex-col">
+<!-- Compact Filters -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm p-4 mb-5">
+
+    <form id="orderFilters"
+          asp-area="Admin"
+          asp-controller="Order"
+          asp-action="Index"
+          method="get"
+          class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3 items-center">
+
+        <!-- Search -->
+        <div class="relative xl:col-span-4">
+
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-tertiary text-[20px]">
+                search
+            </span>
+
+            <input type="search"
+                   name="search"
+                   value="@currentSearch"
+                   placeholder="Search order ID or customer..."
+                   autocomplete="off"
+                   oninput="clearTimeout(window.orderSearchTimer); window.orderSearchTimer = setTimeout(() => this.form.requestSubmit(), 500)"
+                   class="input-field w-full pl-10" />
+        </div>
+
+        <!-- Status -->
+        <div class="xl:col-span-2">
+
+            <select name="status"
+                    aria-label="Filter by status"
+                    onchange="this.form.requestSubmit()"
+                    class="input-field w-full">
+
+                <option value="">
+                    All statuses
+                </option>
+
+                @foreach (var statusValue in Enum.GetNames<OrderStatus>())
+                {
+                    <option value="@statusValue"
+                            selected="@(currentStatus == statusValue
+                                                        ? "selected"
+                                                        : null)">
+
+                        @statusValue
+                    </option>
+                }
+            </select>
+        </div>
+
+        <!-- From Date -->
+        <div class="relative xl:col-span-2">
+
+            <span class="absolute -top-2 left-3 bg-surface-container-lowest px-1 text-[10px] font-bold uppercase tracking-wider text-tertiary">
+                From
+            </span>
+
+            <input type="date"
+                   name="fromDate"
+                   value="@currentFromDate"
+                   aria-label="From date"
+                   onchange="this.form.requestSubmit()"
+                   class="input-field w-full" />
+        </div>
+
+        <!-- To Date -->
+        <div class="relative xl:col-span-2">
+
+            <span class="absolute -top-2 left-3 bg-surface-container-lowest px-1 text-[10px] font-bold uppercase tracking-wider text-tertiary">
+                To
+            </span>
+
+            <input type="date"
+                   name="toDate"
+                   value="@currentToDate"
+                   aria-label="To date"
+                   onchange="this.form.requestSubmit()"
+                   class="input-field w-full" />
+        </div>
+
+        <!-- Sort -->
+        <div class="xl:col-span-1">
+
+            <select name="sort"
+                    aria-label="Sort orders"
+                    onchange="this.form.requestSubmit()"
+                    class="input-field w-full">
+
+                <option value=""
+                        selected="@(string.IsNullOrEmpty(currentSort)
+                                                ? "selected"
+                                                : null)">
+                    Newest
+                </option>
+
+                <option value="oldest"
+                        selected="@(currentSort == "oldest"
+                                                ? "selected"
+                                                : null)">
+                    Oldest
+                </option>
+
+                <option value="amount_desc"
+                        selected="@(currentSort == "amount_desc"
+                                                ? "selected"
+                                                : null)">
+                    Highest
+                </option>
+
+                <option value="amount_asc"
+                        selected="@(currentSort == "amount_asc"
+                                                ? "selected"
+                                                : null)">
+                    Lowest
+                </option>
+            </select>
+        </div>
+
+        <!-- Reset -->
+        <div class="xl:col-span-1 flex justify-end">
+
+            <a asp-area="Admin"
+               asp-controller="Order"
+               asp-action="Index"
+               title="Clear filters"
+               class="w-12 h-12 border border-outline-variant rounded flex items-center justify-center text-tertiary hover:text-primary-container hover:border-primary-container transition-colors">
+
+                <span class="material-symbols-outlined text-[20px]">
+                    filter_alt_off
+                </span>
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Orders Table -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded shadow-sm overflow-hidden">
+
     @if (Model != null && Model.Any())
     {
         <div class="overflow-x-auto w-full">
+
             <table class="w-full text-left border-collapse">
+
                 <thead>
                     <tr class="bg-surface-container-low font-label-caps text-label-caps text-tertiary border-b border-surface-variant">
-                        <th class="p-4 font-normal">Order ID</th>
-                        <th class="p-4 font-normal">Customer</th>
-                        <th class="p-4 font-normal">Date</th>
-                        <th class="p-4 font-normal">Items</th>
-                        <th class="p-4 font-normal">Amount</th>
-                        <th class="p-4 font-normal">Status</th>
-                        <th class="p-4 font-normal text-right">Action</th>
+
+                        <th class="p-4 font-normal">
+                            Order ID
+                        </th>
+
+                        <th class="p-4 font-normal">
+                            Customer
+                        </th>
+
+                        <th class="p-4 font-normal">
+                            Date
+                        </th>
+
+                        <th class="p-4 font-normal">
+                            Items
+                        </th>
+
+                        <th class="p-4 font-normal">
+                            Amount
+                        </th>
+
+                        <th class="p-4 font-normal">
+                            Status
+                        </th>
+
+                        <th class="p-4 font-normal text-right">
+                            Action
+                        </th>
                     </tr>
                 </thead>
+
                 <tbody class="font-body-md text-body-md">
+
                     @foreach (var o in Model)
                     {
                         <tr class="border-b border-surface-variant hover:bg-surface transition-colors">
-                            <td class="p-4 font-medium text-on-surface">#ORD-@o.Id.ToString("D4")</td>
-                            <td class="p-4 text-tertiary">@o.CustomerName</td>
-                            <td class="p-4 text-tertiary">@o.OrderDate.ToString("MMM d, yyyy")</td>
-                            <td class="p-4 text-tertiary">@o.ItemCount</td>
-                            <td class="p-4 font-price-display text-[16px]">@o.Total.ToString("C")</td>
+
+                            <td class="p-4 font-medium text-on-surface">
+                                #ORD-@o.Id.ToString("D4")
+                            </td>
+
+                            <td class="p-4 text-tertiary">
+                                @o.CustomerName
+                            </td>
+
+                            <td class="p-4 text-tertiary">
+                                @o.OrderDate.ToString("MMM d, yyyy")
+                            </td>
+
+                            <td class="p-4 text-tertiary">
+                                @o.ItemCount
+                            </td>
+
+                            <td class="p-4 font-price-display text-[16px]">
+                                @o.Total.ToString("C")
+                            </td>
+
                             <td class="p-4">
+
                                 @{
                                     var badgeClass = o.Status switch
                                     {
-                                        "Completed" => "bg-[#1a1c1c] text-white",
-                                        "Cancelled" => "bg-[#e2e2e5] text-on-surface",
-                                        _ => "bg-[#ac0020] text-white"
+                                        "Completed" =>
+                                            "bg-[#1a1c1c] text-white",
+
+                                        "Cancelled" =>
+                                            "bg-[#e2e2e5] text-on-surface",
+
+                                        "CancellationRequested" =>
+                                            "bg-[#f59e0b] text-white",
+
+                                        _ =>
+                                            "bg-[#ac0020] text-white"
                                     };
                                 }
-                                <span class="inline-flex items-center px-2 py-1 rounded @badgeClass font-label-caps text-label-caps">@o.Status</span>
+
+                                <span class="inline-flex items-center px-2 py-1 rounded @badgeClass font-label-caps text-label-caps">
+                                    @o.Status
+                                </span>
                             </td>
+
                             <td class="p-4 text-right">
-                                <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-id="@o.Id"
-                                   class="font-label-caps text-label-caps text-on-surface hover:text-primary-container">View</a>
+
+                                <a asp-area="Admin"
+                                   asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@o.Id"
+                                   class="inline-flex items-center gap-1 font-label-caps text-label-caps text-on-surface hover:text-primary-container">
+
+                                    View
+
+                                    <span class="material-symbols-outlined text-[16px]">
+                                        arrow_forward
+                                    </span>
+                                </a>
                             </td>
                         </tr>
                     }
@@ -52,8 +272,26 @@
     else
     {
         <div class="text-center py-16">
-            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">shopping_bag</span>
-            <p class="font-body-md text-body-md text-tertiary">No orders yet — they'll appear here once customers start checking out (Phase 4).</p>
+
+            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">
+                search_off
+            </span>
+
+            <p class="font-body-md text-body-md text-tertiary">
+                No orders match the selected filters.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="Order"
+               asp-action="Index"
+               class="inline-flex items-center gap-2 mt-4 font-label-caps text-label-caps text-primary-container hover:underline">
+
+                <span class="material-symbols-outlined text-[18px]">
+                    restart_alt
+                </span>
+
+                RESET FILTERS
+            </a>
         </div>
     }
 </div>
