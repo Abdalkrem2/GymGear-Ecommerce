@@ -65,12 +65,10 @@ namespace Ecommerce.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitTestimonial(TestimonialSubmitVM model)
+        public async Task<IActionResult> SubmitTestimonial(TestimonialSubmitVM NewTestimonial)
         {
             if (!ModelState.IsValid)
             {
-                // Rebuild the full AboutVM so the view has its Testimonials list again,
-                // with the invalid submission preserved for correction.
                 var vm = new AboutVM
                 {
                     Testimonials = await _context.Testimonials
@@ -83,7 +81,7 @@ namespace Ecommerce.Controllers
                             CreatedAt = t.CreatedAt
                         })
                         .ToListAsync(),
-                    NewTestimonial = model
+                    NewTestimonial = NewTestimonial
                 };
 
                 return View("About", vm);
@@ -94,7 +92,7 @@ namespace Ecommerce.Controllers
             var testimonial = new Testimonial
             {
                 UserId = userId!,
-                Text = model.Text,
+                Text = NewTestimonial.Text,
                 IsApproved = false,
                 CreatedAt = DateTime.UtcNow
             };
