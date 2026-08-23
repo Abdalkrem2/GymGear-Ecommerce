@@ -64,6 +64,13 @@
                                     <h2 class="font-headline-sm text-headline-sm text-on-surface">
                                         @item.ProductName
                                     </h2>
+
+                                    @if (!string.IsNullOrEmpty(item.Size))
+                                    {
+                                        <span class="font-label-caps text-label-caps text-tertiary block mt-1">
+                                            Size: @item.Size
+                                        </span>
+                                    }
                                 </div>
 
                                 <!-- Remove Button -->

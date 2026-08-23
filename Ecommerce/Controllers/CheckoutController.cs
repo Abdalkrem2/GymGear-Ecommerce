@@ -40,6 +40,7 @@ namespace Ecommerce.Controllers
                     MainImagePath = c.Product.Images.FirstOrDefault()?.ImagePath,
                     UnitPrice = c.Product.Price,
                     Quantity = c.Quantity,
+                    Size = c.Size,
                     LineTotal = c.Product.Price * c.Quantity
                 }).ToList()
             };
@@ -73,6 +74,7 @@ namespace Ecommerce.Controllers
                     ProductName = c.Product.Name,
                     UnitPrice = c.Product.Price,
                     Quantity = c.Quantity,
+                    Size = c.Size,
                     LineTotal = c.Product.Price * c.Quantity
                 }).ToList();
                 model.Subtotal = model.Items.Sum(i => i.LineTotal);
@@ -92,6 +94,7 @@ namespace Ecommerce.Controllers
                         ProductName = c.Product.Name,
                         UnitPrice = c.Product.Price,
                         Quantity = c.Quantity,
+                        Size = c.Size,
                         LineTotal = c.Product.Price * c.Quantity
                     }).ToList();
                     model.Subtotal = model.Items.Sum(i => i.LineTotal);
@@ -117,7 +120,8 @@ namespace Ecommerce.Controllers
                 {
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    UnitPrice = item.Product.Price
+                    UnitPrice = item.Product.Price,
+                    Size = item.Size
                 });
                 item.Product.Stock -= item.Quantity;
             }

@@ -61,6 +61,21 @@
 
             <span class="font-price-display text-price-display text-on-surface block mb-4">@Model.Price.ToString("C")</span>
 
+            @if (Model.HasSizes)
+            {
+                <div class="mb-6">
+                    <label class="font-label-caps text-label-caps text-tertiary mb-2 block">SELECT SIZE</label>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="selectSize(this)" class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">XS</button>
+                        <button type="button" onclick="selectSize(this)" class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">S</button>
+                        <button type="button" onclick="selectSize(this)" class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors" data-selected="true">M</button>
+                        <button type="button" onclick="selectSize(this)" class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">L</button>
+                        <button type="button" onclick="selectSize(this)" class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">XL</button>
+                        <button type="button" onclick="selectSize(this)" class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">XXL</button>
+                    </div>
+                </div>
+            }
+
             @if (Model.Stock == 0)
             {
                 <p class="font-label-caps text-label-caps text-primary-container mb-6">OUT OF STOCK</p>
@@ -80,6 +95,10 @@
                 <form asp-controller="Cart" asp-action="Add" method="post" class="flex-1">
                     <input type="hidden" name="productId" value="@Model.Id" />
                     <input type="hidden" name="quantity" value="1" />
+                    @if (Model.HasSizes)
+                    {
+                        <input type="hidden" name="size" id="selectedSizeInput" value="M" />
+                    }
                     <button type="submit" class="w-full bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all flex items-center justify-center gap-2" @(Model.Stock == 0 ? "disabled" : "")>
                         <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
                         ADD TO CART
@@ -160,3 +179,31 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function selectSize(btn) {
+            document.querySelectorAll('.size-btn').forEach(b => {
+                b.classList.remove('border-on-surface', 'bg-on-surface', 'text-on-primary');
+                b.classList.add('border-outline-variant', 'text-on-surface');
+                b.removeAttribute('data-selected');
+            });
+            btn.classList.remove('border-outline-variant', 'text-on-surface');
+            btn.classList.add('border-on-surface', 'bg-on-surface', 'text-on-primary');
+            btn.setAttribute('data-selected', 'true');
+
+            var hiddenInput = document.getElementById('selectedSizeInput');
+            if (hiddenInput) {
+                hiddenInput.value = btn.textContent.trim();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const selected = document.querySelector('.size-btn[data-selected="true"]');
+            if (selected) {
+                selected.classList.remove('border-outline-variant', 'text-on-surface');
+                selected.classList.add('border-on-surface', 'bg-on-surface', 'text-on-primary');
+            }
+        });
+    </script>
+}

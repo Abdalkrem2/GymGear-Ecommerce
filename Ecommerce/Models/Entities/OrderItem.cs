@@ -17,5 +17,7 @@ namespace Ecommerce.Models.Entities
         // Snapshot of the price at purchase time (protects against future price changes)
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
+
+        public string? Size { get; set; }
     }
 }

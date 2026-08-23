@@ -91,6 +91,7 @@ namespace Ecommerce.Controllers
 
                     UnitPrice = c.Product?.Price ?? 0,
                     Quantity = c.Quantity,
+                    Size = c.Size,
 
                     LineTotal =
                         (c.Product?.Price ?? 0) * c.Quantity
@@ -107,7 +108,8 @@ namespace Ecommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(
             int productId,
-            int quantity = 1)
+            int quantity = 1,
+            string? size = null)
         {
             var product = await _context.Products
                 .AsNoTracking()
@@ -123,6 +125,12 @@ namespace Ecommerce.Controllers
             if (quantity < 1)
             {
                 quantity = 1;
+            }
+
+            // Only clothing products carry a size — ignore any size value for non-clothing items.
+            if (!product.HasSizes)
+            {
+                size = null;
             }
 
             if (product.Stock <= 0)
@@ -144,15 +152,18 @@ namespace Ecommerce.Controllers
 
             var ownerKey = GetCartOwnerKey();
 
+            // A product in two different sizes is treated as two separate cart rows.
             var existing = IsLoggedIn
                 ? await _context.CartItems
                     .FirstOrDefaultAsync(c =>
                         c.UserId == ownerKey &&
-                        c.ProductId == productId)
+                        c.ProductId == productId &&
+                        c.Size == size)
                 : await _context.CartItems
                     .FirstOrDefaultAsync(c =>
                         c.SessionId == ownerKey &&
-                        c.ProductId == productId);
+                        c.ProductId == productId &&
+                        c.Size == size);
 
             var currentQuantity = existing?.Quantity ?? 0;
             var requestedTotal = currentQuantity + quantity;
@@ -177,6 +188,7 @@ namespace Ecommerce.Controllers
                 {
                     ProductId = productId,
                     Quantity = quantity,
+                    Size = size,
 
                     UserId = IsLoggedIn
                         ? ownerKey

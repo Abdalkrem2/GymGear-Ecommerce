@@ -1,7 +1,7 @@
 ﻿using Ecommerce.Data;
+using Ecommerce.Models.Enums;
 using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
-using Ecommerce.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,6 +61,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                     ProductName = oi.Product.Name,
                     Quantity = oi.Quantity,
                     UnitPrice = oi.UnitPrice,
+                    Size = oi.Size,
                     LineTotal = oi.UnitPrice * oi.Quantity
                 }).ToList()
             };

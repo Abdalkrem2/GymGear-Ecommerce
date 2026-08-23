@@ -1,8 +1,8 @@
-﻿using Ecommerce.Models.ViewModels;
-using Ecommerce.Data;
+﻿using Ecommerce.Data;
+using Ecommerce.Models.ViewModels;
+using GymGear.Web.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GymGear.Web.Data;
 
 namespace Ecommerce.Controllers
 {
@@ -168,6 +168,7 @@ namespace Ecommerce.Controllers
                 Description = product.Description ?? string.Empty,
                 Price = product.Price,
                 Stock = product.Stock,
+                HasSizes = product.HasSizes,
 
                 CategoryName = product.Category != null
                     ? product.Category.Name

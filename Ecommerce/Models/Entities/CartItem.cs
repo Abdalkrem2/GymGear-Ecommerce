@@ -18,6 +18,8 @@ namespace Ecommerce.Models.Entities
 
         public int Quantity { get; set; } = 1;
 
+        public string? Size { get; set; }
+
         public DateTime AddedAt { get; set; } = DateTime.UtcNow;
     }
 }
