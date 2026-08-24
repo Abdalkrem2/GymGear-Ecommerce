@@ -31,90 +31,91 @@
       data-toast-message="@TempData["ToastMessage"]"
       data-toast-type="@TempData["ToastType"]">
 
-    <!-- TopNavBar -->
-    <nav id="main-nav" data-home-page="@isHomePage.ToString().ToLower()" class="fixed top-0 w-full z-50 flex flex-col border-b transition-all duration-300 @navbarClasses">
-        <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
+   <!-- TopNavBar -->
+<nav id="main-nav" data-home-page="@isHomePage.ToString().ToLower()" class="fixed top-0 w-full z-50 flex flex-col border-b transition-all duration-300 @navbarClasses">
+    <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
 
-            <!-- Mobile Menu Toggle Button & Brand -->
-            <div class="flex items-center gap-3 shrink-0">
-                <button type="button" id="mobile-menu-toggle" class="md:hidden p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none" aria-label="Toggle Navigation">
-                    <span class="material-symbols-outlined block text-current" id="menu-icon">menu</span>
-                </button>
+        <!-- Mobile Menu Toggle Button & Brand -->
+        <div class="flex items-center gap-3 shrink-0">
+            <button type="button" id="mobile-menu-toggle" class="md:hidden w-10 h-10 inline-flex items-center justify-center hover:bg-white/10 rounded-full transition-colors focus:outline-none" aria-label="Toggle Navigation">
+                <span class="material-symbols-outlined block text-[22px] leading-none text-current" id="menu-icon">menu</span>
+            </button>
 
-                <!-- Brand Logo -->
-                <a asp-controller="Home" asp-action="Index" class="font-display-lg text-display-lg tracking-tighter shrink-0" style="font-size:24px; line-height:1;">
-                    <span class="text-current">GYM</span><span class="text-primary">GEAR</span>
-                </a>
-            </div>
-
-            <!-- Action Icons & Inline Easing Search -->
-            <div class="flex items-center justify-end gap-1 sm:gap-2">
-                @if (!isAccountPage)
-                {
-                    <!-- Inline Expanding Search Container -->
-                    <div id="search-container" class="relative flex items-center">
-                        <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center">
-                            <input type="text"
-                                   id="search-input"
-                                   name="q"
-                                   placeholder="Search gear…"
-                                   class="w-0 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-surface-variant/90 text-on-surface border border-outline-variant/60 rounded-full py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-tertiary shadow-sm" />
-                        </form>
-
-                        <button type="button" id="search-toggle" class="p-2 hover:bg-white/10 rounded-full transition-colors group" title="Search">
-                            <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current block" id="search-icon">search</span>
-                        </button>
-                    </div>
-                }
-
-                @if (User.Identity != null && User.Identity.IsAuthenticated)
-                {
-                    <a asp-controller="Order" asp-action="Index" class="hidden sm:inline-flex p-2 hover:bg-white/10 rounded-full transition-colors group" title="My Orders">
-                        <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">receipt_long</span>
-                    </a>
-
-                    <form asp-controller="Account" asp-action="Logout" method="post" class="hidden sm:inline-block">
-                        <button type="submit" class="p-2 hover:bg-white/10 rounded-full transition-colors group" title="Sign out">
-                            <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">logout</span>
-                        </button>
-                    </form>
-                }
-                else
-                {
-                    <a asp-controller="Account" asp-action="Login" class="p-2 hover:bg-white/10 rounded-full transition-colors group" title="Sign in">
-                        <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">person</span>
-                    </a>
-                }
-
-                <a asp-controller="Wishlist" asp-action="Index" class="p-2 hover:bg-white/10 rounded-full transition-colors group" title="Wishlist">
-                    <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">favorite</span>
-                </a>
-                <a asp-controller="Cart" asp-action="Index" class="p-2 hover:bg-white/10 rounded-full transition-colors group relative" title="Shopping Cart">
-                    <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">shopping_cart</span>
-                </a>
-            </div>
+            <!-- Brand Logo -->
+            <a asp-controller="Home" asp-action="Index" class="font-display-lg text-display-lg tracking-tighter shrink-0" style="font-size:24px; line-height:1;">
+                <span class="text-current">GYM</span><span class="text-primary">GEAR</span>
+            </a>
         </div>
 
-        <!-- Mobile Navigation Menu (Hidden by default) -->
-        <div id="mobile-menu" class="hidden md:hidden flex-col border-t border-outline-variant bg-surface text-on-surface px-4 py-3 space-y-2 shadow-md absolute top-full left-0 w-full">
-            <a asp-controller="Home" asp-action="Index" class="block py-2 font-medium hover:text-primary transition-colors">Home</a>
-            <a asp-controller="Product" asp-action="Index" class="block py-2 font-medium hover:text-primary transition-colors">Shop</a>
-            <a asp-controller="Home" asp-action="About" class="block py-2 font-medium hover:text-primary transition-colors">About</a>
+        <!-- Action Icons & Inline Easing Search (Flex-Centered) -->
+        <div class="flex items-center justify-end gap-1 sm:gap-1.5">
+            @if (!isAccountPage)
+            {
+                <!-- Inline Expanding Search Container -->
+                <div id="search-container" class="relative flex items-center">
+                    <form asp-controller="Search" asp-action="Index" method="get" class="flex items-center m-0">
+                        <input type="text"
+                               id="search-input"
+                               name="q"
+                               placeholder="Search gear…"
+                               class="w-0 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-surface-variant/90 text-on-surface border border-outline-variant/60 rounded-full py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-tertiary shadow-sm" />
+                    </form>
+
+                    <button type="button" id="search-toggle" class="w-10 h-10 inline-flex items-center justify-center hover:bg-white/10 rounded-full transition-colors group focus:outline-none" title="Search">
+                        <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:opacity-70 transition-opacity" id="search-icon">search</span>
+                    </button>
+                </div>
+            }
+
+            <a asp-controller="Wishlist" asp-action="Index" class="w-10 h-10 inline-flex items-center justify-center hover:bg-white/10 rounded-full transition-colors group" title="Wishlist">
+                <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:opacity-70 transition-opacity">favorite</span>
+            </a>
+
+            <a asp-controller="Cart" asp-action="Index" class="w-10 h-10 inline-flex items-center justify-center hover:bg-white/10 rounded-full transition-colors group relative" title="Shopping Cart">
+                <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:opacity-70 transition-opacity">shopping_cart</span>
+            </a>
 
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                <hr class="border-outline-variant my-2" />
-                <a asp-controller="Order" asp-action="Index" class="flex items-center gap-2 py-2 font-medium hover:text-primary transition-colors">
-                    <span class="material-symbols-outlined text-[20px]">receipt_long</span> My Orders
+                <a asp-controller="Order" asp-action="Index" class="hidden sm:inline-flex w-10 h-10 items-center justify-center hover:bg-white/10 rounded-full transition-colors group" title="My Orders">
+                    <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:opacity-70 transition-opacity">receipt_long</span>
                 </a>
-                <form asp-controller="Account" asp-action="Logout" method="post" class="w-full">
-                    <button type="submit" class="flex items-center gap-2 py-2 font-medium hover:text-error transition-colors w-full text-left">
-                        <span class="material-symbols-outlined text-[20px]">logout</span> Sign Out
+
+                <form asp-controller="Account" asp-action="Logout" method="post" class="hidden sm:inline-flex items-center m-0">
+                    <button type="submit" class="w-10 h-10 inline-flex items-center justify-center hover:bg-white/10 rounded-full transition-colors group focus:outline-none" title="Sign out">
+                        <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:opacity-70 transition-opacity">logout</span>
                     </button>
                 </form>
             }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login" class="w-10 h-10 inline-flex items-center justify-center hover:bg-white/10 rounded-full transition-colors group" title="Sign in">
+                    <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:opacity-70 transition-opacity">person</span>
+                </a>
+            }
         </div>
-    </nav>
+    </div>
+
+    <!-- Mobile Navigation Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden flex-col border-t border-outline-variant bg-surface text-on-surface px-4 py-3 space-y-2 shadow-md absolute top-full left-0 w-full">
+        <a asp-controller="Home" asp-action="Index" class="block py-2 font-medium hover:text-primary transition-colors">Home</a>
+        <a asp-controller="Product" asp-action="Index" class="block py-2 font-medium hover:text-primary transition-colors">Shop</a>
+        <a asp-controller="Home" asp-action="About" class="block py-2 font-medium hover:text-primary transition-colors">About</a>
+
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <hr class="border-outline-variant my-2" />
+            <a asp-controller="Order" asp-action="Index" class="flex items-center gap-2 py-2 font-medium hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-[20px]">receipt_long</span> My Orders
+            </a>
+            <form asp-controller="Account" asp-action="Logout" method="post" class="w-full">
+                <button type="submit" class="flex items-center gap-2 py-2 font-medium hover:text-error transition-colors w-full text-left">
+                    <span class="material-symbols-outlined text-[20px]">logout</span> Sign Out
+                </button>
+            </form>
+        }
+    </div>
+</nav>
 
     <main class="flex-1 flex flex-col">
         @RenderBody()
