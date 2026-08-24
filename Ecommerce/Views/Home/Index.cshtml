@@ -3,36 +3,33 @@
 }
 
 <!-- HERO VIDEO SECTION -->
-<section class="relative w-full h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-    <!-- Video Background (Add your own video URL) -->
-    <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+<section class="relative w-full h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
+    <!-- Video Background -->
+    <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-80">
         <!-- Temporary placeholder video -->
         <source src="~/uploads/videos/AUGUST_SEASONAL_MENS_WEB_8x3.mp4" type="video/mp4" />
     </video>
 
-    <!-- Dark Overlay to ensure text readability -->
-    <div class="absolute inset-0 bg-black/40 z-10"></div>
-
     <!-- Hero Content -->
     <div class="relative z-20 text-center px-4 flex flex-col items-center mt-16">
         <h1 class="text-white text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
-            Unleash Your Edge
+            Unleash Your <span class="text-primary">Edge</span>
         </h1>
         <p class="text-white/90 text-lg md:text-xl font-medium mb-8 max-w-xl">
             The new standard in performance wear. Engineered to breathe, stretch, and move with you.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <a asp-controller="Product" asp-action="Index" asp-route-category="mens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded hover:bg-gray-200 transition-colors w-full sm:w-auto">
+            <a asp-controller="Product" asp-action="Index" asp-route-category="mens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded-sm hover:bg-gray-200 transition-colors w-full sm:w-auto">
                 Shop Men
             </a>
-            <a asp-controller="Product" asp-action="Index" asp-route-category="womens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded hover:bg-gray-200 transition-colors w-full sm:w-auto">
+            <a asp-controller="Product" asp-action="Index" asp-route-category="womens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded-sm hover:bg-gray-200 transition-colors w-full sm:w-auto">
                 Shop Women
             </a>
         </div>
     </div>
 </section>
 
-<!-- 4 PRODUCT CARDS (Mobile Horizontal Scroll) -->
+<!-- NEW ARRIVALS (Mobile Horizontal Scroll) -->
 <section class="w-full py-16 bg-surface">
     <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
         <div class="flex justify-between items-end mb-8">
@@ -44,11 +41,9 @@
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
             @for (int i = 1; i <= 4; i++)
             {
-                <!-- Product Card -->
                 <a asp-controller="Product" asp-action="Details" asp-route-id="@i" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
                     <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                        <!-- Placeholder Image (Replace with dynamic product image) -->
-                        <div class="absolute inset-0 flex items-center justify-center text-tertiary">PRODUCT IMG @i</div>
+                        <div class="absolute inset-0 flex items-center justify-center text-tertiary">IMG @i</div>
                     </div>
                     <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Adapt Seamless T-Shirt</h3>
                     <p class="text-tertiary text-sm mb-2">Black / Charcoal</p>
@@ -71,7 +66,7 @@
                 <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-10"></div>
                 <div class="relative z-20 w-full text-left">
                     <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-4 tracking-tight transform group-hover:-translate-y-2 transition-transform duration-300">Lifting Accessories</h3>
-                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded">Shop Equipment</span>
+                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded-sm">Shop Equipment</span>
                 </div>
             </a>
 
@@ -81,34 +76,34 @@
                 <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-10"></div>
                 <div class="relative z-20 w-full text-left">
                     <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-4 tracking-tight transform group-hover:-translate-y-2 transition-transform duration-300">Recovery & Rest</h3>
-                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded">Shop Rest Day</span>
+                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded-sm">Shop Rest Day</span>
                 </div>
             </a>
         </div>
     </div>
 </section>
 
-<!-- MEN / WOMEN SPLIT SECTION -->
-<section class="w-full border-t border-outline-variant/30">
-    <div class="grid grid-cols-1 md:grid-cols-2 h-[60vh] min-h-[500px]">
-        <!-- Mens -->
-        <a asp-controller="Product" asp-action="Index" asp-route-category="mens" class="relative flex items-center justify-center bg-surface-variant overflow-hidden group cursor-pointer border-b md:border-b-0 md:border-r border-outline-variant block">
-            <div class="absolute inset-0 flex items-center justify-center text-tertiary text-2xl font-bold uppercase tracking-widest">MEN'S COLLECTION BG</div>
-            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-300 z-10"></div>
-            <div class="relative z-20 text-center transform group-hover:scale-105 transition-transform duration-500">
-                <h2 class="text-white text-4xl md:text-6xl font-black uppercase tracking-tight mb-6">Shop Men</h2>
-                <span class="inline-block bg-white text-black font-bold uppercase text-sm px-8 py-4 rounded">Explore</span>
-            </div>
-        </a>
+<!-- MOST FAVORITES (Mobile Horizontal Scroll) -->
+<section class="w-full py-16 bg-surface border-t border-outline-variant/30">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
+        <div class="flex justify-between items-end mb-8">
+            <h2 class="text-2xl md:text-3xl font-black text-on-surface uppercase tracking-tight">Most Favorites</h2>
+            <a asp-controller="Product" asp-action="Index" class="text-sm font-bold border-b border-on-surface text-on-surface uppercase pb-1 hover:text-primary hover:border-primary transition-colors">View All</a>
+        </div>
 
-        <!-- Womens -->
-        <a asp-controller="Product" asp-action="Index" asp-route-category="womens" class="relative flex items-center justify-center bg-surface-variant overflow-hidden group cursor-pointer block">
-            <div class="absolute inset-0 flex items-center justify-center text-tertiary text-2xl font-bold uppercase tracking-widest">WOMEN'S COLLECTION BG</div>
-            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-300 z-10"></div>
-            <div class="relative z-20 text-center transform group-hover:scale-105 transition-transform duration-500">
-                <h2 class="text-white text-4xl md:text-6xl font-black uppercase tracking-tight mb-6">Shop Women</h2>
-                <span class="inline-block bg-white text-black font-bold uppercase text-sm px-8 py-4 rounded">Explore</span>
-            </div>
-        </a>
+        <!-- Scrollable Container -->
+        <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
+            @for (int i = 5; i <= 8; i++)
+            {
+                <a asp-controller="Product" asp-action="Details" asp-route-id="@i" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                    <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                        <div class="absolute inset-0 flex items-center justify-center text-tertiary">FAV IMG @i</div>
+                    </div>
+                    <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Apex Stringer</h3>
+                    <p class="text-tertiary text-sm mb-2">Olive Green</p>
+                    <span class="font-medium text-on-surface">$35.00</span>
+                </a>
+            }
+        </div>
     </div>
 </section>
