@@ -115,5 +115,17 @@ namespace Ecommerce.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [Route("Home/HandleError/{code:int}")]
+        public IActionResult HandleError(int code)
+        {
+            if (code == 404)
+            {
+                return View("NotFound");
+            }
+
+            // Fallback for other errors (500, 403, etc.)
+            return View("Error");
+        }
     }
 }
