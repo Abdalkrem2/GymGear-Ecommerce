@@ -20,6 +20,7 @@ namespace Ecommerce.Controllers
         // GET: /Product
         [HttpGet]
         public async Task<IActionResult> Index(
+            string? category,
             int? categoryId,
             decimal? minPrice,
             decimal? maxPrice,
@@ -35,18 +36,57 @@ namespace Ecommerce.Controllers
                 .AsNoTracking()
                 .Where(product => product.IsActive);
 
+            /*
+             * /Product?category=mens
+             * /Product?category=womens
+             */
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                if (category.Equals(
+                    "mens",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    /*
+                     * Includes:
+                     * Men
+                     * Men - Shirts
+                     * Men's Activewear
+                     */
+                    query = query.Where(product =>
+                        product.Category != null &&
+                        product.Category.Name.StartsWith("Men"));
+                }
+                else if (category.Equals(
+                    "womens",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    /*
+                     * Includes:
+                     * Women
+                     * Women - Shirts
+                     * Women's Activewear
+                     */
+                    query = query.Where(product =>
+                        product.Category != null &&
+                        product.Category.Name.StartsWith("Women"));
+                }
+            }
+
+            // Filter by specific category
             if (categoryId.HasValue)
             {
                 query = query.Where(product =>
                     product.CategoryId == categoryId.Value);
             }
 
+            // Minimum price
             if (minPrice.HasValue)
             {
                 query = query.Where(product =>
                     product.Price >= minPrice.Value);
             }
 
+            // Maximum price
             if (maxPrice.HasValue)
             {
                 query = query.Where(product =>
@@ -65,6 +105,7 @@ namespace Ecommerce.Controllers
                 page = totalPages;
             }
 
+            // Sorting
             query = sort switch
             {
                 "price_asc" =>
@@ -80,6 +121,7 @@ namespace Ecommerce.Controllers
                     query.OrderBy(product => product.Name)
             };
 
+            // Products
             var products = await query
                 .Skip((page - 1) * PageSize)
                 .Take(PageSize)
@@ -102,13 +144,40 @@ namespace Ecommerce.Controllers
                 })
                 .ToListAsync();
 
-            var categories = await _context.Categories
+            /*
+             * Categories:
+             * Shop Men shows Men categories only.
+             * Shop Women shows Women categories only.
+             * Normal Shop shows all categories.
+             */
+            var categoriesQuery = _context.Categories
                 .AsNoTracking()
-                .OrderBy(category => category.Name)
-                .Select(category => new CategoryNavVM
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                if (category.Equals(
+                    "mens",
+                    StringComparison.OrdinalIgnoreCase))
                 {
-                    Id = category.Id,
-                    Name = category.Name
+                    categoriesQuery = categoriesQuery.Where(item =>
+                        item.Name.StartsWith("Men"));
+                }
+                else if (category.Equals(
+                    "womens",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    categoriesQuery = categoriesQuery.Where(item =>
+                        item.Name.StartsWith("Women"));
+                }
+            }
+
+            var categories = await categoriesQuery
+                .OrderBy(item => item.Name)
+                .Select(item => new CategoryNavVM
+                {
+                    Id = item.Id,
+                    Name = item.Name
                 })
                 .ToListAsync();
 
@@ -123,6 +192,9 @@ namespace Ecommerce.Controllers
                 MaxPrice = maxPrice,
                 SortBy = sort
             };
+
+            // Preserve mens/womens while filtering
+            ViewBag.SelectedCollection = category;
 
             return View(model);
         }

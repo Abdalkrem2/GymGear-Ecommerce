@@ -1,7 +1,28 @@
 @model Ecommerce.Models.ViewModels.ProductListVM
 
 @{
-    ViewData["Title"] = "Shop";
+    var selectedCollection =
+        ViewBag.SelectedCollection as string;
+
+    var isMensCollection =
+        string.Equals(
+            selectedCollection,
+            "mens",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    var isWomensCollection =
+        string.Equals(
+            selectedCollection,
+            "womens",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    ViewData["Title"] = isMensCollection
+        ? "Shop Men"
+        : isWomensCollection
+            ? "Shop Women"
+            : "Shop";
 }
 
 <div class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding flex flex-col md:flex-row gap-gutter">
@@ -14,14 +35,24 @@
               method="get"
               class="flex flex-col gap-8">
 
+            <!-- Preserve mens/womens collection -->
+            @if (!string.IsNullOrWhiteSpace(selectedCollection))
+            {
+                <input type="hidden"
+                       name="category"
+                       value="@selectedCollection" />
+            }
+
             <div class="flex justify-between items-center">
 
                 <h2 class="font-headline-sm text-headline-sm text-on-surface">
                     Filters
                 </h2>
 
+                <!-- Clear filters but stay in Men/Women collection -->
                 <a asp-controller="Product"
                    asp-action="Index"
+                   asp-route-category="@selectedCollection"
                    class="font-label-caps text-label-caps text-tertiary hover:text-primary-container">
 
                     Clear
@@ -47,7 +78,18 @@
                             ? "checked"
                             : "") />
 
-                        All Products
+                        @if (isMensCollection)
+                        {
+                            <span>All Men's Products</span>
+                        }
+                        else if (isWomensCollection)
+                        {
+                            <span>All Women's Products</span>
+                        }
+                        else
+                        {
+                            <span>All Products</span>
+                        }
                     </label>
 
                     @foreach (var cat in Model.Categories)
@@ -107,7 +149,10 @@
                         class="input-field text-sm"
                         onchange="this.form.submit()">
 
-                    <option value="">
+                    <option value=""
+                            selected="@(string.IsNullOrEmpty(Model.SortBy)
+                                                        ? "selected"
+                                                        : null)">
                         Recommended
                     </option>
 
@@ -115,7 +160,6 @@
                             selected="@(Model.SortBy == "price_asc"
                                                         ? "selected"
                                                         : null)">
-
                         Price: Low to High
                     </option>
 
@@ -123,7 +167,6 @@
                             selected="@(Model.SortBy == "price_desc"
                                                         ? "selected"
                                                         : null)">
-
                         Price: High to Low
                     </option>
 
@@ -131,7 +174,6 @@
                             selected="@(Model.SortBy == "newest"
                                                         ? "selected"
                                                         : null)">
-
                         Newest
                     </option>
                 </select>
@@ -143,50 +185,83 @@
     <!-- Product Grid -->
     <main class="flex-1 flex flex-col">
 
+        <!-- Breadcrumb -->
         <nav aria-label="Breadcrumb"
              class="flex items-center gap-2 text-sm text-tertiary mb-2">
 
             <a asp-controller="Home"
                asp-action="Index"
                class="hover:text-on-surface">
-
                 Home
             </a>
 
             <span>/</span>
 
-            <span class="text-on-surface">
-                Shop
-            </span>
+            @if (isMensCollection)
+            {
+                <span class="text-on-surface">
+                    Shop Men
+                </span>
+            }
+            else if (isWomensCollection)
+            {
+                <span class="text-on-surface">
+                    Shop Women
+                </span>
+            }
+            else
+            {
+                <span class="text-on-surface">
+                    Shop
+                </span>
+            }
         </nav>
 
+        <!-- Page Heading -->
         <h1 class="font-headline-md text-headline-md text-on-surface mb-6">
 
-            @(Model.SelectedCategoryId != null
-                ? Model.Categories
-                    .FirstOrDefault(c =>
-                        c.Id == Model.SelectedCategoryId)?.Name
-                : "All Products")
+            @if (Model.SelectedCategoryId != null)
+            {
+                var selectedCategory =
+                    Model.Categories.FirstOrDefault(category =>
+                        category.Id == Model.SelectedCategoryId);
+
+                @(selectedCategory?.Name ?? "Products")
+            }
+            else if (isMensCollection)
+            {
+                @:Men's Collection
+            }
+            else if (isWomensCollection)
+            {
+                @:Women's Collection
+            }
+            else
+            {
+                @:All Products
+            }
         </h1>
 
         @if (Model.Products != null && Model.Products.Any())
         {
+            <!-- Product Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter mb-12">
 
-                @foreach (var p in Model.Products)
+                @foreach (var product in Model.Products)
                 {
                     <a asp-controller="Product"
                        asp-action="Details"
-                       asp-route-id="@p.Id"
+                       asp-route-id="@product.Id"
                        class="group bg-surface-container-lowest border border-surface-container hover:border-surface-variant hover:shadow-sm transition-all duration-300 relative flex flex-col">
 
+                        <!-- Product Image -->
                         <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
 
-                            @if (!string.IsNullOrEmpty(p.MainImagePath))
+                            @if (!string.IsNullOrEmpty(product.MainImagePath))
                             {
                                 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                     src="@p.MainImagePath"
-                                     alt="@p.Name" />
+                                     src="@product.MainImagePath"
+                                     alt="@product.Name" />
                             }
                             else
                             {
@@ -196,20 +271,21 @@
                             }
                         </div>
 
+                        <!-- Product Information -->
                         <div class="p-6 flex flex-col flex-grow">
 
                             <span class="font-label-caps text-label-caps text-tertiary mb-1">
-                                @p.CategoryName?.ToUpper()
+                                @product.CategoryName?.ToUpper()
                             </span>
 
                             <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">
-                                @p.Name
+                                @product.Name
                             </h3>
 
                             <div class="mt-auto flex items-center justify-between">
 
                                 <span class="font-price-display text-price-display text-on-surface">
-                                    @p.Price.ToString("C")
+                                    @product.Price.ToString("C")
                                 </span>
                             </div>
                         </div>
@@ -217,24 +293,28 @@
                 }
             </div>
 
+            <!-- Pagination -->
             @if (Model.TotalPages > 1)
             {
                 <div class="flex justify-center items-center gap-2 mt-auto border-t border-surface-container pt-8">
 
-                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    @for (int pageNumber = 1;
+                         pageNumber <= Model.TotalPages;
+                         pageNumber++)
                     {
                         <a asp-controller="Product"
                            asp-action="Index"
-                           asp-route-page="@i"
+                           asp-route-category="@selectedCollection"
+                           asp-route-page="@pageNumber"
                            asp-route-categoryId="@Model.SelectedCategoryId"
                            asp-route-minPrice="@Model.MinPrice"
                            asp-route-maxPrice="@Model.MaxPrice"
                            asp-route-sort="@Model.SortBy"
-                           class="w-10 h-10 flex items-center justify-center font-bold border @(i == Model.CurrentPage
+                           class="w-10 h-10 flex items-center justify-center font-bold border @(pageNumber == Model.CurrentPage
                                                           ? "bg-on-surface text-on-primary border-on-surface"
                                                           : "border-surface-container text-tertiary hover:border-on-surface hover:text-on-surface transition-colors")">
 
-                    @i
+                    @pageNumber
                 </a>
             }
         </div>
@@ -242,6 +322,7 @@
 }
         else
 {
+    <!-- No Products -->
     <div class="w-full text-center py-24 border border-dashed border-outline-variant rounded-sm">
 
         <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">

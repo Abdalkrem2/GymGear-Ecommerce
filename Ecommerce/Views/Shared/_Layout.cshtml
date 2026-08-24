@@ -1,16 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>@ViewData["Title"] - Gym Gear & Activewear</title>
-<partial name="_TailwindHead" />
-@await RenderSectionAsync("Styles", required: false)
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Gym Gear & Activewear</title>
+
+    <partial name="_TailwindHead" />
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
+
+@{
+    var controllerName =
+        ViewContext.RouteData.Values["controller"]?.ToString();
+
+    var actionName =
+        ViewContext.RouteData.Values["action"]?.ToString();
+
+    var isAccountPage =
+        string.Equals(
+            controllerName,
+            "Account",
+            StringComparison.OrdinalIgnoreCase
+        ) &&
+        (
+            string.Equals(
+                actionName,
+                "Login",
+                StringComparison.OrdinalIgnoreCase
+            ) ||
+            string.Equals(
+                actionName,
+                "Register",
+                StringComparison.OrdinalIgnoreCase
+            ) ||
+            string.Equals(
+                actionName,
+                "ForgotPassword",
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+
+    var isHomePage =
+        string.Equals(
+            controllerName,
+            "Home",
+            StringComparison.OrdinalIgnoreCase
+        ) &&
+        string.Equals(
+            actionName,
+            "Index",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    var navbarClasses = isHomePage
+        ? "bg-transparent text-white border-transparent"
+        : "bg-surface text-on-surface border-outline-variant shadow-sm";
+}
+
 <body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden"
-      data-toast-message="@TempData["ToastMessage"]" data-toast-type="@TempData["ToastType"]">
+      data-toast-message="@TempData["ToastMessage"]"
+      data-toast-type="@TempData["ToastType"]">
 
+    <!-- Top Navbar -->
+    <nav id="main-nav"
+         data-home-page="@isHomePage.ToString().ToLower()"
+         class="fixed top-0 w-full z-50 flex flex-col border-b transition-all duration-300 @navbarClasses">
 
+<<<<<<< Updated upstream
     <!-- TopNavBar -->
     <nav id="main-nav" class="fixed top-0 w-full z-50 flex flex-col bg-transparent text-white border-b border-transparent transition-all duration-300">
         <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
@@ -181,75 +240,401 @@
 </main>
 
 <!-- Footer -->
+=======
+        <!-- Main Top Bar -->
+        <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
+
+            <!-- Mobile Menu and Brand -->
+            <div class="flex items-center gap-3">
+
+                <!-- Mobile Menu Button -->
+                <button type="button"
+                        id="mobile-menu-toggle"
+                        class="md:hidden p-2 hover:bg-black/10 rounded-full transition-colors focus:outline-none"
+                        aria-label="Toggle Navigation">
+
+                    <span class="material-symbols-outlined block text-current"
+                          id="menu-icon">
+                        menu
+                    </span>
+                </button>
+
+                <!-- Brand -->
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="font-display-lg text-display-lg tracking-tighter shrink-0 text-current"
+                   style="font-size: 24px; line-height: 1;">
+
+                    GYM<span class="opacity-80">GEAR</span>
+                </a>
+            </div>
+
+            <!-- Desktop Search Bar -->
+            @if (!isAccountPage)
+            {
+                <div class="hidden md:flex flex-1 max-w-[320px] mx-6 items-center">
+
+                    <form asp-controller="Search"
+                          asp-action="Index"
+                          method="get"
+                          class="flex items-center gap-2 w-full">
+
+                        <span class="material-symbols-outlined shrink-0 text-[20px] text-current">
+                            search
+                        </span>
+
+                        <input type="text"
+                               name="q"
+                               placeholder="Search products or categories..."
+                               class="bg-transparent border-b border-current/50 focus:border-current focus:outline-none text-sm w-full py-1 placeholder:text-current/70 text-current transition-colors" />
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="hidden md:block flex-1"></div>
+            }
+
+            <!-- Action Icons -->
+            <div class="flex items-center gap-1 sm:gap-2">
+
+                <!-- Mobile Search -->
+                @if (!isAccountPage)
+                {
+                    <button type="button"
+                            id="mobile-search-toggle"
+                            class="md:hidden p-2 hover:bg-black/10 rounded-full transition-colors"
+                            aria-label="Search">
+
+                        <span class="material-symbols-outlined text-[22px] text-current">
+                            search
+                        </span>
+                    </button>
+                }
+
+                @if (User.Identity != null &&
+                     User.Identity.IsAuthenticated)
+                {
+                    <span class="font-label-caps text-label-caps mr-2 hidden lg:inline text-current/80">
+                        Hi, @User.Identity.Name
+                    </span>
+
+                    <!-- My Orders -->
+                    <a asp-controller="Order"
+                       asp-action="Index"
+                       class="hidden sm:inline-flex p-2 hover:bg-black/10 rounded-full transition-colors group"
+                       title="My Orders">
+
+                        <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">
+                            receipt_long
+                        </span>
+                    </a>
+
+                    <!-- Logout -->
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="hidden sm:inline-block">
+
+                        <button type="submit"
+                                class="p-2 hover:bg-black/10 rounded-full transition-colors group"
+                                title="Sign out">
+
+                            <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">
+                                logout
+                            </span>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <!-- Login -->
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="p-2 hover:bg-black/10 rounded-full transition-colors group"
+                       title="Sign in">
+
+                        <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">
+                            person
+                        </span>
+                    </a>
+                }
+
+                <!-- Wishlist -->
+                <a asp-controller="Wishlist"
+                   asp-action="Index"
+                   class="p-2 hover:bg-black/10 rounded-full transition-colors group"
+                   title="Wishlist">
+
+                    <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">
+                        favorite
+                    </span>
+                </a>
+
+                <!-- Cart -->
+                <a asp-controller="Cart"
+                   asp-action="Index"
+                   class="p-2 hover:bg-black/10 rounded-full transition-colors group relative"
+                   title="Shopping Cart">
+
+                    <span class="material-symbols-outlined group-hover:opacity-70 transition-opacity text-[22px] text-current">
+                        shopping_cart
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu"
+             class="hidden md:hidden flex-col border-t border-outline-variant bg-surface text-on-surface px-4 py-3 space-y-2">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="block py-2 font-medium hover:text-primary transition-colors">
+                Home
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               class="block py-2 font-medium hover:text-primary transition-colors">
+                Shop
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-category="mens"
+               class="block py-2 font-medium hover:text-primary transition-colors">
+                Shop Men
+            </a>
+
+            <a asp-controller="Home"
+               asp-action="About"
+               class="block py-2 font-medium hover:text-primary transition-colors">
+                About
+            </a>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+>>>>>>> Stashed changes
     <footer class="bg-inverse-surface text-on-primary w-full border-t border-outline-variant/30">
+
         <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop py-12 md:py-16">
-            <!-- Main Footer Columns -->
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12">
 
-                <!-- Brand Column -->
+                <!-- Brand -->
                 <div class="md:col-span-2 space-y-4">
-                    <a asp-controller="Home" asp-action="Index" class="font-display-lg text-xl md:text-2xl font-black text-on-primary tracking-tight block">
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="font-display-lg text-xl md:text-2xl font-black text-on-primary tracking-tight block">
+
                         GYM<span class="text-primary">GEAR</span>
                     </a>
+
                     <p class="text-tertiary-fixed-dim text-sm md:text-base leading-relaxed max-w-sm">
-                        Performance activewear for athletes who train without compromise. Engineered for durability, comfort, and speed.
+                        Performance activewear for athletes who train without
+                        compromise. Engineered for durability, comfort, and speed.
                     </p>
                 </div>
 
-                <!-- Navigation / Support Column -->
+                <!-- Quick Links -->
                 <div class="flex flex-col space-y-3">
-                    <span class="text-xs font-bold tracking-widest text-on-primary uppercase mb-1">Quick Links</span>
-                    <a asp-controller="Product" asp-action="Index" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Shop All Gear</a>
-                    <a asp-controller="Home" asp-action="About" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">About Us</a>
-                    <a href="#" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Shipping &amp; Delivery</a>
-                    <a href="#" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Returns &amp; Exchanges</a>
-                    <a href="#" class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">Contact Support</a>
+
+                    <span class="text-xs font-bold tracking-widest text-on-primary uppercase mb-1">
+                        Quick Links
+                    </span>
+
+                    <a asp-controller="Product"
+                       asp-action="Index"
+                       class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">
+                        Shop All Gear
+                    </a>
+
+                    <a asp-controller="Product"
+                       asp-action="Index"
+                       asp-route-category="mens"
+                       class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">
+                        Shop Men
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="About"
+                       class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">
+                        About Us
+                    </a>
+
+                    <a href="#"
+                       class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">
+                        Shipping &amp; Delivery
+                    </a>
+
+                    <a href="#"
+                       class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">
+                        Returns &amp; Exchanges
+                    </a>
+
+                    <a href="#"
+                       class="text-sm text-tertiary-fixed-dim hover:text-on-primary transition-colors">
+                        Contact Support
+                    </a>
                 </div>
 
-                <!-- Newsletter Column -->
+                <!-- Newsletter -->
                 <div class="flex flex-col space-y-3">
-                    <span class="text-xs font-bold tracking-widest text-on-primary uppercase mb-1">Stay Connected</span>
+
+                    <span class="text-xs font-bold tracking-widest text-on-primary uppercase mb-1">
+                        Stay Connected
+                    </span>
+
                     <p class="text-sm text-tertiary-fixed-dim">
                         Get first access to limited drops and exclusive training gear.
                     </p>
+
                     <form onsubmit="event.preventDefault();" class="mt-2">
+
                         <div class="relative flex items-center">
+
                             <input type="email"
                                    placeholder="Enter your email"
                                    class="w-full bg-surface-container-lowest/10 border border-outline-variant/40 rounded px-3.5 py-2.5 text-sm text-on-primary placeholder:text-tertiary focus:outline-none focus:border-primary transition-colors" />
+
                             <button type="submit"
                                     class="absolute right-1.5 p-1.5 text-primary hover:text-on-primary hover:bg-primary/20 rounded transition-colors"
                                     aria-label="Subscribe">
-                                <span class="material-symbols-outlined text-[20px] block">arrow_forward</span>
+
+                                <span class="material-symbols-outlined text-[20px] block">
+                                    arrow_forward
+                                </span>
                             </button>
                         </div>
                     </form>
                 </div>
-
             </div>
 
-            <!-- Bottom Copyright Row -->
+            <!-- Copyright -->
             <div class="mt-12 pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-tertiary">
+
                 <div>
-                    &copy; @DateTime.Now.Year GYMGEAR ACTIVEWEAR. All rights reserved.
+                    &copy; @DateTime.Now.Year GYMGEAR ACTIVEWEAR.
+                    All rights reserved.
                 </div>
+
                 <div class="flex items-center gap-6">
-                    <a asp-controller="Home" asp-action="Privacy" class="hover:text-on-primary transition-colors">Privacy Policy</a>
-                    <a href="#" class="hover:text-on-primary transition-colors">Terms of Service</a>
+
+                    <a asp-controller="Home"
+                       asp-action="Privacy"
+                       class="hover:text-on-primary transition-colors">
+                        Privacy Policy
+                    </a>
+
+                    <a href="#"
+                       class="hover:text-on-primary transition-colors">
+                        Terms of Service
+                    </a>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- Navbar Script -->
+    <script>
+            document.addEventListener("DOMContentLoaded", function() {
 
-<script>
-    window.addEventListener('scroll', () => {
-        const nav = document.getElementById('main-nav');
-        if (window.scrollY > 40) { nav.classList.add('shadow-md'); } else { nav.classList.remove('shadow-md'); }
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+                const nav =
+                    document.getElementById("main-nav");
+
+                const menuToggle =
+                    document.getElementById("mobile-menu-toggle");
+
+                const mobileMenu =
+                    document.getElementById("mobile-menu");
+
+                const isHomePage =
+                    nav?.dataset.homePage === "true";
+
+                function updateNavbar() {
+
+                    if (!nav || !isHomePage) {
+                        return;
+                    }
+
+                    if (window.scrollY > 40) {
+
+                        nav.classList.add(
+                            "bg-surface",
+                            "text-on-surface",
+                            "border-outline-variant",
+                            "shadow-md"
+                        );
+
+                        nav.classList.remove(
+                            "bg-transparent",
+                            "text-white",
+                            "border-transparent"
+                        );
+
+                    } else {
+
+                        nav.classList.add(
+                            "bg-transparent",
+                            "text-white",
+                            "border-transparent"
+                        );
+
+                        nav.classList.remove(
+                            "bg-surface",
+                            "text-on-surface",
+                            "border-outline-variant",
+                            "shadow-md"
+                        );
+                    }
+                }
+
+                window.addEventListener(
+                    "scroll",
+                    updateNavbar
+                );
+
+                updateNavbar();
+
+                if (menuToggle && mobileMenu) {
+
+                    menuToggle.addEventListener(
+                        "click",
+                        function() {
+
+                            mobileMenu.classList.toggle("hidden");
+                            mobileMenu.classList.toggle("flex");
+
+                            if (
+                                isHomePage &&
+                                window.scrollY <= 40
+                            ) {
+                                nav.classList.toggle("bg-surface");
+                                nav.classList.toggle("text-on-surface");
+                                nav.classList.toggle("text-white");
+                                nav.classList.toggle("bg-transparent");
+                            }
+                        }
+                    );
+                }
+            });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true">
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
