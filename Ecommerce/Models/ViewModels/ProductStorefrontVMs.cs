@@ -28,6 +28,7 @@ namespace Ecommerce.Models.ViewModels
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
+        public bool HasSizes { get; set; }
         public string CategoryName { get; set; }
         public List<ProductImageVM> Images { get; set; } = new();
 

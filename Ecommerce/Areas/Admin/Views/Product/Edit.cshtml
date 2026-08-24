@@ -65,6 +65,13 @@
         </div>
 
         <div class="mb-6">
+            <label class="flex items-center gap-2 font-body-md text-body-md text-on-surface">
+                <input asp-for="HasSizes" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary" />
+                This product has sizes (clothing — shows XS/S/M/L/XL selector on the product page)
+            </label>
+        </div>
+
+        <div class="mb-6">
             <label asp-for="ImageFiles" class="font-label-caps text-label-caps text-tertiary mb-2 block">ADD MORE IMAGES (OPTIONAL)</label>
             <input asp-for="ImageFiles" type="file" accept="image/*" multiple class="input-field" />
             <span asp-validation-for="ImageFiles" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>

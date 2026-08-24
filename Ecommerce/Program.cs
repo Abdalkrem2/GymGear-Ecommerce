@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Ecommerce.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // 1) EF Core + SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -53,6 +54,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseStatusCodePagesWithReExecute("/Home/HandleError/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="flex-1 overflow-y-auto">
-        <ul class="flex flex-col gap-1">
+            <ul class="flex flex-col gap-1 min-h-full">
             <li>
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"
                    class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Dashboard" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
@@ -65,6 +65,13 @@
                     <span class="material-symbols-outlined">gavel</span> Moderation
                 </a>
             </li>
+                <li class="mt-auto pt-4 border-t border-tertiary-container">
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                            <span class="material-symbols-outlined">logout</span> Sign Out
+                        </button>
+                    </form>
+                </li>
         </ul>
     </div>
 </nav>

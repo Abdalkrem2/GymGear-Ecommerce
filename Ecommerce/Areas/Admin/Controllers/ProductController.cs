@@ -1,6 +1,7 @@
-﻿using Ecommerce.Models.ViewModels;
-using GymGear.Web.Data;
+﻿using Ecommerce.Data;
 using Ecommerce.Models.Entities;
+using Ecommerce.Models.ViewModels;
+using GymGear.Web.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                         : string.Empty,
                     Price = product.Price,
                     Stock = product.Stock,
+                    HasSizes = product.HasSizes,
                     IsActive = product.IsActive,
                     MainImagePath = product.Images
                         .OrderByDescending(image => image.IsMain)
@@ -79,6 +81,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                 Description = model.Description,
                 Price = model.Price,
                 Stock = model.Stock,
+                HasSizes = model.HasSizes,
                 CategoryId = model.CategoryId,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
@@ -123,6 +126,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                 Description = product.Description ?? string.Empty,
                 Price = product.Price,
                 Stock = product.Stock,
+                HasSizes = product.HasSizes,
                 CategoryId = product.CategoryId,
                 ExistingImages = product.Images
                     .OrderByDescending(image => image.IsMain)
@@ -184,6 +188,7 @@ namespace Ecommerce.Areas.Admin.Controllers
             product.Description = model.Description;
             product.Price = model.Price;
             product.Stock = model.Stock;
+            product.HasSizes = model.HasSizes;
             product.CategoryId = model.CategoryId;
 
             if (model.ImageFiles.Any())
@@ -222,6 +227,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                         : string.Empty,
                     Price = product.Price,
                     Stock = product.Stock,
+                    HasSizes = product.HasSizes,
                     IsActive = product.IsActive,
                     MainImagePath = product.Images
                         .OrderByDescending(image => image.IsMain)

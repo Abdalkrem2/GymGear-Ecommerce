@@ -3,7 +3,7 @@ function showToast(message, type) {
   var iconMap = { success: 'success', error: 'error', info: 'info' };
   Swal.fire({
     toast: true,
-    position: 'top-end',
+    position: 'bottom-end',
     icon: iconMap[type] || 'success',
     title: message,
     showConfirmButton: false,

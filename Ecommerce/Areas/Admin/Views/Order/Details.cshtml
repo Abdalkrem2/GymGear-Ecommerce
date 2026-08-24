@@ -27,6 +27,7 @@
                 <thead>
                     <tr class="bg-surface-container-low font-label-caps text-label-caps text-tertiary border-b border-surface-variant">
                         <th class="p-4 font-normal">Product</th>
+                        <th class="p-4 font-normal">Size</th>
                         <th class="p-4 font-normal">Qty</th>
                         <th class="p-4 font-normal">Unit Price</th>
                         <th class="p-4 font-normal text-right">Line Total</th>
@@ -37,6 +38,7 @@
                     {
                         <tr class="border-b border-surface-variant">
                             <td class="p-4 text-on-surface font-medium">@item.ProductName</td>
+                            <td class="p-4 text-tertiary">@(string.IsNullOrEmpty(item.Size) ? "—" : item.Size)</td>
                             <td class="p-4 text-tertiary">@item.Quantity</td>
                             <td class="p-4 text-tertiary">@item.UnitPrice.ToString("C")</td>
                             <td class="p-4 text-right font-price-display text-[15px]">@item.LineTotal.ToString("C")</td>

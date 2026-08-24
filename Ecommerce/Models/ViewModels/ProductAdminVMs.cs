@@ -11,6 +11,7 @@ namespace Ecommerce.Models.ViewModels
         public string CategoryName { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
+        public bool HasSizes { get; set; }
         public bool IsActive { get; set; }
         public string MainImagePath { get; set; }
     }
@@ -30,6 +31,8 @@ namespace Ecommerce.Models.ViewModels
 
         [Required, Range(0, int.MaxValue)]
         public int Stock { get; set; }
+
+        public bool HasSizes { get; set; }
 
         [Required]
         public int CategoryId { get; set; }

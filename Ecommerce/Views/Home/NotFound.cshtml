@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Page Not Found";
+}
+
+<!-- Changed min-h-[70vh] to flex-1 -->
+<div class="w-full flex-1 flex flex-col items-center justify-center bg-background text-center px-4 py-16">
+    
+    <h1 class="mt-16 text-8xl md:text-[12rem] font-black text-on-surface tracking-tighter leading-none mb-2">
+        404
+    </h1>
+    
+    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-tight text-on-surface mb-6">
+        Off the grid
+    </h2>
+    
+    <p class="text-tertiary text-base md:text-lg max-w-md mb-10">
+        The page you're looking for doesn't exist, has been moved, or is temporarily unavailable. Let's get you back on track.
+    </p>
+    
+    <a asp-controller="Product" asp-action="Index" class="bg-primary text-on-primary font-bold uppercase tracking-widest px-10 py-4 rounded-sm hover:bg-primary/90 transition-colors inline-flex items-center gap-2 group">
+        Back to Shop
+        <span class="material-symbols-outlined transform group-hover:translate-x-1 transition-transform">arrow_forward</span>
+    </a>
+</div>
