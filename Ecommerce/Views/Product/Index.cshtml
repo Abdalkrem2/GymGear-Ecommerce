@@ -35,7 +35,7 @@
               method="get"
               class="flex flex-col gap-8">
 
-            <!-- Preserve mens/womens collection -->
+            <!-- Preserve Men/Women Collection -->
             @if (!string.IsNullOrWhiteSpace(selectedCollection))
             {
                 <input type="hidden"
@@ -49,12 +49,10 @@
                     Filters
                 </h2>
 
-                <!-- Clear filters but stay in Men/Women collection -->
                 <a asp-controller="Product"
                    asp-action="Index"
                    asp-route-category="@selectedCollection"
                    class="font-label-caps text-label-caps text-tertiary hover:text-primary-container">
-
                     Clear
                 </a>
             </div>
@@ -74,9 +72,7 @@
                                value=""
                                class="text-primary-container"
                                onchange="this.form.submit()"
-                        @(Model.SelectedCategoryId == null
-                            ? "checked"
-                            : "") />
+                               checked="@(Model.SelectedCategoryId == null ? "checked" : null)" />
 
                         @if (isMensCollection)
                         {
@@ -92,20 +88,18 @@
                         }
                     </label>
 
-                    @foreach (var cat in Model.Categories)
+                    @foreach (var category in Model.Categories)
                     {
                         <label class="flex items-center gap-2 font-body-md text-body-md text-tertiary">
 
                             <input type="radio"
                                    name="categoryId"
-                                   value="@cat.Id"
+                                   value="@category.Id"
                                    class="text-primary-container"
                                    onchange="this.form.submit()"
-                            @(Model.SelectedCategoryId == cat.Id
-                                ? "checked"
-                                : "") />
+                                   checked="@(Model.SelectedCategoryId == category.Id ? "checked" : null)" />
 
-                            @cat.Name
+                            <span>@category.Name</span>
                         </label>
                     }
                 </div>
@@ -125,7 +119,6 @@
                            step="0.01"
                            placeholder="Min $"
                            value="@Model.MinPrice"
-                           onchange="this.form.submit()"
                            class="input-field text-sm" />
 
                     <input type="number"
@@ -134,9 +127,13 @@
                            step="0.01"
                            placeholder="Max $"
                            value="@Model.MaxPrice"
-                           onchange="this.form.submit()"
                            class="input-field text-sm" />
                 </div>
+
+                <button type="submit"
+                        class="w-full mt-3 bg-on-surface text-on-primary py-2 font-bold uppercase tracking-widest rounded-sm hover:opacity-90 transition-opacity">
+                    Apply Price
+                </button>
             </div>
 
             <!-- Sort -->
@@ -150,30 +147,22 @@
                         onchange="this.form.submit()">
 
                     <option value=""
-                            selected="@(string.IsNullOrEmpty(Model.SortBy)
-                                                        ? "selected"
-                                                        : null)">
+                            selected="@(string.IsNullOrEmpty(Model.SortBy) ? "selected" : null)">
                         Recommended
                     </option>
 
                     <option value="price_asc"
-                            selected="@(Model.SortBy == "price_asc"
-                                                        ? "selected"
-                                                        : null)">
+                            selected="@(Model.SortBy == "price_asc" ? "selected" : null)">
                         Price: Low to High
                     </option>
 
                     <option value="price_desc"
-                            selected="@(Model.SortBy == "price_desc"
-                                                        ? "selected"
-                                                        : null)">
+                            selected="@(Model.SortBy == "price_desc" ? "selected" : null)">
                         Price: High to Low
                     </option>
 
                     <option value="newest"
-                            selected="@(Model.SortBy == "newest"
-                                                        ? "selected"
-                                                        : null)">
+                            selected="@(Model.SortBy == "newest" ? "selected" : null)">
                         Newest
                     </option>
                 </select>
@@ -182,7 +171,7 @@
         </form>
     </aside>
 
-    <!-- Product Grid -->
+    <!-- Main Content -->
     <main class="flex-1 flex flex-col">
 
         <!-- Breadcrumb -->
@@ -217,7 +206,7 @@
             }
         </nav>
 
-        <!-- Page Heading -->
+        <!-- Heading -->
         <h1 class="font-headline-md text-headline-md text-on-surface mb-6">
 
             @if (Model.SelectedCategoryId != null)
@@ -255,13 +244,14 @@
                        class="group bg-surface-container-lowest border border-surface-container hover:border-surface-variant hover:shadow-sm transition-all duration-300 relative flex flex-col">
 
                         <!-- Product Image -->
-                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                        <div class="product-card-image relative w-full aspect-[4/5] bg-white overflow-hidden flex items-center justify-center">
 
-                            @if (!string.IsNullOrEmpty(product.MainImagePath))
+                            @if (!string.IsNullOrWhiteSpace(product.MainImagePath))
                             {
-                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                     src="@product.MainImagePath"
-                                     alt="@product.Name" />
+                                <img src="@product.MainImagePath"
+                                     alt="@product.Name"
+                                     class="w-full h-full object-contain p-3"
+                                     loading="lazy" />
                             }
                             else
                             {
@@ -334,5 +324,6 @@
         </p>
     </div>
 }
+
 </main>
 </div>
