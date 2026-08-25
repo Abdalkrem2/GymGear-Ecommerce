@@ -61,12 +61,6 @@
                 </a>
             </div>
 
-            <!-- Desktop Navigation Links (Centered) -->
-            <div class="hidden md:flex items-center justify-center gap-8 flex-1">
-                <a asp-controller="Home" asp-action="Index" class="font-medium hover:text-primary transition-colors font-label-caps text-label-caps text-current">Home</a>
-                <a asp-controller="Product" asp-action="Index" class="font-medium hover:text-primary transition-colors font-label-caps text-label-caps text-current">Shop</a>
-                <a asp-controller="Home" asp-action="About" class="font-medium hover:text-primary transition-colors font-label-caps text-label-caps text-current">About</a>
-            </div>
 
             <!-- Action Icons & Inline Easing Search -->
             <div class="flex items-center justify-end gap-1 sm:gap-1.5">
@@ -87,11 +81,11 @@
                     </div>
                 }
 
-                <!-- Dark / Light Theme Toggle -->
-                <button type="button" id="theme-toggle" class="w-10 h-10 inline-flex items-center justify-center hover:text-primary hover:bg-white/10 rounded-full transition-colors group focus:outline-none" title="Toggle Theme">
-                    <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:text-primary transition-colors hidden dark:block">light_mode</span>
-                    <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:text-primary transition-colors block dark:hidden">dark_mode</span>
+                <button type="button" id="theme-toggle" class="w-10 h-10 inline-flex items-center justify-center hover:bg-surface-variant hover:text-primary rounded-full transition-colors text-on-surface focus:outline-none" title="Toggle Theme">
+                    <span class="material-symbols-outlined text-[20px] hidden dark:block">light_mode</span>
+                    <span class="material-symbols-outlined text-[20px] block dark:hidden">dark_mode</span>
                 </button>
+
 
                 <a asp-controller="Wishlist" asp-action="Index" class="w-10 h-10 inline-flex items-center justify-center hover:text-primary hover:bg-white/10 rounded-full transition-colors group" title="Wishlist">
                     <span class="material-symbols-outlined text-[22px] leading-none text-current group-hover:text-primary transition-colors">favorite</span>

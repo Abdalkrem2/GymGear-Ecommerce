@@ -4,35 +4,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Admin - Gym Gear & Activewear</title>
-    
-    <!-- Anti-flicker theme loader -->
-    <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    </script>
-    
-    <partial name="_TailwindHead" />
-    @await RenderSectionAsync("Styles", required: false)
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>@ViewData["Title"] - Admin - Gym Gear & Activewear</title>
+<partial name="_TailwindHead" />
+@await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="bg-background text-on-background font-body-md antialiased flex h-screen overflow-hidden"
+<body class="bg-background text-on-background font-body-md antialiased flex"
       data-toast-message="@TempData["ToastMessage"]" data-toast-type="@TempData["ToastType"]">
 
 <!-- Sidebar -->
 <nav class="bg-inverse-surface fixed left-0 top-0 h-full w-[280px] shadow-md flex flex-col py-6 z-40 hidden md:flex">
     <div class="px-6 mb-8 flex flex-col gap-4">
-        <div class="flex items-center justify-between">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="font-headline-md text-headline-md font-black text-on-primary tracking-tight">
-                GYM<span class="text-primary">GEAR</span> <span class="text-xs font-semibold uppercase text-tertiary-fixed-dim ml-1">Admin</span>
-            </a>
-        </div>
-        <div class="flex items-center gap-3 pt-2 border-t border-white/10">
-            <div class="w-10 h-10 rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+        <h1 class="font-headline-md text-headline-md font-bold text-on-primary">GYM<span style="color:#ff8a8a;">GEAR</span> Admin</h1>
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full overflow-hidden bg-tertiary-container flex items-center justify-center">
                 <span class="material-symbols-outlined text-on-primary">person</span>
             </div>
             <div>
@@ -41,84 +27,67 @@
             </div>
         </div>
     </div>
-    
-    <div class="flex-1 overflow-y-auto px-2">
-        <ul class="flex flex-col gap-1 min-h-full">
+    <div class="flex-1 overflow-y-auto">
+            <ul class="flex flex-col gap-1 min-h-full">
             <li>
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"
-                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 rounded-sm @(currentController == "Dashboard" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-white/10 border-transparent")">
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Dashboard" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">dashboard</span> Dashboard
                 </a>
             </li>
             <li>
                 <a asp-area="Admin" asp-controller="Category" asp-action="Index"
-                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 rounded-sm @(currentController == "Category" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-white/10 border-transparent")">
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Category" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">category</span> Categories
                 </a>
             </li>
             <li>
                 <a asp-area="Admin" asp-controller="Product" asp-action="Index"
-                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 rounded-sm @(currentController == "Product" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-white/10 border-transparent")">
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Product" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">inventory_2</span> Products
                 </a>
             </li>
             <li>
                 <a asp-area="Admin" asp-controller="Order" asp-action="Index"
-                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 rounded-sm @(currentController == "Order" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-white/10 border-transparent")">
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Order" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">shopping_bag</span> Orders
                 </a>
             </li>
             <li>
                 <a asp-area="Admin" asp-controller="User" asp-action="Index"
-                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 rounded-sm @(currentController == "User" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-white/10 border-transparent")">
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "User" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">group</span> Users
                 </a>
             </li>
             <li>
                 <a asp-area="Admin" asp-controller="Moderation" asp-action="Index"
-                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 rounded-sm @(currentController == "Moderation" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-white/10 border-transparent")">
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Moderation" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
                     <span class="material-symbols-outlined">gavel</span> Moderation
                 </a>
             </li>
-
-            <!-- Bottom Options -->
-            <li class="mt-auto pt-4 border-t border-white/10 flex flex-col gap-1">
-                <!-- Return to Storefront -->
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps text-tertiary-fixed-dim hover:text-on-primary hover:bg-white/10 transition-all duration-200 border-l-4 border-transparent">
-                    <span class="material-symbols-outlined text-[20px]">storefront</span> View Storefront
-                </a>
-                
-                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
-                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps text-tertiary-fixed-dim hover:text-primary hover:bg-white/10 transition-all duration-200 border-l-4 border-transparent text-left">
-                        <span class="material-symbols-outlined text-[20px]">logout</span> Sign Out
-                    </button>
-                </form>
-            </li>
+                <li class="mt-auto pt-4 border-t border-tertiary-container">
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                            <span class="material-symbols-outlined">logout</span> Sign Out
+                        </button>
+                    </form>
+                </li>
         </ul>
     </div>
 </nav>
 
 <!-- Main Content Area -->
-<main class="flex-1 md:ml-[280px] h-full overflow-y-auto bg-background w-full flex flex-col">
-    <header class="bg-surface border-b border-outline-variant sticky top-0 z-30 px-margin-mobile md:px-margin-desktop py-4 flex justify-between items-center h-16 shrink-0">
+<main class="flex-1 md:ml-[280px] h-full overflow-y-auto bg-background w-full">
+    <header class="bg-surface border-b border-outline-variant sticky top-0 z-30 px-margin-mobile md:px-margin-desktop py-4 flex justify-between items-center h-16">
         <div class="flex items-center gap-4">
             <button class="md:hidden text-on-surface"><span class="material-symbols-outlined">menu</span></button>
             <h2 class="font-headline-sm text-headline-sm text-on-surface hidden md:block">@ViewData["Title"]</h2>
         </div>
-        <div class="flex items-center gap-3">
-            <!-- Storefront Quick Link -->
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 border border-outline-variant rounded-sm text-xs font-bold uppercase tracking-wider text-on-surface hover:text-primary hover:border-primary transition-colors">
-                <span class="material-symbols-outlined text-[16px]">open_in_new</span> Storefront
-            </a>
-
-            <!-- Theme Toggle -->
-            <button type="button" id="theme-toggle" class="w-10 h-10 inline-flex items-center justify-center hover:bg-surface-variant rounded-full transition-colors text-on-surface focus:outline-none" title="Toggle Theme">
-                <span class="material-symbols-outlined text-[20px] hidden dark:block">light_mode</span>
-                <span class="material-symbols-outlined text-[20px] block dark:hidden">dark_mode</span>
-            </button>
+        <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-on-surface cursor-pointer hover:text-primary transition-colors">notifications</span>
         </div>
     </header>
-    <div class="p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full space-y-gutter flex-1 pb-16">
+    <div class="p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto space-y-gutter">
         @RenderBody()
     </div>
 </main>

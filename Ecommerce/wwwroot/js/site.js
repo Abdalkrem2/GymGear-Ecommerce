@@ -12,15 +12,22 @@ function showToast(message, type) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const themeToggleBtn = document.getElementById("theme-toggle");
+document.addEventListener("DOMContentLoaded", function () {
+// 1. Grab the theme toggle button
+const themeToggleBtn = document.getElementById("theme-toggle");
 
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener("click", () => {
-            const isDark = document.documentElement.classList.toggle("dark");
-            localStorage.setItem("theme", isDark ? "dark" : "light");
-        });
-    }
+// 2. Check if the button exists on the current page
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", function (e) {
+        e.preventDefault(); // Prevent any default button behavior
+        
+        // 3. Toggle the 'dark' class on the <html> tag
+        const isDark = document.documentElement.classList.toggle("dark");
+        
+        // 4. Save the user's preference to localStorage so it remembers across pages
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+}
 });
 
 document.addEventListener('DOMContentLoaded', function () {
