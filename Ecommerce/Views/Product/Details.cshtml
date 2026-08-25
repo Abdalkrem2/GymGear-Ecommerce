@@ -6,6 +6,8 @@
     var mainImage = Model.Images != null && Model.Images.Any()
         ? Model.Images.First().ImagePath
         : null;
+
+    var sizes = new[] { "XS", "S", "M", "L", "XL", "XXL" };
 }
 
 <div class="w-full bg-background pt-24 pb-16">
@@ -24,7 +26,8 @@
             <span class="mx-2">/</span>
 
             <a asp-controller="Product"
-               asp-action="Index"
+               asp-action="Index
+       
                class="hover:text-primary transition-colors">
                 @Model.CategoryName
             </a>
@@ -42,14 +45,15 @@
             <div class="lg:col-span-7 flex flex-col gap-4">
 
                 <!-- Main Image -->
-                <div class="w-full bg-surface-container-low aspect-[4/5] rounded-sm overflow-hidden flex items-center justify-center relative">
+                <div class="w-full bg-white aspect-[4/5] rounded-sm overflow-hidden flex items-center justify-center relative">
 
-                    @if (!string.IsNullOrEmpty(mainImage))
+                    @if (!string.IsNullOrWhiteSpace(mainImage))
                     {
                         <img src="@mainImage"
                              alt="@Model.Name"
                              id="mainProductImage"
-                             class="w-full h-full object-cover" />
+                             class="w-full h-full object-contain p-4"
+                             loading="eager" />
                     }
                     else
                     {
@@ -57,7 +61,6 @@
                             NO IMAGE
                         </span>
                     }
-
                 </div>
 
                 <!-- Thumbnails -->
@@ -65,29 +68,29 @@
                 {
                     <div class="grid grid-cols-4 gap-3">
 
-                        @foreach (var img in Model.Images)
+                        @for (int index = 0; index < Model.Images.Count; index++)
                         {
-                            <button type="button"
-                                    onclick="document.getElementById('mainProductImage').src='@img.ImagePath'"
-                                    class="aspect-square bg-surface-container-low border border-outline-variant rounded-sm overflow-hidden hover:border-on-surface transition-colors focus:outline-none">
+                            var image = Model.Images[index];
 
-                                <img class="w-full h-full object-cover"
-                                     src="@img.ImagePath"
-                                     alt="@Model.Name" />
+                            <button type="button"
+                                    onclick="changeProductImage('@image.ImagePath', this)"
+                                    class="product-thumbnail aspect-square bg-white border rounded-sm overflow-hidden transition-colors focus:outline-none @(index == 0 ? "border-primary ring-2 ring-primary" : "border-outline-variant hover:border-on-surface")">
+
+                                <img src="@image.ImagePath"
+                                     alt="@Model.Name"
+                                     class="w-full h-full object-contain p-2"
+                                     loading="lazy" />
                             </button>
                         }
-
                     </div>
                 }
-
             </div>
 
             <!-- RIGHT COLUMN: Product Details -->
             <div class="lg:col-span-5 relative">
-
                 <div class="sticky top-28 flex flex-col">
 
-                    <!-- Category, Title and Price -->
+                    <!-- Category, Name, Rating and Price -->
                     <div class="border-b border-outline-variant/30 pb-6 mb-6">
 
                         <span class="font-label-caps text-label-caps text-primary-container mb-2 block">
@@ -103,7 +106,6 @@
                             <div class="flex items-center gap-2 mb-4">
 
                                 <div class="flex items-center text-primary-container">
-
                                     @for (int i = 1; i <= 5; i++)
                                     {
                                         <span class="material-symbols-outlined text-[18px]"
@@ -111,14 +113,12 @@
                                             star
                                         </span>
                                     }
-
                                 </div>
 
                                 <a href="#reviews"
                                    class="text-sm text-tertiary hover:text-on-surface underline transition-colors">
                                     @Model.ReviewCount Review@(Model.ReviewCount == 1 ? "" : "s")
                                 </a>
-
                             </div>
                         }
 
@@ -145,10 +145,9 @@
                                 IN STOCK
                             </p>
                         }
-
                     </div>
 
-                    <!-- Add to Cart Form -->
+                    <!-- Add to Cart -->
                     <form asp-controller="Cart"
                           asp-action="Add"
                           method="post"
@@ -161,57 +160,26 @@
                         @if (Model.HasSizes)
                         {
                             <div>
-
                                 <label class="text-xs font-bold uppercase tracking-widest text-on-surface mb-3 block">
                                     Select Size
                                 </label>
 
                                 <div class="flex gap-2 flex-wrap">
-
-                                    <button type="button"
-                                            onclick="selectSize(this)"
-                                            class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
-                                        XS
-                                    </button>
-
-                                    <button type="button"
-                                            onclick="selectSize(this)"
-                                            class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
-                                        S
-                                    </button>
-
-                                    <button type="button"
-                                            onclick="selectSize(this)"
-                                            data-selected="true"
-                                            class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
-                                        M
-                                    </button>
-
-                                    <button type="button"
-                                            onclick="selectSize(this)"
-                                            class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
-                                        L
-                                    </button>
-
-                                    <button type="button"
-                                            onclick="selectSize(this)"
-                                            class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
-                                        XL
-                                    </button>
-
-                                    <button type="button"
-                                            onclick="selectSize(this)"
-                                            class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
-                                        XXL
-                                    </button>
-
+                                    @foreach (var size in sizes)
+                                    {
+                                        <button type="button"
+                                                onclick="selectSize(this)"
+                                                data-selected="@(size == "M" ? "true" : null)"
+                                                class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
+                                            @size
+                                        </button>
+                                    }
                                 </div>
 
                                 <input type="hidden"
                                        name="size"
                                        id="selectedSizeInput"
                                        value="M" />
-
                             </div>
                         }
 
@@ -236,6 +204,7 @@
                                        name="quantity"
                                        value="1"
                                        min="1"
+                                       max="@Model.Stock"
                                        class="w-full text-center bg-transparent border-none focus:ring-0 text-on-surface font-medium p-0" />
 
                                 <button type="button"
@@ -243,24 +212,37 @@
                                         class="px-4 py-2 text-tertiary hover:text-on-surface transition-colors focus:outline-none">
                                     +
                                 </button>
-
                             </div>
                         </div>
 
                         <!-- Buttons -->
                         <div class="flex flex-col gap-3 mt-4">
 
-                            <button type="submit"
-                                    class="w-full bg-primary text-on-primary py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
-                                    disabled="@(Model.Stock == 0 ? "disabled" : null)">
+                            @if (Model.Stock > 0)
+                            {
+                                <button type="submit"
+                                        class="w-full bg-primary text-on-primary py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
 
-                                Add To Cart
+                                    Add To Cart
 
-                                <span class="material-symbols-outlined text-[20px]">
-                                    shopping_bag
-                                </span>
+                                    <span class="material-symbols-outlined text-[20px]">
+                                        shopping_bag
+                                    </span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button"
+                                        disabled
+                                        class="w-full bg-gray-400 text-white py-4 font-bold uppercase tracking-widest rounded-sm cursor-not-allowed flex items-center justify-center gap-2">
 
-                            </button>
+                                    Out Of Stock
+
+                                    <span class="material-symbols-outlined text-[20px]">
+                                        shopping_bag
+                                    </span>
+                                </button>
+                            }
 
                             <a asp-controller="Wishlist"
                                asp-action="Add"
@@ -272,9 +254,7 @@
                                 <span class="material-symbols-outlined text-[20px]">
                                     favorite_border
                                 </span>
-
                             </a>
-
                         </div>
                     </form>
 
@@ -295,12 +275,11 @@
                                 <span class="material-symbols-outlined text-tertiary group-hover:text-primary transition-colors accordion-icon">
                                     remove
                                 </span>
-
                             </button>
 
                             <div class="accordion-content pb-5 text-tertiary-fixed-dim text-sm leading-relaxed block">
 
-                                @if (!string.IsNullOrEmpty(Model.Description))
+                                @if (!string.IsNullOrWhiteSpace(Model.Description))
                                 {
                                     @Html.Raw(Model.Description)
                                 }
@@ -310,7 +289,6 @@
                                         Engineered for maximum performance and durability.
                                     </p>
                                 }
-
                             </div>
                         </div>
 
@@ -327,7 +305,6 @@
                                 <span class="material-symbols-outlined text-tertiary group-hover:text-primary transition-colors accordion-icon">
                                     add
                                 </span>
-
                             </button>
 
                             <div class="accordion-content pb-5 text-tertiary-fixed-dim text-sm leading-relaxed hidden">
@@ -348,7 +325,6 @@
                                                     </p>
 
                                                     <div class="flex items-center text-primary-container">
-
                                                         @for (int i = 1; i <= 5; i++)
                                                         {
                                                             <span class="material-symbols-outlined text-[14px]"
@@ -356,7 +332,6 @@
                                                                 star
                                                             </span>
                                                         }
-
                                                     </div>
                                                 </div>
 
@@ -367,10 +342,8 @@
                                                 <p class="font-body-md text-body-md text-on-surface">
                                                     @review.Text
                                                 </p>
-
                                             </div>
                                         }
-
                                     </div>
                                 }
                                 else
@@ -380,7 +353,7 @@
                                     </p>
                                 }
 
-                                <!-- Add Review Form -->
+                                <!-- Add Review -->
                                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                                 {
                                     <form asp-controller="Comment"
@@ -392,7 +365,6 @@
                                                name="ProductId"
                                                value="@Model.Id" />
 
-                                        <!-- Star Rating -->
                                         <div class="mb-4">
 
                                             <label class="font-label-caps text-label-caps text-tertiary mb-2 block">
@@ -403,66 +375,23 @@
                                                  role="radiogroup"
                                                  aria-label="Choose your rating">
 
-                                                <input type="radio"
-                                                       id="rating5"
-                                                       name="Rating"
-                                                       value="5"
-                                                       required />
+                                                @for (int rating = 5; rating >= 1; rating--)
+                                                {
+                                                    <input type="radio"
+                                                           id="rating@rating"
+                                                           name="Rating"
+                                                           value="@rating"
+                                                           required="@(rating == 5 ? "required" : null)" />
 
-                                                <label for="rating5"
-                                                       title="Excellent"
-                                                       aria-label="5 stars">
-                                                    ★
-                                                </label>
-
-                                                <input type="radio"
-                                                       id="rating4"
-                                                       name="Rating"
-                                                       value="4" />
-
-                                                <label for="rating4"
-                                                       title="Good"
-                                                       aria-label="4 stars">
-                                                    ★
-                                                </label>
-
-                                                <input type="radio"
-                                                       id="rating3"
-                                                       name="Rating"
-                                                       value="3" />
-
-                                                <label for="rating3"
-                                                       title="Average"
-                                                       aria-label="3 stars">
-                                                    ★
-                                                </label>
-
-                                                <input type="radio"
-                                                       id="rating2"
-                                                       name="Rating"
-                                                       value="2" />
-
-                                                <label for="rating2"
-                                                       title="Poor"
-                                                       aria-label="2 stars">
-                                                    ★
-                                                </label>
-
-                                                <input type="radio"
-                                                       id="rating1"
-                                                       name="Rating"
-                                                       value="1" />
-
-                                                <label for="rating1"
-                                                       title="Terrible"
-                                                       aria-label="1 star">
-                                                    ★
-                                                </label>
-
+                                                    <label for="rating@rating"
+                                                           title="@rating star rating"
+                                                           aria-label="@rating stars">
+                                                        ★
+                                                    </label>
+                                                }
                                             </div>
                                         </div>
 
-                                        <!-- Review Text -->
                                         <label class="font-label-caps text-label-caps text-tertiary mb-2 block">
                                             YOUR REVIEW
                                         </label>
@@ -482,7 +411,6 @@
                                         <p class="font-label-caps text-label-caps text-tertiary mt-2">
                                             Reviews are published after admin approval.
                                         </p>
-
                                     </form>
                                 }
                                 else
@@ -498,14 +426,11 @@
                                             </a>
 
                                             to leave a review.
-
                                         </p>
                                     </div>
                                 }
-
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -513,7 +438,6 @@
     </div>
 </div>
 
-<!-- Star Rating Style -->
 <style>
     .star-rating {
         display: inline-flex;
@@ -559,22 +483,56 @@
 
 @section Scripts {
     <script>
+        // Change Main Product Image
+        function changeProductImage(imagePath, button) {
+            const mainImage =
+                document.getElementById("mainProductImage");
+
+            if (mainImage) {
+                mainImage.src = imagePath;
+            }
+
+            document.querySelectorAll(".product-thumbnail")
+                .forEach(function(thumbnail) {
+                    thumbnail.classList.remove(
+                        "border-primary",
+                        "ring-2",
+                        "ring-primary"
+                    );
+
+                    thumbnail.classList.add(
+                        "border-outline-variant"
+                    );
+                });
+
+            button.classList.remove(
+                "border-outline-variant"
+            );
+
+            button.classList.add(
+                "border-primary",
+                "ring-2",
+                "ring-primary"
+            );
+        }
+
         // Size Selection
         function selectSize(button) {
-            document.querySelectorAll(".size-btn").forEach(function(sizeButton) {
-                sizeButton.classList.remove(
-                    "border-on-surface",
-                    "bg-on-surface",
-                    "text-on-primary"
-                );
+            document.querySelectorAll(".size-btn")
+                .forEach(function(sizeButton) {
+                    sizeButton.classList.remove(
+                        "border-on-surface",
+                        "bg-on-surface",
+                        "text-on-primary"
+                    );
 
-                sizeButton.classList.add(
-                    "border-outline-variant",
-                    "text-on-surface"
-                );
+                    sizeButton.classList.add(
+                        "border-outline-variant",
+                        "text-on-surface"
+                    );
 
-                sizeButton.removeAttribute("data-selected");
-            });
+                    sizeButton.removeAttribute("data-selected");
+                });
 
             button.classList.remove(
                 "border-outline-variant",
@@ -593,37 +551,54 @@
                 document.getElementById("selectedSizeInput");
 
             if (hiddenInput) {
-                hiddenInput.value = button.textContent.trim();
+                hiddenInput.value =
+                    button.textContent.trim();
             }
         }
 
         // Quantity
         function incrementQty() {
-            const input = document.getElementById("quantity");
+            const input =
+                document.getElementById("quantity");
 
-            if (input) {
-                const currentValue = parseInt(input.value) || 1;
+            if (!input) {
+                return;
+            }
+
+            const currentValue =
+                parseInt(input.value) || 1;
+
+            const maximumValue =
+                parseInt(input.max) || currentValue + 1;
+
+            if (currentValue < maximumValue) {
                 input.value = currentValue + 1;
             }
         }
 
         function decrementQty() {
-            const input = document.getElementById("quantity");
+            const input =
+                document.getElementById("quantity");
 
-            if (input) {
-                const currentValue = parseInt(input.value) || 1;
+            if (!input) {
+                return;
+            }
 
-                if (currentValue > 1) {
-                    input.value = currentValue - 1;
-                }
+            const currentValue =
+                parseInt(input.value) || 1;
+
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
             }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
 
-            // Default Selected Size
+            // Default Size
             const selectedSize =
-                document.querySelector('.size-btn[data-selected="true"]');
+                document.querySelector(
+                    '.size-btn[data-selected="true"]'
+                );
 
             if (selectedSize) {
                 selectedSize.classList.remove(
@@ -640,13 +615,20 @@
 
             // Accordion
             const toggles =
-                document.querySelectorAll(".accordion-toggle");
+                document.querySelectorAll(
+                    ".accordion-toggle"
+                );
 
             toggles.forEach(function(toggle) {
                 toggle.addEventListener("click", function() {
-                    const content = toggle.nextElementSibling;
+
+                    const content =
+                        toggle.nextElementSibling;
+
                     const icon =
-                        toggle.querySelector(".accordion-icon");
+                        toggle.querySelector(
+                            ".accordion-icon"
+                        );
 
                     if (content.classList.contains("hidden")) {
                         content.classList.remove("hidden");
