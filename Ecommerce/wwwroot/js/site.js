@@ -12,6 +12,17 @@ function showToast(message, type) {
   });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const themeToggleBtn = document.getElementById("theme-toggle");
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", () => {
+            const isDark = document.documentElement.classList.toggle("dark");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        });
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function () {
   var body = document.body;
   var msg = body.getAttribute('data-toast-message');

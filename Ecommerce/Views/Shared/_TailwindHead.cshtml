@@ -97,6 +97,36 @@
     }
   }
 </script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#e11d48', // Brand Red
+                    'primary-container': '#be123c',
+                    'on-primary': '#ffffff',
+                    background: 'var(--color-background)',
+                    'on-background': 'var(--color-on-background)',
+                    surface: 'var(--color-surface)',
+                    'on-surface': 'var(--color-on-surface)',
+                    'surface-variant': 'var(--color-surface-variant)',
+                    'surface-container-low': 'var(--color-surface-container-low)',
+                    'surface-container-lowest': 'var(--color-surface-container-lowest)',
+                    tertiary: 'var(--color-tertiary)',
+                    'tertiary-fixed-dim': 'var(--color-tertiary-fixed-dim)',
+                    'outline-variant': 'var(--color-outline-variant)'
+                }
+            }
+        }
+    }
+</script>
+
 <style>
     .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -116,3 +146,4 @@
     .input-field:focus { outline: none; border-color: #1a1c1c; }
     .input-field.field-error { border-color: #d31e32; }
 </style>
+

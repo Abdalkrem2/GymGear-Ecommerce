@@ -38,17 +38,53 @@
 
         <!-- Scrollable Container -->
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
-            @for (int i = 1; i <= 4; i++)
-            {
-                <a asp-controller="Product" asp-action="Details" asp-route-id="@i" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                    <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                        <div class="absolute inset-0 flex items-center justify-center text-tertiary">IMG @i</div>
-                    </div>
-                    <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Adapt Seamless T-Shirt</h3>
-                    <p class="text-tertiary text-sm mb-2">Black / Charcoal</p>
-                    <span class="font-medium text-on-surface">$45.00</span>
-                </a>
-            }
+<!-- Product 1 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="1" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="[https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80)" 
+                         alt="Onyx Seamless T-Shirt" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Onyx Seamless T-Shirt</h3>
+                <p class="text-tertiary text-sm mb-2">Charcoal / Black</p>
+                <span class="font-medium text-on-surface">$45.00</span>
+            </a>
+
+            <!-- Product 2 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="2" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=800&q=80" 
+                         alt="Arrival 5'' Performance Shorts" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Arrival 5" Shorts</h3>
+                <p class="text-tertiary text-sm mb-2">Pitch Black</p>
+                <span class="font-medium text-on-surface">$38.00</span>
+            </a>
+
+            <!-- Product 3 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="3" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80" 
+                         alt="Adapt Seamless Crop Top" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Adapt Seamless Crop Top</h3>
+                <p class="text-tertiary text-sm mb-2">Base Green</p>
+                <span class="font-medium text-on-surface">$40.00</span>
+            </a>
+
+            <!-- Product 4 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="4" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=800&q=80" 
+                         alt="Apex High-Rise Leggings" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Apex High-Rise Leggings</h3>
+                <p class="text-tertiary text-sm mb-2">Graphite Marl</p>
+                <span class="font-medium text-on-surface">$60.00</span>
+            </a>
         </div>
     </div>
 </section>
@@ -59,25 +95,31 @@
         <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-8 md:mb-12">Trending Now</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <!-- Trending Block 1 -->
-            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[600px] bg-surface-variant rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
-                <div class="absolute inset-0 flex items-center justify-center text-tertiary text-2xl font-bold uppercase tracking-widest">ACCESSORIES BG</div>
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-10"></div>
+
+            <!-- Trending Block 1: Accessories -->
+            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[550px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
+                <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80" 
+                     alt="Lifting Equipment" 
+                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
                 <div class="relative z-20 w-full text-left">
-                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-4 tracking-tight transform group-hover:-translate-y-2 transition-transform duration-300">Lifting Accessories</h3>
-                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded-sm">Shop Equipment</span>
+                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-3 tracking-tight">Lifting Accessories</h3>
+                    <span class="inline-block bg-white text-black font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-200 transition-colors">Shop Equipment</span>
                 </div>
             </a>
 
-            <!-- Trending Block 2 -->
-            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[600px] bg-surface-variant rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
-                <div class="absolute inset-0 flex items-center justify-center text-tertiary text-2xl font-bold uppercase tracking-widest">REST DAY BG</div>
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-10"></div>
+            <!-- Trending Block 2: Rest Day / Recovery -->
+            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[550px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
+                <img src="https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=1200&q=80" 
+                     alt="Rest & Recovery" 
+                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
                 <div class="relative z-20 w-full text-left">
-                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-4 tracking-tight transform group-hover:-translate-y-2 transition-transform duration-300">Recovery & Rest</h3>
-                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded-sm">Shop Rest Day</span>
+                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-3 tracking-tight">Recovery &amp; Rest</h3>
+                    <span class="inline-block bg-white text-black font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-200 transition-colors">Shop Rest Day</span>
                 </div>
             </a>
+
         </div>
     </div>
 </section>
@@ -92,17 +134,53 @@
 
         <!-- Scrollable Container -->
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
-            @for (int i = 5; i <= 8; i++)
-            {
-                <a asp-controller="Product" asp-action="Details" asp-route-id="@i" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                    <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                        <div class="absolute inset-0 flex items-center justify-center text-tertiary">FAV IMG @i</div>
-                    </div>
-                    <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Apex Stringer</h3>
-                    <p class="text-tertiary text-sm mb-2">Olive Green</p>
-                    <span class="font-medium text-on-surface">$35.00</span>
-                </a>
-            }
+<!-- Favorite 1 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="5" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80" 
+                         alt="Heavyweight Pump Cover" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Heavyweight Pump Cover</h3>
+                <p class="text-tertiary text-sm mb-2">Vintage Black</p>
+                <span class="font-medium text-on-surface">$50.00</span>
+            </a>
+
+            <!-- Favorite 2 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="6" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80" 
+                         alt="Legacy Stringer Tank" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Legacy Stringer</h3>
+                <p class="text-tertiary text-sm mb-2">Off-White</p>
+                <span class="font-medium text-on-surface">$32.00</span>
+            </a>
+
+            <!-- Favorite 3 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="7" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80" 
+                         alt="Crest Pullover Hoodie" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Crest Pullover Hoodie</h3>
+                <p class="text-tertiary text-sm mb-2">Olive Green</p>
+                <span class="font-medium text-on-surface">$55.00</span>
+            </a>
+
+            <!-- Favorite 4 -->
+            <a asp-controller="Product" asp-action="Details" asp-route-id="8" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=800&q=80" 
+                         alt="Rest Day Knit Joggers" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Rest Day Knit Joggers</h3>
+                <p class="text-tertiary text-sm mb-2">Heather Grey</p>
+                <span class="font-medium text-on-surface">$58.00</span>
+            </a>        
         </div>
     </div>
 </section>
