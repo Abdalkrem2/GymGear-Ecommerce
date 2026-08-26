@@ -1,9 +1,12 @@
+@using System.Globalization
+@model Ecommerce.Models.ViewModels.HomeVM
+
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <!-- HERO VIDEO SECTION -->
-<section class="relative w-full h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
+<section class="js-hero-section relative w-full h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
     <!-- Video Background -->
     <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-80">
         <source src="~/uploads/videos/AUGUST_SEASONAL_MENS_WEB_8x3.mp4" type="video/mp4" />
@@ -38,16 +41,40 @@
 
         <!-- Scrollable Container -->
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
-            @for (int i = 1; i <= 4; i++)
+            @if (Model.NewArrivals != null && Model.NewArrivals.Any())
             {
-                <a asp-controller="Product" asp-action="Details" asp-route-id="@i" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                    <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                        <div class="absolute inset-0 flex items-center justify-center text-tertiary">IMG @i</div>
-                    </div>
-                    <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Adapt Seamless T-Shirt</h3>
-                    <p class="text-tertiary text-sm mb-2">Black / Charcoal</p>
-                    <span class="font-medium text-on-surface">$45.00</span>
-                </a>
+                @foreach (var product in Model.NewArrivals)
+                {
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                            @if (!string.IsNullOrEmpty(product.MainImagePath))
+                            {
+                                <img src="@product.MainImagePath" 
+                                     alt="@product.Name" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            }
+                            else
+                            {
+                                <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-xs">
+                                    NO IMAGE
+                                </div>
+                            }
+                        </div>
+                        <span class="text-[11px] font-semibold tracking-wider text-tertiary uppercase mb-1">
+                            @product.CategoryName
+                        </span>
+                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1.5 truncate">
+                            @product.Name
+                        </h3>
+                        <span class="font-body-md text-sm md:text-base font-medium text-on-surface tracking-tight">
+                            @product.Price.ToString("C", new CultureInfo("en-US"))
+                        </span>
+                    </a>
+                }
+            }
+            else
+            {
+                <p class="text-tertiary text-sm py-4">No new arrivals available at the moment.</p>
             }
         </div>
     </div>
@@ -59,25 +86,31 @@
         <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-8 md:mb-12">Trending Now</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <!-- Trending Block 1 -->
-            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[600px] bg-surface-variant rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
-                <div class="absolute inset-0 flex items-center justify-center text-tertiary text-2xl font-bold uppercase tracking-widest">ACCESSORIES BG</div>
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-10"></div>
+
+            <!-- Trending Block 1: Accessories -->
+            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[550px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
+                <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80" 
+                     alt="Lifting Equipment" 
+                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
                 <div class="relative z-20 w-full text-left">
-                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-4 tracking-tight transform group-hover:-translate-y-2 transition-transform duration-300">Lifting Accessories</h3>
-                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded-sm">Shop Equipment</span>
+                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-3 tracking-tight">Lifting Accessories</h3>
+                    <span class="inline-block bg-white text-black font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-200 transition-colors">Shop Equipment</span>
                 </div>
             </a>
 
-            <!-- Trending Block 2 -->
-            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[600px] bg-surface-variant rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
-                <div class="absolute inset-0 flex items-center justify-center text-tertiary text-2xl font-bold uppercase tracking-widest">REST DAY BG</div>
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-10"></div>
+            <!-- Trending Block 2: Rest Day / Recovery -->
+            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[550px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
+                <img src="https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=1200&q=80" 
+                     alt="Rest & Recovery" 
+                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
                 <div class="relative z-20 w-full text-left">
-                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-4 tracking-tight transform group-hover:-translate-y-2 transition-transform duration-300">Recovery & Rest</h3>
-                    <span class="inline-block bg-white text-black font-bold uppercase text-sm px-6 py-3 rounded-sm">Shop Rest Day</span>
+                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-3 tracking-tight">Recovery &amp; Rest</h3>
+                    <span class="inline-block bg-white text-black font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-200 transition-colors">Shop Rest Day</span>
                 </div>
             </a>
+
         </div>
     </div>
 </section>
@@ -92,16 +125,40 @@
 
         <!-- Scrollable Container -->
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
-            @for (int i = 5; i <= 8; i++)
+            @if (Model.MostFavorites != null && Model.MostFavorites.Any())
             {
-                <a asp-controller="Product" asp-action="Details" asp-route-id="@i" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                    <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                        <div class="absolute inset-0 flex items-center justify-center text-tertiary">FAV IMG @i</div>
-                    </div>
-                    <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Apex Stringer</h3>
-                    <p class="text-tertiary text-sm mb-2">Olive Green</p>
-                    <span class="font-medium text-on-surface">$35.00</span>
-                </a>
+                @foreach (var product in Model.MostFavorites)
+                {
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                            @if (!string.IsNullOrEmpty(product.MainImagePath))
+                            {
+                                <img src="@product.MainImagePath" 
+                                     alt="@product.Name" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            }
+                            else
+                            {
+                                <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-xs">
+                                    NO IMAGE
+                                </div>
+                            }
+                        </div>
+                        <span class="text-[11px] font-semibold tracking-wider text-tertiary uppercase mb-1">
+                            @product.CategoryName
+                        </span>
+                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1.5 truncate">
+                            @product.Name
+                        </h3>
+                        <span class="font-body-md text-sm md:text-base font-medium text-on-surface tracking-tight">
+                            @product.Price.ToString("C", new CultureInfo("en-US"))
+                        </span>
+                    </a>
+                }
+            }
+            else
+            {
+                <p class="text-tertiary text-sm py-4">No favorite items available at the moment.</p>
             }
         </div>
     </div>

@@ -1,10 +1,40 @@
 html {
   font-size: 14px;
 }
+/* Light Theme (Default) */
+:root {
+    --color-background: #ffffff;
+    --color-on-background: #111827;
+    --color-surface: #ffffff;
+    --color-on-surface: #111827;
+    --color-surface-variant: #f3f4f6;
+    --color-surface-container-low: #f9fafb;
+    --color-surface-container-lowest: #ffffff;
+    --color-tertiary: #6b7280;
+    --color-tertiary-fixed-dim: #9ca3af;
+    --color-outline-variant: #e5e7eb;
+}
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
+/* Dark Theme */
+html.dark {
+    --color-background: #121212;
+    --color-on-background: #f9fafb;
+    --color-surface: #1e1e1e;
+    --color-on-surface: #f3f4f6;
+    --color-surface-variant: #2d2d2d;
+    --color-surface-container-low: #181818;
+    --color-surface-container-lowest: #141414;
+    --color-tertiary: #9ca3af;
+    --color-tertiary-fixed-dim: #6b7280;
+    --color-outline-variant: #374151;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+}
+
+@media (min-width: 768px) { html { font-size: 16px;
   }
 }
 
@@ -19,6 +49,16 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+/* Global Brand Hover Defaults */
+a {
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+
+button {
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

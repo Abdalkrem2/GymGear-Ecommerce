@@ -1,71 +1,135 @@
 @model Ecommerce.Models.ViewModels.AboutVM
 @{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "About Us";
 }
 
-<!-- About Hero -->
-<section class="w-full bg-inverse-surface text-on-primary py-section-padding px-margin-mobile md:px-margin-desktop text-center">
-    <span class="font-label-caps text-label-caps text-primary-container mb-4 block">OUR STORY</span>
-    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-primary mb-6">
-        Built for people who train hard
-    </h1>
-    <p class="font-body-lg text-body-lg text-tertiary-fixed-dim max-w-xl mx-auto">
-        Gym Gear &amp; Activewear started with one goal: give athletes and everyday gym-goers apparel
-        that keeps up with them. Every piece is tested against real training, not just a photoshoot.
-    </p>
-</section>
-
-<!-- Testimonials -->
-<section class="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
-    <div class="flex justify-between items-end mb-12 border-b border-outline-variant pb-4">
-        <h2 class="font-headline-md text-headline-md text-on-surface">What our customers say</h2>
+<!-- 1. HERO SECTION -->
+<section class=" js-hero-section relative w-full h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden bg-black mt-[-72px]"> <!-- Background Image --> <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80" 
+         alt="Athletes training hard" 
+         class="absolute inset-0 w-full h-full object-cover opacity-50" />
+    
+    <!-- Hero Content -->
+    <div class="relative z-10 text-center px-4 mt-20">
+        <span class="text-primary font-bold tracking-[0.2em] uppercase text-sm mb-4 block">Our Story</span>
+        
+        <h1 class="text-white text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6">
+            Built to <span class="text-primary">Fit</span> Your Grind
+        </h1>
+        
+        <p class="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto italic">
+            "Greatness isn't given, it's forged in the iron. We just make sure you're <span class="text-primary font-bold">fittingly</span> equipped for the battle."
+        </p>
     </div>
-
-    @if (Model.Testimonials != null && Model.Testimonials.Any())
-    {
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-            @foreach (var t in Model.Testimonials)
-            {
-                <div class="bg-surface-container-low p-6 rounded-sm border border-outline-variant">
-                    <p class="font-body-md text-body-md text-on-surface mb-4">&ldquo;@t.Text&rdquo;</p>
-                    <p class="font-label-caps text-label-caps text-on-surface">@t.UserFullName</p>
-                    <p class="font-label-caps text-label-caps text-tertiary mt-1">@t.CreatedAt.ToString("MMM yyyy")</p>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="w-full text-center py-16 border border-dashed border-outline-variant rounded-sm">
-            <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">rate_review</span>
-            <p class="font-body-md text-body-md text-tertiary">No approved testimonials yet — be the first to share your experience below.</p>
-        </div>
-    }
 </section>
 
-<!-- Submit Testimonial -->
-<section class="w-full bg-surface-container-low py-section-padding px-margin-mobile md:px-margin-desktop">
-    <div class="max-w-[560px] mx-auto text-center">
-        <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Share your experience</h2>
-        <p class="font-body-md text-body-md text-tertiary mb-8">Your testimonial will be reviewed before it appears publicly.</p>
+<!-- 2. THE MISSION (Split Layout) -->
+<section class="w-full bg-surface py-16 md:py-24">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            
+            <!-- Text Side -->
+            <div class="order-2 md:order-1">
+                <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-6">
+                    Tested by Athletes.<br />Not Photoshoots.
+                </h2>
+                <div class="w-16 h-1 bg-primary mb-6"></div>
+                <p class="text-tertiary-fixed-dim text-base md:text-lg leading-relaxed mb-6">
+                    Gym Gear &amp; Activewear started with one relentless goal: to give athletes and everyday gym-goers apparel that actually keeps up with their ambition. 
+                </p>
+                <p class="text-tertiary-fixed-dim text-base md:text-lg leading-relaxed">
+                    We don't do compromises. From the bottom of a heavy squat to the final mile on the track, our fabrics are engineered for durability, breathability, and absolute unrestricted movement. You bring the effort; we bring the gear.
+                </p>
+            </div>
+            
+            <!-- Image Side -->
+            <div class="order-1 md:order-2 relative aspect-[4/3] md:aspect-square bg-surface-variant rounded-sm overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80" 
+                     alt="Gym Equipment" 
+                     class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- 3. TESTIMONIALS (Grid Layout) -->
+<section class="w-full bg-surface-container-lowest py-16 md:py-24 border-t border-outline-variant/30">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
+        
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-4">The Community</h2>
+            <p class="text-tertiary text-lg">Don't just take our word for it.</p>
+        </div>
+
+        @if (Model.Testimonials != null && Model.Testimonials.Any())
+        {
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach (var t in Model.Testimonials)
+                {
+                    <div class="bg-surface p-8 rounded-sm border border-outline-variant/50 hover:border-primary transition-colors flex flex-col justify-between group">
+                        <div class="mb-8">
+                            <!-- Star Rating Visual (Static for aesthetics, can be dynamic later) -->
+                            <div class="flex text-primary mb-4">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                }
+                            </div>
+                            <p class="text-on-surface text-base italic leading-relaxed">
+                                "&ldquo;@t.Text&rdquo;"
+                            </p>
+                        </div>
+                        <div class="border-t border-outline-variant/30 pt-4">
+                            <p class="font-bold text-on-surface uppercase tracking-widest text-sm group-hover:text-primary transition-colors">@t.UserFullName</p>
+                            <p class="text-xs text-tertiary uppercase tracking-wider mt-1">@t.CreatedAt.ToString("MMM yyyy")</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="w-full text-center py-20 border border-dashed border-outline-variant rounded-sm bg-surface">
+                <span class="material-symbols-outlined text-tertiary text-[40px] mb-3 block">rate_review</span>
+                <p class="text-lg text-tertiary font-medium">No approved testimonials yet.</p>
+                <p class="text-sm text-tertiary mt-1">Be the first to leave your mark below.</p>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- 4. SUBMIT EXPERIENCE (Form) -->
+<section class="w-full bg-surface py-16 md:py-24 border-t border-outline-variant/30">
+    <div class="max-w-[600px] mx-auto px-4 text-center">
+        
+        <h2 class="text-2xl md:text-4xl font-black text-on-surface uppercase tracking-tight mb-3">Leave Your Mark</h2>
+        <p class="text-tertiary mb-10">Your testimonial will be reviewed before it hits the live wall.</p>
 
         @if (User.Identity == null || !User.Identity.IsAuthenticated)
         {
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-sm p-6">
-                <p class="font-body-md text-body-md text-on-surface">
-                    Please <a asp-controller="Account" asp-action="Login" class="text-primary-container font-bold">sign in</a> to leave a testimonial.
+            <div class="bg-surface-container-low border-l-4 border-primary p-6 text-left shadow-sm">
+                <p class="text-on-surface font-medium">
+                    You must be a part of the crew to drop a review. 
+                    <a asp-controller="Account" asp-action="Login" class="text-primary hover:underline font-bold uppercase tracking-widest text-sm ml-2">Sign In</a>
                 </p>
             </div>
         }
         else
         {
-            <form asp-controller="Home" asp-action="SubmitTestimonial" method="post" class="text-left">
-                <label asp-for="NewTestimonial.Text" class="font-label-caps text-label-caps text-tertiary mb-2 block">YOUR MESSAGE</label>
-                <textarea asp-for="NewTestimonial.Text" class="input-field" rows="4" placeholder="Tell us about your experience..."></textarea>
-                <span asp-validation-for="NewTestimonial.Text" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>
+            <form asp-controller="Home" asp-action="SubmitTestimonial" method="post" class="text-left bg-surface-container-low p-8 rounded-sm border border-outline-variant shadow-sm">
+                
+                <div class="mb-6">
+                    <label asp-for="NewTestimonial.Text" class="text-xs font-bold uppercase tracking-widest text-on-surface mb-2 block">Your Experience</label>
+                    <textarea asp-for="NewTestimonial.Text" 
+                              class="w-full bg-surface text-on-surface border border-outline-variant p-4 rounded-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all resize-none" 
+                              rows="5" 
+                              placeholder="How did the gear hold up during your hardest session?"></textarea>
+                    <span asp-validation-for="NewTestimonial.Text" class="text-primary text-xs font-bold uppercase tracking-widest block mt-2"></span>
+                </div>
 
-                <button type="submit" class="w-full mt-4 inline-flex items-center justify-center bg-primary-container text-on-primary font-label-caps text-label-caps px-10 py-4 rounded-sm hover:bg-surface-tint transition-all">
-                    SUBMIT FOR REVIEW
+                <button type="submit" class="w-full bg-primary text-on-primary font-bold uppercase tracking-widest py-4 rounded-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 group">
+                    Submit For Review
+                    <span class="material-symbols-outlined text-[20px] transform group-hover:translate-x-1 transition-transform">send</span>
                 </button>
             </form>
         }
