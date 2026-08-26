@@ -32,6 +32,12 @@
         string.Equals(controllerName, "Home", StringComparison.OrdinalIgnoreCase) &&
         string.Equals(actionName, "Index", StringComparison.OrdinalIgnoreCase);
 
+    var isAboutPage =
+        string.Equals(controllerName, "Home", StringComparison.OrdinalIgnoreCase) &&
+        string.Equals(actionName, "About", StringComparison.OrdinalIgnoreCase);
+
+    var isTransparentNavPage = isHomePage || isAboutPage;
+
     var navbarClasses = isHomePage
         ? "bg-transparent text-white border-transparent"
         : "bg-surface text-on-surface border-outline-variant shadow-sm";
@@ -45,8 +51,10 @@
       data-toast-message="@TempData["ToastMessage"]"
       data-toast-type="@TempData["ToastType"]">
 
+<div aria-hidden="true" class="hidden bg-surface text-on-surface border-outline-variant shadow-md bg-transparent text-white border-transparent w-44 sm:w-64 opacity-100 px-3.5 mr-1 w-0 opacity-0 pointer-events-none"></div>
+
     <!-- TopNavBar -->
-    <nav id="main-nav" data-home-page="@isHomePage.ToString().ToLower()" class="fixed top-0 w-full z-50 flex flex-col border-b transition-all duration-300 @navbarClasses">
+    <nav id="main-nav" data-transparent-nav="@isHomePage.ToString().ToLower()" class="fixed top-0 w-full z-50 flex flex-col border-b transition-all duration-300 @navbarClasses">
         <div class="w-full max-w-[1280px] mx-auto px-4 md:px-margin-desktop h-[64px] md:h-[72px] flex items-center justify-between gap-4">
 
             <!-- Mobile Menu Toggle Button & Brand -->
@@ -60,8 +68,12 @@
                     <span class="text-current group-hover:text-primary transition-colors">GYM</span><span class="text-primary">GEAR</span>
                 </a>
             </div>
-
-
+            <!-- Desktop Navigation Links (Centered) -->
+            <div id="desktop-nav-links" class="hidden md:flex items-center justify-center gap-8 absolute left-1/2 -translate-x-1/2  transition-opacity duration-200">
+                <a asp-controller="Home" asp-action="Index" class="font-bold tracking-widest text-xs uppercase hover:text-primary transition-colors text-current">Home</a>
+                <a asp-controller="Product" asp-action="Index" class="font-bold tracking-widest text-xs uppercase hover:text-primary transition-colors text-current">Shop</a>
+                <a asp-controller="Home" asp-action="About" class="font-bold tracking-widest text-xs uppercase hover:text-primary transition-colors text-current">About</a>
+            </div>
             <!-- Action Icons & Inline Easing Search -->
             <div class="flex items-center justify-end gap-1 sm:gap-1.5">
                 @if (!isAccountPage)
@@ -80,11 +92,10 @@
                         </button>
                     </div>
                 }
-
-                <button type="button" id="theme-toggle" class="w-10 h-10 inline-flex items-center justify-center hover:bg-surface-variant hover:text-primary rounded-full transition-colors text-on-surface focus:outline-none" title="Toggle Theme">
-                    <span class="material-symbols-outlined text-[20px] hidden dark:block">light_mode</span>
-                    <span class="material-symbols-outlined text-[20px] block dark:hidden">dark_mode</span>
-                </button>
+<button type="button" id="theme-toggle" class="w-10 h-10 inline-flex items-center justify-center hover:bg-white/10 hover:text-primary rounded-full transition-colors text-current focus:outline-none" title="Toggle Theme">
+    <span class="material-symbols-outlined text-[22px] leading-none text-current hidden dark:block">light_mode</span>
+    <span class="material-symbols-outlined text-[22px] leading-none text-current block dark:hidden">dark_mode</span>
+</button>
 
 
                 <a asp-controller="Wishlist" asp-action="Index" class="w-10 h-10 inline-flex items-center justify-center hover:text-primary hover:bg-white/10 rounded-full transition-colors group" title="Wishlist">
@@ -115,6 +126,7 @@
                 }
             </div>
         </div>
+
 
         <!-- Mobile Navigation Menu -->
         <div id="mobile-menu" class="hidden md:hidden flex-col border-t border-outline-variant bg-surface text-on-surface px-4 py-3 space-y-2 shadow-md absolute top-full left-0 w-full">
@@ -198,109 +210,118 @@
         </div>
     </footer>
 
-    <!-- Navbar & Theme Scripts -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const nav = document.getElementById("main-nav");
-            const menuToggle = document.getElementById("mobile-menu-toggle");
-            const mobileMenu = document.getElementById("mobile-menu");
-            const searchToggle = document.getElementById("search-toggle");
-            const searchInput = document.getElementById("search-input");
-            const searchContainer = document.getElementById("search-container");
-            const searchIcon = document.getElementById("search-icon");
-            const themeToggleBtn = document.getElementById("theme-toggle");
+ <!-- Navbar & Theme Scripts -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const nav = document.getElementById("main-nav");
+        const menuToggle = document.getElementById("mobile-menu-toggle");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const searchToggle = document.getElementById("search-toggle");
+        const searchInput = document.getElementById("search-input");
+        const searchContainer = document.getElementById("search-container");
+        const searchIcon = document.getElementById("search-icon");
+        const isTransparentNavPage = nav?.dataset.transparentNav === "true";
+        const heroSection = document.querySelector(".js-hero-section");
+        const desktopNavLinks = document.getElementById("desktop-nav-links");
 
-            const isHomePage = nav?.dataset.homePage === "true";
+        // Theme toggling is handled by the single listener in site.js
+        // (a duplicate listener used to live here, which caused the
+        // "dark" class to be toggled twice per click and cancel itself out)
 
-            // Theme Toggle Listener
-            if (themeToggleBtn) {
-                themeToggleBtn.addEventListener("click", () => {
-                    const isDark = document.documentElement.classList.toggle("dark");
-                    localStorage.setItem("theme", isDark ? "dark" : "light");
-                });
+        function updateNavbar() {
+            if (!nav || !isTransparentNavPage) return;
+
+            const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+            const isSearchOpen = searchInput && searchInput.classList.contains('opacity-100');
+
+            // Switch to solid once the hero section has scrolled out from
+            // behind the fixed navbar (falls back to a small fixed offset
+            // if a page using transparent-nav has no .js-hero-section).
+            const navHeight = nav.offsetHeight || 0;
+            const scrolledPastHero = heroSection
+                ? heroSection.getBoundingClientRect().bottom <= navHeight
+                : window.scrollY > 40;
+
+            if (scrolledPastHero || isMenuOpen || isSearchOpen) {
+                nav.classList.add("bg-surface", "text-on-surface", "border-outline-variant", "shadow-md");
+                nav.classList.remove("bg-transparent", "text-white", "border-transparent");
+            } else {
+                nav.classList.add("bg-transparent", "text-white", "border-transparent");
+                nav.classList.remove("bg-surface", "text-on-surface", "border-outline-variant", "shadow-md");
             }
+        }
 
-            function updateNavbar() {
-                if (!nav || !isHomePage) return;
+        if (isTransparentNavPage) {
+            window.addEventListener("scroll", updateNavbar);
+            updateNavbar();
+        }
 
-                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
-                const isSearchOpen = searchInput && searchInput.classList.contains('opacity-100');
+        // Mobile Menu Toggle
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener("click", function(e) {
+                e.stopPropagation();
+                mobileMenu.classList.toggle("hidden");
+                mobileMenu.classList.toggle("flex");
 
-                if (window.scrollY > 40 || isMenuOpen || isSearchOpen) {
-                    nav.classList.add("bg-surface", "text-on-surface", "border-outline-variant", "shadow-md");
-                    nav.classList.remove("bg-transparent", "text-white", "border-transparent");
-                } else {
-                    nav.classList.add("bg-transparent", "text-white", "border-transparent");
-                    nav.classList.remove("bg-surface", "text-on-surface", "border-outline-variant", "shadow-md");
+                if (searchInput && searchInput.classList.contains("opacity-100")) {
+                    closeSearch();
                 }
-            }
+                updateNavbar();
+            });
+        }
 
-            if (isHomePage) {
-                window.addEventListener("scroll", updateNavbar);
+        // Inline Smooth Easing Search Toggle
+        if (searchToggle && searchInput) {
+            searchToggle.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const isOpen = searchInput.classList.contains("w-44") || searchInput.classList.contains("sm:w-64");
+
+                if (isOpen) {
+                    closeSearch();
+                } else {
+                    searchInput.classList.remove("w-0", "opacity-0", "pointer-events-none");
+                    searchInput.classList.add("w-44", "sm:w-64", "opacity-100", "px-3.5", "mr-1");
+                    if(searchIcon) searchIcon.textContent = "close";
+                    searchInput.focus();
+
+                    if (mobileMenu && !mobileMenu.classList.contains("hidden")) {
+                        mobileMenu.classList.add("hidden");
+                        mobileMenu.classList.remove("flex");
+                    }
+
+                    updateNavbar();
+                }
+            });
+
+            document.addEventListener("click", (e) => {
+                if (searchContainer && !searchContainer.contains(e.target)) {
+                    closeSearch();
+                }
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") closeSearch();
+            });
+        }
+
+        function closeSearch() {
+            if (searchInput && searchInput.classList.contains("opacity-100")) {
+                searchInput.classList.remove("w-44", "sm:w-64", "opacity-100", "px-3.5", "mr-1");
+                searchInput.classList.add("w-0", "opacity-0", "pointer-events-none");
+                if(searchIcon) searchIcon.textContent = "search";
+
+                if (desktopNavLinks) {
+                    desktopNavLinks.classList.remove("opacity-0", "pointer-events-none");
+                }
                 updateNavbar();
             }
+        }
+    });
+</script>
 
-            // Mobile Menu Toggle
-            if (menuToggle && mobileMenu) {
-                menuToggle.addEventListener("click", function(e) {
-                    e.stopPropagation();
-                    mobileMenu.classList.toggle("hidden");
-                    mobileMenu.classList.toggle("flex");
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
-                    if (searchInput && searchInput.classList.contains("opacity-100")) {
-                        closeSearch();
-                    }
-                    updateNavbar();
-                });
-            }
-
-            // Inline Smooth Easing Search Toggle
-            if (searchToggle && searchInput) {
-                searchToggle.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    const isOpen = searchInput.classList.contains("w-44") || searchInput.classList.contains("sm:w-64");
-
-                    if (isOpen) {
-                        closeSearch();
-                    } else {
-                        searchInput.classList.remove("w-0", "opacity-0", "pointer-events-none");
-                        searchInput.classList.add("w-44", "sm:w-64", "opacity-100", "px-3.5", "mr-1");
-                        if(searchIcon) searchIcon.textContent = "close";
-                        searchInput.focus();
-
-                        if (mobileMenu && !mobileMenu.classList.contains("hidden")) {
-                            mobileMenu.classList.add("hidden");
-                            mobileMenu.classList.remove("flex");
-                        }
-                        updateNavbar();
-                    }
-                });
-
-                document.addEventListener("click", (e) => {
-                    if (searchContainer && !searchContainer.contains(e.target)) {
-                        closeSearch();
-                    }
-                });
-
-                document.addEventListener("keydown", (e) => {
-                    if (e.key === "Escape") closeSearch();
-                });
-            }
-
-            function closeSearch() {
-                if (searchInput && searchInput.classList.contains("opacity-100")) {
-                    searchInput.classList.remove("w-44", "sm:w-64", "opacity-100", "px-3.5", "mr-1");
-                    searchInput.classList.add("w-0", "opacity-0", "pointer-events-none");
-                    if(searchIcon) searchIcon.textContent = "search";
-                    updateNavbar();
-                }
-            }
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)   <!-- Navbar & Theme Scripts -->
 </body>
 </html>

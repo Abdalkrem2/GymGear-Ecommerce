@@ -1,3 +1,4 @@
+@using System.Globalization
 @model Ecommerce.Models.ViewModels.ProductListVM
 
 @{
@@ -35,7 +36,6 @@
               method="get"
               class="flex flex-col gap-8">
 
-            <!-- Preserve mens/womens collection -->
             @if (!string.IsNullOrWhiteSpace(selectedCollection))
             {
                 <input type="hidden"
@@ -49,11 +49,10 @@
                     Filters
                 </h2>
 
-                <!-- Clear filters but stay in Men/Women collection -->
                 <a asp-controller="Product"
                    asp-action="Index"
                    asp-route-category="@selectedCollection"
-                   class="font-label-caps text-label-caps text-tertiary hover:text-primary-container">
+                   class="font-label-caps text-label-caps text-tertiary hover:text-primary">
 
                     Clear
                 </a>
@@ -72,7 +71,7 @@
                         <input type="radio"
                                name="categoryId"
                                value=""
-                               class="text-primary-container"
+                               class="text-primary focus:ring-primary"
                                onchange="this.form.submit()"
                         @(Model.SelectedCategoryId == null
                             ? "checked"
@@ -99,7 +98,7 @@
                             <input type="radio"
                                    name="categoryId"
                                    value="@cat.Id"
-                                   class="text-primary-container"
+                                   class="text-primary focus:ring-primary"
                                    onchange="this.form.submit()"
                             @(Model.SelectedCategoryId == cat.Id
                                 ? "checked"
@@ -151,29 +150,29 @@
 
                     <option value=""
                             selected="@(string.IsNullOrEmpty(Model.SortBy)
-                                                        ? "selected"
-                                                        : null)">
+                                        ? "selected"
+                                        : null)">
                         Recommended
                     </option>
 
                     <option value="price_asc"
                             selected="@(Model.SortBy == "price_asc"
-                                                        ? "selected"
-                                                        : null)">
+                                        ? "selected"
+                                        : null)">
                         Price: Low to High
                     </option>
 
                     <option value="price_desc"
                             selected="@(Model.SortBy == "price_desc"
-                                                        ? "selected"
-                                                        : null)">
+                                        ? "selected"
+                                        : null)">
                         Price: High to Low
                     </option>
 
                     <option value="newest"
                             selected="@(Model.SortBy == "newest"
-                                                        ? "selected"
-                                                        : null)">
+                                        ? "selected"
+                                        : null)">
                         Newest
                     </option>
                 </select>
@@ -245,17 +244,17 @@
         @if (Model.Products != null && Model.Products.Any())
         {
             <!-- Product Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter mb-12 gap-2 md:gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
 
                 @foreach (var product in Model.Products)
                 {
                     <a asp-controller="Product"
                        asp-action="Details"
                        asp-route-id="@product.Id"
-                       class="group bg-surface-container-lowest border border-surface-container hover:border-surface-variant hover:shadow-sm transition-all duration-300 relative flex flex-col">
+                       class="group bg-surface border border-outline-variant hover:border-primary transition-all duration-300 relative flex flex-col rounded-sm overflow-hidden">
 
                         <!-- Product Image -->
-                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                        <div class="relative aspect-[4/5] bg-surface-variant overflow-hidden">
 
                             @if (!string.IsNullOrEmpty(product.MainImagePath))
                             {
@@ -269,24 +268,26 @@
                                     NO IMAGE
                                 </div>
                             }
+
                         </div>
 
                         <!-- Product Information -->
-                        <div class="p-6 flex flex-col flex-grow">
+                        <div class="p-4 flex flex-col flex-grow">
 
-                            <span class="font-label-caps text-label-caps text-tertiary mb-1">
-                                @product.CategoryName?.ToUpper()
+                            <span class="text-[11px] font-semibold tracking-wider text-tertiary uppercase mb-1">
+                                @product.CategoryName
                             </span>
 
-                            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">
+                            <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1.5">
                                 @product.Name
                             </h3>
 
                             <div class="mt-auto flex items-center justify-between">
 
-                                <span class="font-price-display text-price-display text-on-surface">
-                                    @product.Price.ToString("C")
+                                <span class="font-body-md text-sm md:text-base font-medium text-on-surface tracking-tight">
+                                    @product.Price.ToString("C", new CultureInfo("en-US"))
                                 </span>
+
                             </div>
                         </div>
                     </a>
@@ -296,11 +297,11 @@
             <!-- Pagination -->
             @if (Model.TotalPages > 1)
             {
-                <div class="flex justify-center items-center gap-2 mt-auto border-t border-surface-container pt-8">
+                <div class="flex justify-center items-center gap-2 mt-auto border-t border-outline-variant pt-8">
 
                     @for (int pageNumber = 1;
-                         pageNumber <= Model.TotalPages;
-                         pageNumber++)
+                             pageNumber <= Model.TotalPages;
+                             pageNumber++)
                     {
                         <a asp-controller="Product"
                            asp-action="Index"
@@ -311,28 +312,28 @@
                            asp-route-maxPrice="@Model.MaxPrice"
                            asp-route-sort="@Model.SortBy"
                            class="w-10 h-10 flex items-center justify-center font-bold border @(pageNumber == Model.CurrentPage
-                                                          ? "bg-on-surface text-on-primary border-on-surface"
-                                                          : "border-surface-container text-tertiary hover:border-on-surface hover:text-on-surface transition-colors")">
+                                                                         ? "bg-on-surface text-on-primary border-on-surface"
+                                                                         : "border-outline-variant text-tertiary hover:border-primary hover:text-primary transition-colors")">
 
-                    @pageNumber
-                </a>
+                            @pageNumber
+                        </a>
+                    }
+                </div>
             }
-        </div>
-    }
-}
+        }
         else
-{
-    <!-- No Products -->
-    <div class="w-full text-center py-24 border border-dashed border-outline-variant rounded-sm">
+        {
+            <!-- No Products -->
+            <div class="w-full text-center py-24 border border-dashed border-outline-variant rounded-sm">
 
-        <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">
-            inventory_2
-        </span>
+                <span class="material-symbols-outlined text-tertiary text-[32px] mb-2 block">
+                    inventory_2
+                </span>
 
-        <p class="font-body-md text-body-md text-tertiary">
-            No products match your filters.
-        </p>
-    </div>
-}
-</main>
+                <p class="font-body-md text-body-md text-tertiary">
+                    No products match your filters.
+                </p>
+            </div>
+        }
+    </main>
 </div>

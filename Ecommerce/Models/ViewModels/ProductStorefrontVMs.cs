@@ -19,6 +19,8 @@ namespace Ecommerce.Models.ViewModels
         public string CategoryName { get; set; }
         public decimal Price { get; set; }
         public string MainImagePath { get; set; }
+        public double AverageRating { get; set; } = 4.5; // Or pull dynamically from comments
+        public int ReviewCount { get; set; } = 0;
     }
 
     public class ProductDetailsVM

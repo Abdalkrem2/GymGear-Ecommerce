@@ -1,9 +1,10 @@
 using System.Diagnostics;
+using System.Globalization;
 using Ecommerce.Data;
 using Ecommerce.Models;
+using Ecommerce.Models.Entities;
 using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
-using Ecommerce.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,16 +26,70 @@ namespace Ecommerce.Controllers
         // GET: / or /Home/Index
         public async Task<IActionResult> Index()
         {
+            var categories = await _context.Categories
+                .AsNoTracking()
+                .OrderBy(c => c.Name)
+                .Select(c => new CategoryNavVM
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync();
+
+            // 1. Fetch New Arrivals (Latest Active Products)
+            var newArrivals = await _context.Products
+                .AsNoTracking()
+                .Where(p => p.IsActive)
+                .OrderByDescending(p => p.CreatedAt)
+                .ThenByDescending(p => p.Id)
+                .Take(8)
+                .Select(p => new ProductCardVM
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    CategoryName = p.Category != null ? p.Category.Name : "Gear",
+                    MainImagePath = p.Images
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.Id)
+                        .Select(img => img.ImagePath)
+                        .FirstOrDefault() ?? string.Empty
+                })
+                .ToListAsync();
+
+            // 2. Fetch Most Favorites (Highest Rated & Reviewed Products)
+            var mostFavorites = await _context.Products
+                .AsNoTracking()
+                .Where(p => p.IsActive)
+                .Select(p => new
+                {
+                    Product = p,
+                    AverageRating = p.Comments.Where(c => c.IsApproved).Select(c => (double?)c.Rating).Average() ?? 0,
+                    ReviewCount = p.Comments.Count(c => c.IsApproved)
+                })
+                .OrderByDescending(x => x.AverageRating)
+                .ThenByDescending(x => x.ReviewCount)
+                .ThenByDescending(x => x.Product.Id)
+                .Take(8)
+                .Select(x => new ProductCardVM
+                {
+                    Id = x.Product.Id,
+                    Name = x.Product.Name,
+                    Price = x.Product.Price,
+                    CategoryName = x.Product.Category != null ? x.Product.Category.Name : "Gear",
+                    MainImagePath = x.Product.Images
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.Id)
+                        .Select(img => img.ImagePath)
+                        .FirstOrDefault() ?? string.Empty
+                })
+                .ToListAsync();
+
             var vm = new HomeVM
             {
-                Categories = await _context.Categories
-                    .OrderBy(c => c.Name)
-                    .Select(c => new CategoryNavVM
-                    {
-                        Id = c.Id,
-                        Name = c.Name
-                    })
-                    .ToListAsync()
+                Categories = categories,
+                NewArrivals = newArrivals,
+                MostFavorites = mostFavorites
             };
 
             return View(vm);
@@ -124,7 +179,6 @@ namespace Ecommerce.Controllers
                 return View("NotFound");
             }
 
-            // Fallback for other errors (500, 403, etc.)
             return View("Error");
         }
     }

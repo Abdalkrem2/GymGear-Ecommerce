@@ -1,9 +1,12 @@
+@using System.Globalization
+@model Ecommerce.Models.ViewModels.HomeVM
+
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <!-- HERO VIDEO SECTION -->
-<section class="relative w-full h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
+<section class="js-hero-section relative w-full h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
     <!-- Video Background -->
     <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-80">
         <source src="~/uploads/videos/AUGUST_SEASONAL_MENS_WEB_8x3.mp4" type="video/mp4" />
@@ -38,53 +41,41 @@
 
         <!-- Scrollable Container -->
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
-<!-- Product 1 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="1" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Onyx Seamless T-Shirt</h3>
-                <p class="text-tertiary text-sm mb-2">Charcoal / Black</p>
-                <span class="font-medium text-on-surface">$45.00</span>
-            </a>
-
-            <!-- Product 2 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="2" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Arrival 5" Shorts</h3>
-                <p class="text-tertiary text-sm mb-2">Pitch Black</p>
-                <span class="font-medium text-on-surface">$38.00</span>
-            </a>
-
-            <!-- Product 3 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="3" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Adapt Seamless Crop Top</h3>
-                <p class="text-tertiary text-sm mb-2">Base Green</p>
-                <span class="font-medium text-on-surface">$40.00</span>
-            </a>
-
-            <!-- Product 4 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="4" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Apex High-Rise Leggings</h3>
-                <p class="text-tertiary text-sm mb-2">Graphite Marl</p>
-                <span class="font-medium text-on-surface">$60.00</span>
-            </a>
+            @if (Model.NewArrivals != null && Model.NewArrivals.Any())
+            {
+                @foreach (var product in Model.NewArrivals)
+                {
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                            @if (!string.IsNullOrEmpty(product.MainImagePath))
+                            {
+                                <img src="@product.MainImagePath" 
+                                     alt="@product.Name" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            }
+                            else
+                            {
+                                <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-xs">
+                                    NO IMAGE
+                                </div>
+                            }
+                        </div>
+                        <span class="text-[11px] font-semibold tracking-wider text-tertiary uppercase mb-1">
+                            @product.CategoryName
+                        </span>
+                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1.5 truncate">
+                            @product.Name
+                        </h3>
+                        <span class="font-body-md text-sm md:text-base font-medium text-on-surface tracking-tight">
+                            @product.Price.ToString("C", new CultureInfo("en-US"))
+                        </span>
+                    </a>
+                }
+            }
+            else
+            {
+                <p class="text-tertiary text-sm py-4">No new arrivals available at the moment.</p>
+            }
         </div>
     </div>
 </section>
@@ -134,53 +125,41 @@
 
         <!-- Scrollable Container -->
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
-<!-- Favorite 1 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="5" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Heavyweight Pump Cover</h3>
-                <p class="text-tertiary text-sm mb-2">Vintage Black</p>
-                <span class="font-medium text-on-surface">$50.00</span>
-            </a>
-
-            <!-- Favorite 2 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="6" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Legacy Stringer</h3>
-                <p class="text-tertiary text-sm mb-2">Off-White</p>
-                <span class="font-medium text-on-surface">$32.00</span>
-            </a>
-
-            <!-- Favorite 3 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="7" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Crest Pullover Hoodie</h3>
-                <p class="text-tertiary text-sm mb-2">Olive Green</p>
-                <span class="font-medium text-on-surface">$55.00</span>
-            </a>
-
-            <!-- Favorite 4 -->
-            <a asp-controller="Product" asp-action="Details" asp-route-id="8" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
-                    <img src="" 
-                         alt="" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <h3 class="font-bold text-on-surface text-sm uppercase mb-1 group-hover:text-primary transition-colors">Rest Day Knit Joggers</h3>
-                <p class="text-tertiary text-sm mb-2">Heather Grey</p>
-                <span class="font-medium text-on-surface">$58.00</span>
-            </a>        
+            @if (Model.MostFavorites != null && Model.MostFavorites.Any())
+            {
+                @foreach (var product in Model.MostFavorites)
+                {
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
+                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                            @if (!string.IsNullOrEmpty(product.MainImagePath))
+                            {
+                                <img src="@product.MainImagePath" 
+                                     alt="@product.Name" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            }
+                            else
+                            {
+                                <div class="w-full h-full flex items-center justify-center text-tertiary font-label-caps text-xs">
+                                    NO IMAGE
+                                </div>
+                            }
+                        </div>
+                        <span class="text-[11px] font-semibold tracking-wider text-tertiary uppercase mb-1">
+                            @product.CategoryName
+                        </span>
+                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1.5 truncate">
+                            @product.Name
+                        </h3>
+                        <span class="font-body-md text-sm md:text-base font-medium text-on-surface tracking-tight">
+                            @product.Price.ToString("C", new CultureInfo("en-US"))
+                        </span>
+                    </a>
+                }
+            }
+            else
+            {
+                <p class="text-tertiary text-sm py-4">No favorite items available at the moment.</p>
+            }
         </div>
     </div>
 </section>

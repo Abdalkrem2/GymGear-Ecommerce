@@ -5,6 +5,8 @@ namespace Ecommerce.Models.ViewModels
     public class HomeVM
     {
         public List<CategoryNavVM> Categories { get; set; } = new();
+        public List<ProductCardVM> NewArrivals { get; set; } = new();
+        public List<ProductCardVM> MostFavorites { get; set; } = new();
     }
 
     public class CategoryNavVM

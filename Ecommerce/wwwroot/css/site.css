@@ -34,16 +34,7 @@ body {
     color: var(--color-on-background);
 }
 
-/* Universal Brand Hover Effect */
-main a:not([class*="bg-"]):hover,
-footer a:hover {
-    color: #e11d48; /* GYMGEAR Primary Red */
-    transition: color 0.2s ease-in-out;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
+@media (min-width: 768px) { html { font-size: 16px;
   }
 }
 
@@ -65,9 +56,6 @@ a {
     transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-a:hover {
-    color: var(--color-primary, #e11d48);
-}
 
 button {
     transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;

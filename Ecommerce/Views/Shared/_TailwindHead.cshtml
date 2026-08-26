@@ -3,6 +3,9 @@
 <!-- Poppins + Inter -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
+<!-- Tailwind CSS Engine (must load BEFORE the config script below) -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
 <script id="tailwind-config">
   tailwind.config = {
     darkMode: "class",
@@ -61,8 +64,7 @@
     }
   }
 </script>
-<!-- Tailwind CSS Engine -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 
@@ -85,3 +87,4 @@
     .input-field:focus { outline: none; border-color: #e11d48; }
     .input-field.field-error { border-color: #e11d48; }
 </style>
+
