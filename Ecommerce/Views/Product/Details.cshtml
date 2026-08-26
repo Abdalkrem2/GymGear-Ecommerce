@@ -6,7 +6,8 @@
     var sizes = new[] { "XS", "S", "M", "L", "XL", "XXL" };
 }
 
-<div class="w-full bg-background px-4 md:px-8 pt-20 pb-24">
+<div class="w-full bg-background pt-16 md:pt-20 pb-24">
+    <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Breadcrumbs -->
         <nav aria-label="Breadcrumb" class="flex text-xs font-bold uppercase tracking-widest text-tertiary mb-6">
@@ -17,7 +18,7 @@
             <span class="text-on-surface truncate">@Model.Name</span>
         </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
             <!-- LEFT COLUMN: Primary Image As-Is + Clickable Gallery Slider -->
             <div class="lg:col-span-7 flex flex-col gap-4">
@@ -356,12 +357,12 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
+</div>
 
 <style>
     .star-rating {
