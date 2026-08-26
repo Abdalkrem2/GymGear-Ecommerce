@@ -34,6 +34,8 @@ namespace Ecommerce.Models.ViewModels
 
         public bool HasSizes { get; set; }
 
+        public bool IsActive { get; set; } = true;
+
         [Required]
         public int CategoryId { get; set; }
 

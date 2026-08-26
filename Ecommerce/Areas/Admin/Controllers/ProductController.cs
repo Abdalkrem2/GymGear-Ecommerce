@@ -127,6 +127,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                 Price = product.Price,
                 Stock = product.Stock,
                 HasSizes = product.HasSizes,
+                IsActive = product.IsActive,
                 CategoryId = product.CategoryId,
                 ExistingImages = product.Images
                     .OrderByDescending(image => image.IsMain)
@@ -189,6 +190,7 @@ namespace Ecommerce.Areas.Admin.Controllers
             product.Price = model.Price;
             product.Stock = model.Stock;
             product.HasSizes = model.HasSizes;
+            product.IsActive = model.IsActive;
             product.CategoryId = model.CategoryId;
 
             if (model.ImageFiles.Any())
@@ -250,36 +252,18 @@ namespace Ecommerce.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products
-                .Include(product => product.Images)
                 .FirstOrDefaultAsync(product => product.Id == id);
 
             if (product == null)
                 return NotFound();
 
-            var imagePaths = product.Images
-                .Select(image => image.ImagePath)
-                .ToList();
+            product.IsDeleted = true;
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
+            TempData["ToastMessage"] =
+                "Product deleted successfully";
 
-                foreach (var imagePath in imagePaths)
-                    DeleteImage(imagePath);
-
-                TempData["ToastMessage"] =
-                    "Product deleted successfully";
-
-                TempData["ToastType"] = "success";
-            }
-            catch (DbUpdateException)
-            {
-                TempData["ToastMessage"] =
-                    "This product cannot be deleted because it is linked to other records.";
-
-                TempData["ToastType"] = "error";
-            }
+            TempData["ToastType"] = "success";
 
             return RedirectToAction(nameof(Index));
         }

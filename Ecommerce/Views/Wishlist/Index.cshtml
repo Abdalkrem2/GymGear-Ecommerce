@@ -35,6 +35,7 @@
                             <span class="font-price-display text-price-display text-on-surface">@item.Price.ToString("C")</span>
                             <form asp-controller="Cart" asp-action="Add" method="post">
                                 <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
                                 <button type="submit" class="text-on-surface hover:text-primary-container transition-colors">
                                     <span class="material-symbols-outlined">shopping_cart</span>
                                 </button>

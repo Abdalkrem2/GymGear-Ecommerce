@@ -140,6 +140,7 @@
                     <!-- Add to Cart Form -->
                     <form asp-controller="Cart" asp-action="Add" method="post" class="flex flex-col gap-6">
                         <input type="hidden" name="productId" value="@Model.Id" />
+                        <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
 
                         @if (Model.HasSizes)
                         {

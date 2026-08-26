@@ -14,6 +14,8 @@ namespace Ecommerce.Models.Entities
 
         public string? ImagePath { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

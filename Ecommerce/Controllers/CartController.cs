@@ -109,7 +109,8 @@ namespace Ecommerce.Controllers
         public async Task<IActionResult> Add(
             int productId,
             int quantity = 1,
-            string? size = null)
+            string? size = null,
+            string? returnUrl = null)
         {
             var product = await _context.Products
                 .AsNoTracking()
@@ -139,6 +140,12 @@ namespace Ecommerce.Controllers
                     "This product is out of stock.";
 
                 TempData["ToastType"] = "error";
+
+                if (!string.IsNullOrEmpty(returnUrl) &&
+                    Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
 
                 return RedirectToAction(
                     "Details",
@@ -175,6 +182,12 @@ namespace Ecommerce.Controllers
 
                 TempData["ToastType"] = "error";
 
+                if (!string.IsNullOrEmpty(returnUrl) &&
+                    Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -206,6 +219,12 @@ namespace Ecommerce.Controllers
 
             TempData["ToastMessage"] = "Added to cart";
             TempData["ToastType"] = "success";
+
+            if (!string.IsNullOrEmpty(returnUrl) &&
+                Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
 
             return RedirectToAction(nameof(Index));
         }

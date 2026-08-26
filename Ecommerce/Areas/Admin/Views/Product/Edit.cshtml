@@ -72,6 +72,16 @@
         </div>
 
         <div class="mb-6">
+            <label class="flex items-center gap-3 cursor-pointer select-none">
+                <input asp-for="IsActive" type="checkbox" class="sr-only peer" />
+                <span class="relative w-11 h-6 shrink-0 rounded-full bg-outline-variant peer-checked:bg-primary-container transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-5 after:h-5 after:rounded-full after:bg-surface-container-lowest after:shadow after:transition-transform peer-checked:after:translate-x-5"></span>
+                <span class="font-body-md text-body-md text-on-surface">
+                    Product is active (visible in the store — inactive products are hidden from customers)
+                </span>
+            </label>
+        </div>
+
+        <div class="mb-6">
             <label asp-for="ImageFiles" class="font-label-caps text-label-caps text-tertiary mb-2 block">ADD MORE IMAGES (OPTIONAL)</label>
             <input asp-for="ImageFiles" type="file" accept="image/*" multiple class="input-field" />
             <span asp-validation-for="ImageFiles" class="text-primary-container font-label-caps text-label-caps block mt-1"></span>

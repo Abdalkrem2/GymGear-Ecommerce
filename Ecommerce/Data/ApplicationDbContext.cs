@@ -27,6 +27,10 @@ namespace GymGear.Web.Data
         {
             base.OnModelCreating(builder);
 
+            // Soft delete: globally hide deleted rows from all queries
+            builder.Entity<Product>().HasQueryFilter(p => !p.IsDeleted);
+            builder.Entity<Category>().HasQueryFilter(c => !c.IsDeleted);
+
             // Category -> Products
             builder.Entity<Product>()
                 .HasOne(p => p.Category)

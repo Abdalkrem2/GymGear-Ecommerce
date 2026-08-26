@@ -194,9 +194,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            DeleteImage(category.ImagePath);
-
-            _context.Categories.Remove(category);
+            category.IsDeleted = true;
             await _context.SaveChangesAsync();
 
             TempData["ToastMessage"] =
