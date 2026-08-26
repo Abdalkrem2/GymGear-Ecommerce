@@ -42,9 +42,11 @@
         ? "bg-transparent text-white border-transparent"
         : "bg-surface text-on-surface border-outline-variant shadow-sm";
 
-    var mainContentClasses = isHomePage 
-        ? "flex-1 flex flex-col" 
-        : "flex-1 flex flex-col pt-[64px] md:pt-[72px]";
+    var mainContentClasses = isAccountPage
+        ? "flex-1 flex flex-col min-h-screen"
+        : isHomePage 
+            ? "flex-1 flex flex-col" 
+            : "flex-1 flex flex-col pt-[64px] md:pt-[72px]";
 }
 
 <body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden flex flex-col min-h-screen"
@@ -53,8 +55,10 @@
 
 <div aria-hidden="true" class="hidden bg-surface text-on-surface border-outline-variant shadow-md bg-transparent text-white border-transparent w-44 sm:w-64 opacity-100 px-3.5 mr-1 w-0 opacity-0 pointer-events-none"></div>
 
-    <!-- TopNavBar -->
-    <nav id="main-nav" data-transparent-nav="@isHomePage.ToString().ToLower()" class="fixed top-0 w-full z-50 flex flex-col border-b transition-all duration-300 @navbarClasses">
+    @if (!isAccountPage)
+    {
+        <!-- TopNavBar -->
+        <nav id="main-nav" data-transparent-nav="@isHomePage.ToString().ToLower()" class="fixed top-0 w-full z-50 flex flex-col border-b transition-all duration-300 @navbarClasses">
         <div class="w-full px-4 md:px-8 h-[64px] md:h-[72px] flex items-center justify-between gap-4">
 
             <!-- Mobile Menu Toggle Button & Brand -->
@@ -148,14 +152,17 @@
             }
         </div>
     </nav>
+    }
 
     <!-- Page Content (Pushed down automatically on non-home pages) -->
     <main class="@mainContentClasses">
         @RenderBody()
     </main>
 
-    <!-- Footer -->
-    <footer class="mt-auto bg-inverse-surface text-on-primary w-full border-t border-outline-variant/30">
+    @if (!isAccountPage)
+    {
+        <!-- Footer -->
+        <footer class="mt-auto bg-inverse-surface text-on-primary w-full border-t border-outline-variant/30">
         <div class="w-full px-4 md:px-8 py-12 md:py-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12">
 
@@ -207,6 +214,7 @@
             </div>
         </div>
     </footer>
+    }
 
  <!-- Navbar & Theme Scripts -->
 <script>

@@ -4,50 +4,199 @@
 }
 
 <!-- 1. HERO SECTION -->
-<section class=" js-hero-section relative w-full h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden bg-black mt-[-72px]"> <!-- Background Image --> <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80" 
+<section class="js-hero-section relative w-full h-[65vh] min-h-[520px] flex items-center justify-center overflow-hidden bg-black mt-[-72px]">
+    <!-- Background Image with Gradient Overlay -->
+    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80" 
          alt="Athletes training hard" 
-         class="absolute inset-0 w-full h-full object-cover opacity-50" />
+         class="absolute inset-0 w-full h-full object-cover opacity-45 scale-105 filter contrast-125" />
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/70"></div>
     
     <!-- Hero Content -->
-    <div class="relative z-10 text-center px-4 mt-20">
-        <span class="text-primary font-bold tracking-[0.2em] uppercase text-sm mb-4 block">Our Story</span>
+    <div class="relative z-10 text-center px-4 mt-20 max-w-4xl mx-auto space-y-4">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/20 border border-primary/40 text-primary text-xs font-black uppercase tracking-[0.25em]">
+            <span class="material-symbols-outlined text-[16px]">bolt</span>
+            Our Philosophy &amp; Vision
+        </span>
         
-        <h1 class="text-white text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6">
-            Built to <span class="text-primary">Fit</span> Your Grind
+        <h1 class="text-white text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-none">
+            Built For The <br />
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-red-400 to-amber-300">
+                Uncompromising
+            </span>
         </h1>
         
-        <p class="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto italic">
-            "Greatness isn't given, it's forged in the iron. We just make sure you're <span class="text-primary font-bold">fittingly</span> equipped for the battle."
+        <p class="text-white/85 text-base sm:text-lg md:text-xl font-normal max-w-2xl mx-auto leading-relaxed">
+            We don't manufacture sportswear for passive lounging. Every stitch, seam, and fabric weave is engineered to endure your heaviest lifts and longest runs.
         </p>
     </div>
 </section>
 
-<!-- 2. THE MISSION (Split Layout) -->
+<!-- 2. STATS & COMMUNITY IMPACT COUNTER STRIP -->
+<section class="w-full bg-surface-container-high border-y border-outline-variant/40 py-8 md:py-10">
+    <div class="w-full px-4 md:px-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 text-center">
+            <div class="space-y-1">
+                <span class="text-2xl sm:text-4xl font-black text-primary tracking-tight">50,000+</span>
+                <p class="text-xs uppercase tracking-widest font-bold text-on-surface">Athletes Geared Up</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-2xl sm:text-4xl font-black text-on-surface tracking-tight">99.4%</span>
+                <p class="text-xs uppercase tracking-widest font-bold text-tertiary">Verified Satisfaction</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-2xl sm:text-4xl font-black text-primary tracking-tight">15+</span>
+                <p class="text-xs uppercase tracking-widest font-bold text-on-surface">Custom Fabric Blends</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-2xl sm:text-4xl font-black text-on-surface tracking-tight">100%</span>
+                <p class="text-xs uppercase tracking-widest font-bold text-tertiary">Athlete Tested</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. THE ORIGIN & MISSION (Split Layout) -->
 <section class="w-full bg-surface py-16 md:py-24">
     <div class="w-full px-4 md:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             
             <!-- Text Side -->
-            <div class="order-2 md:order-1">
-                <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-6">
-                    Tested by Athletes.<br />Not Photoshoots.
+            <div class="space-y-6">
+                <span class="text-primary font-bold tracking-[0.2em] uppercase text-xs block">The Standard</span>
+                <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight leading-tight">
+                    Tested On Heavy Sets.<br />
+                    <span class="text-primary">Not In Studios.</span>
                 </h2>
-                <div class="w-16 h-1 bg-primary mb-6"></div>
-                <p class="text-tertiary-fixed-dim text-base md:text-lg leading-relaxed mb-6">
-                    Gym Gear &amp; Activewear started with one relentless goal: to give athletes and everyday gym-goers apparel that actually keeps up with their ambition. 
+                <div class="w-16 h-1 bg-primary"></div>
+                
+                <p class="text-tertiary text-base md:text-lg leading-relaxed">
+                    GymGear was founded on a simple observation: conventional sportswear was optimized for marketing campaigns and loungewear, not the reality of high-intensity training.
                 </p>
-                <p class="text-tertiary-fixed-dim text-base md:text-lg leading-relaxed">
-                    We don't do compromises. From the bottom of a heavy squat to the final mile on the track, our fabrics are engineered for durability, breathability, and absolute unrestricted movement. You bring the effort; we bring the gear.
+                <p class="text-tertiary text-base md:text-lg leading-relaxed">
+                    Barbell knurling shreds flimsy cotton. Low-grade elastane sags after two heavy sessions. We set out to change that by collaborating directly with powerlifters, runners, and hybrid athletes to engineer apparel with zero restrictions and indestructible construction.
                 </p>
+
+                <div class="pt-2 flex flex-col sm:flex-row gap-4">
+                    <a asp-controller="Product" asp-action="Index" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-on-primary font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-all shadow-sm">
+                        <span>Explore The Gear</span>
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </a>
+                </div>
             </div>
             
             <!-- Image Side -->
-            <div class="order-1 md:order-2 relative aspect-[4/3] md:aspect-square bg-surface-variant rounded-sm overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80" 
-                     alt="Gym Equipment" 
-                     class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+            <div class="relative aspect-[4/3] md:aspect-square bg-surface-variant rounded-sm overflow-hidden border border-outline-variant/60 shadow-md group">
+                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1000&q=80" 
+                     alt="Gym Equipment and Lifters" 
+                     class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+                <div class="absolute bottom-4 left-4 right-4 p-4 bg-black/80 backdrop-blur-md rounded-sm border border-white/10 text-white">
+                    <p class="font-bold text-xs uppercase tracking-wider text-primary mb-0.5">Heavy Load Tested</p>
+                    <p class="text-xs text-white/80">Every new silhouette undergoes 100+ hours of brutal gym stress testing.</p>
+                </div>
             </div>
             
+        </div>
+    </div>
+</section>
+
+<!-- 4. CORE ENGINEERING PILLARS (4-Card Grid) -->
+<section class="w-full bg-surface-container-lowest py-16 md:py-24 border-t border-outline-variant/30">
+    <div class="w-full px-4 md:px-8">
+        <div class="max-w-3xl mb-12">
+            <span class="text-primary font-bold tracking-[0.2em] uppercase text-xs mb-2 block">Innovation &amp; Craft</span>
+            <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-4">
+                Engineered Down To The Fiber
+            </h2>
+            <p class="text-tertiary text-base md:text-lg">
+                We combine cutting-edge textile science with ergonomic athlete profiling to deliver uncompromising performance.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Pillar 1 -->
+            <div class="bg-surface p-6 sm:p-8 rounded-sm border border-outline-variant/60 hover:border-primary transition-all duration-300 space-y-4 group">
+                <div class="w-12 h-12 rounded-sm bg-primary/10 border border-primary/20 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                    <span class="material-symbols-outlined text-[24px]">water_drop</span>
+                </div>
+                <h3 class="text-lg font-black uppercase text-on-surface tracking-tight">Capillary Moisture Management</h3>
+                <p class="text-xs md:text-sm text-tertiary leading-relaxed">
+                    Micro-grooved yarn structures actively channel sweat outward to the fabric exterior for instant evaporative cooling.
+                </p>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="bg-surface p-6 sm:p-8 rounded-sm border border-outline-variant/60 hover:border-primary transition-all duration-300 space-y-4 group">
+                <div class="w-12 h-12 rounded-sm bg-primary/10 border border-primary/20 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                    <span class="material-symbols-outlined text-[24px]">fitness_center</span>
+                </div>
+                <h3 class="text-lg font-black uppercase text-on-surface tracking-tight">Knurling-Resistant Fabric</h3>
+                <p class="text-xs md:text-sm text-tertiary leading-relaxed">
+                    High-density woven blends withstand direct barbell friction without pilling, fraying, or losing structural shape.
+                </p>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="bg-surface p-6 sm:p-8 rounded-sm border border-outline-variant/60 hover:border-primary transition-all duration-300 space-y-4 group">
+                <div class="w-12 h-12 rounded-sm bg-primary/10 border border-primary/20 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                    <span class="material-symbols-outlined text-[24px]">all_inclusive</span>
+                </div>
+                <h3 class="text-lg font-black uppercase text-on-surface tracking-tight">4-Way Kinetic Stretch</h3>
+                <p class="text-xs md:text-sm text-tertiary leading-relaxed">
+                    Biomechanical multidirectional elasticity allows full range of motion from deep squats to overhead presses with zero pinch points.
+                </p>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div class="bg-surface p-6 sm:p-8 rounded-sm border border-outline-variant/60 hover:border-primary transition-all duration-300 space-y-4 group">
+                <div class="w-12 h-12 rounded-sm bg-primary/10 border border-primary/20 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                    <span class="material-symbols-outlined text-[24px]">architecture</span>
+                </div>
+                <h3 class="text-lg font-black uppercase text-on-surface tracking-tight">Tapered Athlete Fit</h3>
+                <p class="text-xs md:text-sm text-tertiary leading-relaxed">
+                    Tailored specifically for athletic physiques with broader shoulders, narrow waists, and ergonomic raglan sleeves.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. 3-STAGE INNOVATION LIFECYCLE -->
+<section class="w-full bg-surface py-16 md:py-24 border-t border-outline-variant/30">
+    <div class="w-full px-4 md:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="text-primary font-bold tracking-[0.2em] uppercase text-xs mb-2 block">The Process</span>
+            <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight">
+                From Lab To Barbell
+            </h2>
+            <p class="text-tertiary text-sm md:text-base mt-2">
+                How every piece of GymGear is conceived, prototyped, and certified.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-6 md:p-8 bg-surface-container-low/50 border border-outline-variant/60 rounded-sm relative">
+                <span class="text-4xl font-black text-primary/30 mb-4 block">01</span>
+                <h3 class="text-xl font-black text-on-surface uppercase tracking-tight mb-2">Biomechanical Mapping</h3>
+                <p class="text-tertiary text-xs md:text-sm leading-relaxed">
+                    We 3D scan lifters across complete movement arcs to position seams where they won't chafe or pull under maximum load.
+                </p>
+            </div>
+
+            <div class="p-6 md:p-8 bg-surface-container-low/50 border border-outline-variant/60 rounded-sm relative">
+                <span class="text-4xl font-black text-primary/30 mb-4 block">02</span>
+                <h3 class="text-xl font-black text-on-surface uppercase tracking-tight mb-2">Gym Stress Testing</h3>
+                <p class="text-tertiary text-xs md:text-sm leading-relaxed">
+                    Prototypes are handed to competitive athletes who log hundreds of high-volume sets, sweat sessions, and commercial washes.
+                </p>
+            </div>
+
+            <div class="p-6 md:p-8 bg-surface-container-low/50 border border-outline-variant/60 rounded-sm relative">
+                <span class="text-4xl font-black text-primary/30 mb-4 block">03</span>
+                <h3 class="text-xl font-black text-on-surface uppercase tracking-tight mb-2">The Drop</h3>
+                <p class="text-tertiary text-xs md:text-sm leading-relaxed">
+                    Only cuts that pass our strict durability and comfort thresholds make it to the production line and into your gym bag.
+                </p>
+            </div>
         </div>
     </div>
 </section>

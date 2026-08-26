@@ -272,30 +272,6 @@
                     </a>
                 }
             </div>
-
-            <!-- Pagination -->
-            @if (Model.TotalPages > 1)
-            {
-                <div class="flex justify-center items-center gap-2 mt-auto border-t border-outline-variant/30 pt-8">
-
-                    @for (int pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
-                    {
-                        <a asp-controller="Product"
-                           asp-action="Index"
-                           asp-route-category="@selectedCollection"
-                           asp-route-page="@pageNumber"
-                           asp-route-categoryId="@Model.SelectedCategoryId"
-                           asp-route-minPrice="@Model.MinPrice"
-                           asp-route-maxPrice="@Model.MaxPrice"
-                           asp-route-sort="@Model.SortBy"
-                           class="w-10 h-10 flex items-center justify-center font-bold border rounded-sm text-sm @(pageNumber == Model.CurrentPage
-                                                                         ? "bg-primary text-on-primary border-primary"
-                                                                         : "border-outline-variant bg-surface text-tertiary hover:border-primary hover:text-primary transition-colors")">
-                            @pageNumber
-                        </a>
-                    }
-                </div>
-            }
         }
         else
         {
@@ -314,3 +290,60 @@
         }
     </main>
 </div>
+
+<!-- Exact Screen-Centered Full-Width Pagination -->
+@if (Model.TotalPages > 1)
+{
+    <div class="w-full px-4 md:px-8 pb-24">
+        <div class="w-full border-t border-outline-variant/30 pt-8 flex justify-center items-center gap-2">
+            @if (Model.CurrentPage > 1)
+            {
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-category="@selectedCollection"
+                   asp-route-page="@(Model.CurrentPage - 1)"
+                   asp-route-categoryId="@Model.SelectedCategoryId"
+                   asp-route-minPrice="@Model.MinPrice"
+                   asp-route-maxPrice="@Model.MaxPrice"
+                   asp-route-sort="@Model.SortBy"
+                   class="w-10 h-10 flex items-center justify-center font-bold border border-outline-variant rounded-sm text-sm bg-surface text-on-surface hover:border-primary hover:text-primary transition-colors shadow-sm"
+                   aria-label="Previous page">
+                    <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                </a>
+            }
+
+            @for (int pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
+            {
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-category="@selectedCollection"
+                   asp-route-page="@pageNumber"
+                   asp-route-categoryId="@Model.SelectedCategoryId"
+                   asp-route-minPrice="@Model.MinPrice"
+                   asp-route-maxPrice="@Model.MaxPrice"
+                   asp-route-sort="@Model.SortBy"
+                   class="w-10 h-10 flex items-center justify-center font-bold border rounded-sm text-sm shadow-sm transition-all @(pageNumber == Model.CurrentPage
+                                                                 ? "bg-primary text-on-primary border-primary ring-2 ring-primary/20"
+                                                                 : "border-outline-variant bg-surface text-tertiary hover:border-primary hover:text-primary")">
+                    @pageNumber
+                </a>
+            }
+
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-category="@selectedCollection"
+                   asp-route-page="@(Model.CurrentPage + 1)"
+                   asp-route-categoryId="@Model.SelectedCategoryId"
+                   asp-route-minPrice="@Model.MinPrice"
+                   asp-route-maxPrice="@Model.MaxPrice"
+                   asp-route-sort="@Model.SortBy"
+                   class="w-10 h-10 flex items-center justify-center font-bold border border-outline-variant rounded-sm text-sm bg-surface text-on-surface hover:border-primary hover:text-primary transition-colors shadow-sm"
+                   aria-label="Next page">
+                    <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                </a>
+            }
+        </div>
+    </div>
+}

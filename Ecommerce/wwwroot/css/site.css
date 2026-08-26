@@ -113,3 +113,97 @@ textarea:-webkit-autofill:focus {
 .animate-marquee:hover {
     animation-play-state: paused;
 }
+
+/* Smooth Auth Form Entrance Animation */
+@keyframes authFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.auth-card-enter {
+    animation: authFadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* GPU-Accelerated Silky Smooth Ken Burns Cinematic Zoom */
+@keyframes kenBurns {
+    0% {
+        transform: scale3d(1.02, 1.02, 1) translate3d(0, 0, 0);
+    }
+    50% {
+        transform: scale3d(1.08, 1.08, 1) translate3d(0, 0, 0);
+    }
+    100% {
+        transform: scale3d(1.02, 1.02, 1) translate3d(0, 0, 0);
+    }
+}
+
+.animate-kenburns {
+    animation: kenBurns 20s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+    will-change: transform;
+}
+
+.hero-carousel-slide {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: opacity;
+    image-rendering: auto;
+}
+
+/* Kinetic Light Sweep for CTA buttons */
+@keyframes shineSweep {
+    0% {
+        transform: translateX(-100%) skewX(-15deg);
+    }
+    100% {
+        transform: translateX(200%) skewX(-15deg);
+    }
+}
+
+.btn-shine-sweep {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-shine-sweep::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transform: translateX(-100%) skewX(-15deg);
+    pointer-events-none;
+}
+
+.btn-shine-sweep:hover::after {
+    animation: shineSweep 0.85s ease-in-out;
+}
+
+/* Floating Ambient Aura Glow */
+@keyframes auraPulse {
+    0%, 100% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.15;
+    }
+    50% {
+        transform: scale(1.15) translate(4%, 3%);
+        opacity: 0.25;
+    }
+}
+
+.animate-aura {
+    animation: auraPulse 8s ease-in-out infinite;
+}

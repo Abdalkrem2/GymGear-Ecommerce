@@ -10,7 +10,7 @@ namespace Ecommerce.Controllers
 {
     public class ProductController : Controller
     {
-        private const int PageSize = 9;
+        private const int PageSize = 12;
 
         private readonly ApplicationDbContext _context;
 
