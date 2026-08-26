@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="flex-1 overflow-y-auto">
-            <ul class="flex flex-col gap-1 min-h-full">
+        <ul class="flex flex-col gap-1 min-h-full">
             <li>
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"
                    class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps border-l-4 transition-all duration-200 @(currentController == "Dashboard" ? "text-on-primary bg-primary border-primary" : "text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container border-transparent")">
@@ -65,13 +65,21 @@
                     <span class="material-symbols-outlined">gavel</span> Moderation
                 </a>
             </li>
-                <li class="mt-auto pt-4 border-t border-tertiary-container">
-                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
-                        <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
-                            <span class="material-symbols-outlined">logout</span> Sign Out
-                        </button>
-                    </form>
-                </li>
+
+            <!-- Bottom Actions -->
+            <li class="mt-auto pt-4 border-t border-tertiary-container flex flex-col gap-1">
+                <!-- Back to Storefront Link in Sidebar -->
+                <a asp-area="" asp-controller="Home" asp-action="Index"
+                   class="flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                    <span class="material-symbols-outlined">storefront</span> View Storefront
+                </a>
+
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 font-label-caps text-label-caps text-tertiary-fixed-dim hover:text-on-primary hover:bg-tertiary-container transition-all duration-200 border-l-4 border-transparent">
+                        <span class="material-symbols-outlined">logout</span> Sign Out
+                    </button>
+                </form>
+            </li>
         </ul>
     </div>
 </nav>
@@ -83,8 +91,28 @@
             <button class="md:hidden text-on-surface"><span class="material-symbols-outlined">menu</span></button>
             <h2 class="font-headline-sm text-headline-sm text-on-surface hidden md:block">@ViewData["Title"]</h2>
         </div>
-        <div class="flex items-center gap-4">
-            <span class="material-symbols-outlined text-on-surface cursor-pointer hover:text-primary transition-colors">notifications</span>
+
+        <div class="flex items-center gap-3">
+            <!-- Back to Storefront Button (Header) -->
+            <a asp-area="" asp-controller="Home" asp-action="Index" 
+               class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-sm border border-outline-variant hover:border-primary text-on-surface text-xs font-bold uppercase tracking-wider transition-colors">
+                <span class="material-symbols-outlined text-[18px]">storefront</span>
+                <span>Store</span>
+            </a>
+
+            <!-- Theme Toggle Button -->
+            <button type="button" 
+                    id="adminThemeToggle"
+                    onclick="toggleTheme()" 
+                    aria-label="Toggle theme"
+                    class="p-2 rounded-sm border border-outline-variant text-on-surface hover:text-primary hover:border-primary transition-colors flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]" id="adminThemeIcon">dark_mode</span>
+            </button>
+
+            <!-- Notifications -->
+            <button type="button" aria-label="Notifications" class="p-2 rounded-sm border border-outline-variant text-on-surface hover:text-primary hover:border-primary transition-colors flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">notifications</span>
+            </button>
         </div>
     </header>
     <div class="p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto space-y-gutter">
@@ -94,6 +122,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+    function updateThemeIcon(isDark) {
+        const icon = document.getElementById('adminThemeIcon');
+        if (!icon) return;
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+    }
+
+    function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateThemeIcon(isDark);
+
+        // Notify active charts (like Dashboard Chart.js) if open
+        window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const isDark = document.documentElement.classList.contains('dark') || 
+                       localStorage.getItem('theme') === 'dark';
+        if (isDark) {
+            document.documentElement.classList.add('dark');
+        }
+        updateThemeIcon(isDark);
+    });
+</script>
+
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -43,20 +43,20 @@
             <!-- LEFT COLUMN: Image Gallery -->
             <div class="lg:col-span-7 flex flex-col gap-4">
 
-                <!-- Main Image -->
-                <div class="w-full bg-surface-variant aspect-[4/5] rounded-sm overflow-hidden flex items-center justify-center relative">
+                <!-- Main Image Stage (Preserves Aspect Ratio, No Cropping) -->
+                <div class="w-full min-h-[380px] max-h-[620px] bg-surface-variant/40 rounded-sm overflow-hidden flex items-center justify-center relative p-2 md:p-4">
 
                     @if (!string.IsNullOrWhiteSpace(mainImage))
                     {
                         <img src="@mainImage"
                              alt="@Model.Name"
                              id="mainProductImage"
-                             class="w-full h-full object-cover"
+                             class="w-auto h-auto max-w-full max-h-[580px] object-contain rounded-sm transition-all duration-300"
                              loading="eager" />
                     }
                     else
                     {
-                        <span class="font-headline-md text-tertiary uppercase tracking-widest">
+                        <span class="font-headline-md text-tertiary uppercase tracking-widest py-32">
                             NO IMAGE
                         </span>
                     }
@@ -73,11 +73,11 @@
 
                             <button type="button"
                                     onclick="changeProductImage('@image.ImagePath', this)"
-                                    class="product-thumbnail aspect-square bg-surface-variant border rounded-sm overflow-hidden transition-colors focus:outline-none @(index == 0 ? "border-primary ring-2 ring-primary" : "border-outline-variant hover:border-on-surface")">
+                                    class="product-thumbnail aspect-square bg-surface-variant/40 border rounded-sm overflow-hidden transition-colors focus:outline-none flex items-center justify-center p-1 @(index == 0 ? "border-primary ring-2 ring-primary" : "border-outline-variant hover:border-on-surface")">
 
                                 <img src="@image.ImagePath"
                                      alt="@Model.Name"
-                                     class="w-full h-full object-cover"
+                                     class="w-full h-full object-contain"
                                      loading="lazy" />
                             </button>
                         }
@@ -150,7 +150,7 @@
                     <form asp-controller="Cart"
                           asp-action="Add"
                           method="post"
-                          class="flex flex-col gap-6 mb-3">
+                          class="flex flex-col gap-6 mb-8">
 
                         <input type="hidden"
                                name="productId"
@@ -166,10 +166,11 @@
                                 <div class="flex gap-2 flex-wrap">
                                     @foreach (var size in sizes)
                                     {
+                                        var isDefault = size == "M";
                                         <button type="button"
                                                 onclick="selectSize(this)"
-                                                data-selected="@(size == "M" ? "true" : null)"
-                                                class="size-btn w-12 h-12 border rounded-sm font-label-caps text-label-caps transition-colors @(size == "M" ? "border-white !bg-white !text-black" : "border-outline-variant text-on-surface hover:border-on-surface")">
+                                                data-selected="@(isDefault ? "true" : null)"
+                                                class="size-btn w-12 h-12 border rounded-sm font-label-caps text-label-caps font-bold transition-all @(isDefault ? "bg-on-surface text-background border-on-surface shadow-sm" : "bg-transparent text-on-surface border-outline-variant hover:border-on-surface")">
                                             @size
                                         </button>
                                     }
@@ -214,7 +215,7 @@
                             </div>
                         </div>
 
-                        <!-- Add to Cart button -->
+                        <!-- Buttons -->
                         <div class="flex flex-col gap-3 mt-4">
 
                             @if (Model.Stock > 0)
@@ -242,28 +243,19 @@
                                     </span>
                                 </button>
                             }
+
+                            <a asp-controller="Wishlist"
+                               asp-action="Add"
+                               asp-route-id="@Model.Id"
+                               class="w-full bg-surface border border-outline-variant text-on-surface py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+
+                                Save to Wishlist
+
+                                <span class="material-symbols-outlined text-[20px]">
+                                    favorite_border
+                                </span>
+                            </a>
                         </div>
-                    </form>
-
-                    <!-- Wishlist form — kept separate from the Cart form on purpose (nested forms are invalid HTML) -->
-                    <form asp-controller="Wishlist"
-                          asp-action="Add"
-                          method="post"
-                          class="w-full mb-8">
-
-                        <input type="hidden"
-                               name="productId"
-                               value="@Model.Id" />
-
-                        <button type="submit"
-                                class="w-full bg-surface border border-outline-variant text-on-surface py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
-
-                            Save to Wishlist
-
-                            <span class="material-symbols-outlined text-[20px]">
-                                favorite_border
-                            </span>
-                        </button>
                     </form>
 
                     <!-- Description and Reviews -->
@@ -508,17 +500,20 @@
             button.classList.add("border-primary", "ring-2", "ring-primary");
         }
 
-        // Size Selection
+        // Size Selection (Semantic Theme Adaptive)
         function selectSize(button) {
+            const activeClasses = ["bg-on-surface", "text-background", "border-on-surface", "shadow-sm"];
+            const inactiveClasses = ["bg-transparent", "text-on-surface", "border-outline-variant"];
+
             document.querySelectorAll(".size-btn")
                 .forEach(function(sizeButton) {
-                    sizeButton.classList.remove("border-white", "!bg-white", "!text-black");
-                    sizeButton.classList.add("border-outline-variant", "text-on-surface");
+                    sizeButton.classList.remove(...activeClasses);
+                    sizeButton.classList.add(...inactiveClasses);
                     sizeButton.removeAttribute("data-selected");
                 });
 
-            button.classList.remove("border-outline-variant", "text-on-surface");
-            button.classList.add("border-white", "!bg-white", "!text-black");
+            button.classList.remove(...inactiveClasses);
+            button.classList.add(...activeClasses);
             button.setAttribute("data-selected", "true");
 
             const hiddenInput = document.getElementById("selectedSizeInput");
@@ -551,13 +546,6 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            // Default Size Selection initialization
-            const selectedSize = document.querySelector('.size-btn[data-selected="true"]');
-            if (selectedSize) {
-                selectedSize.classList.remove("border-outline-variant", "text-on-surface");
-                selectedSize.classList.add("border-white", "!bg-white", "!text-black");
-            }
-
             // Accordion toggles
             const toggles = document.querySelectorAll(".accordion-toggle");
             toggles.forEach(function(toggle) {
@@ -579,4 +567,3 @@
         });
     </script>
 }
-
