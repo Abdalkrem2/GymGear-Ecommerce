@@ -20,18 +20,56 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
 
-            <!-- LEFT COLUMN: Gymshark-Style Natural Aspect Ratio Image Gallery -->
-            <div class="lg:col-span-7 flex flex-col gap-3 md:gap-4">
+            <!-- LEFT COLUMN: Primary Image As-Is + Clickable Gallery Slider -->
+            <div class="lg:col-span-7 flex flex-col gap-4">
                 @if (Model.Images != null && Model.Images.Any())
                 {
-                    @for (int index = 0; index < Model.Images.Count; index++)
+                    var firstImage = Model.Images.First();
+
+                    <!-- Main First Image (Displayed As-Is, Uncropped) -->
+                    <div class="w-full overflow-hidden rounded-sm bg-surface-container-low border border-outline-variant/40 shadow-sm">
+                        <img src="@firstImage.ImagePath"
+                             alt="@Model.Name"
+                             id="mainProductImage"
+                             class="w-full h-auto object-cover block transition-all duration-300"
+                             loading="eager" />
+                    </div>
+
+                    <!-- Clickable Slider for Remaining Images -->
+                    @if (Model.Images.Count > 1)
                     {
-                        var image = Model.Images[index];
-                        <div class="w-full overflow-hidden rounded-sm bg-surface-container-low">
-                            <img src="@image.ImagePath"
-                                 alt="@Model.Name - View @(index + 1)"
-                                 class="w-full h-auto object-cover block"
-                                 loading="@(index == 0 ? "eager" : "lazy")" />
+                        <div class="relative w-full group/gallerySlider mt-1">
+                            <div id="productThumbnailsSlider" class="flex overflow-x-auto gap-3 pb-2 hide-scrollbar scroll-smooth items-center">
+                                @for (int index = 0; index < Model.Images.Count; index++)
+                                {
+                                    var image = Model.Images[index];
+                                    <button type="button"
+                                            onclick="changeProductImage('@image.ImagePath', this)"
+                                            class="product-thumbnail shrink-0 w-20 h-20 md:w-24 md:h-24 aspect-square rounded-sm overflow-hidden border bg-surface-container-low transition-all focus:outline-none @(index == 0 ? "border-primary ring-2 ring-primary" : "border-outline-variant/60 hover:border-on-surface")"
+                                            aria-label="View photo @(index + 1)">
+                                        <img src="@image.ImagePath"
+                                             alt="@Model.Name - Thumbnail @(index + 1)"
+                                             class="w-full h-full object-cover block"
+                                             loading="lazy" />
+                                    </button>
+                                }
+                            </div>
+
+                            @if (Model.Images.Count > 3)
+                            {
+                                <button type="button"
+                                        onclick="slideThumbnails(-1)"
+                                        class="absolute -left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface border border-outline-variant text-on-surface flex items-center justify-center shadow-md hover:bg-surface-variant hover:border-primary transition-all focus:outline-none z-10"
+                                        aria-label="Previous thumbnails">
+                                    <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                                </button>
+                                <button type="button"
+                                        onclick="slideThumbnails(1)"
+                                        class="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface border border-outline-variant text-on-surface flex items-center justify-center shadow-md hover:bg-surface-variant hover:border-primary transition-all focus:outline-none z-10"
+                                        aria-label="Next thumbnails">
+                                    <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                                </button>
+                            }
                         </div>
                     }
                 }
@@ -367,6 +405,31 @@
 
 @section Scripts {
     <script>
+        // Change Main Product Image from Slider
+        function changeProductImage(imagePath, button) {
+            const mainImage = document.getElementById("mainProductImage");
+            if (mainImage) {
+                mainImage.src = imagePath;
+            }
+
+            document.querySelectorAll(".product-thumbnail").forEach(function (thumbnail) {
+                thumbnail.classList.remove("border-primary", "ring-2", "ring-primary");
+                thumbnail.classList.add("border-outline-variant/60");
+            });
+
+            if (button) {
+                button.classList.remove("border-outline-variant/60");
+                button.classList.add("border-primary", "ring-2", "ring-primary");
+            }
+        }
+
+        // Slide Thumbnails horizontally
+        function slideThumbnails(direction) {
+            const slider = document.getElementById("productThumbnailsSlider");
+            if (!slider) return;
+            slider.scrollBy({ left: direction * 180, behavior: "smooth" });
+        }
+
         // Size Selection
         function selectSize(button) {
             document.querySelectorAll(".size-btn").forEach(function (sizeButton) {
