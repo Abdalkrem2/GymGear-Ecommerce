@@ -75,5 +75,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 //app.MapRazorPages(); // needed if you use Identity's scaffolded Razor Pages for Login/Register
+await DbSeeder.SeedDefaultTestimonialsAsync(app.Services);
 
 app.Run();
