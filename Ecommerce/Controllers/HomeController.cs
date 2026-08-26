@@ -42,7 +42,7 @@ namespace Ecommerce.Controllers
                 .Where(p => p.IsActive)
                 .OrderByDescending(p => p.CreatedAt)
                 .ThenByDescending(p => p.Id)
-                .Take(8)
+                .Take(16)
                 .Select(p => new ProductCardVM
                 {
                     Id = p.Id,
@@ -70,7 +70,7 @@ namespace Ecommerce.Controllers
                 .OrderByDescending(x => x.AverageRating)
                 .ThenByDescending(x => x.ReviewCount)
                 .ThenByDescending(x => x.Product.Id)
-                .Take(8)
+                .Take(16)
                 .Select(x => new ProductCardVM
                 {
                     Id = x.Product.Id,
@@ -85,11 +85,56 @@ namespace Ecommerce.Controllers
                 })
                 .ToListAsync();
 
+            // 3. Fetch Women's Collection (Women's Activewear & Apparel)
+            var womensCollection = await _context.Products
+                .AsNoTracking()
+                .Where(p => p.IsActive && p.Category != null && (p.Category.Name.StartsWith("Women") || p.Category.Name.Contains("Women") || p.Name.Contains("Women") || p.Name.Contains("Leggings") || p.Name.Contains("Bra")))
+                .OrderByDescending(p => p.CreatedAt)
+                .ThenByDescending(p => p.Id)
+                .Take(16)
+                .Select(p => new ProductCardVM
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    CategoryName = p.Category != null ? p.Category.Name : "Women's Activewear",
+                    MainImagePath = p.Images
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.Id)
+                        .Select(img => img.ImagePath)
+                        .FirstOrDefault() ?? string.Empty
+                })
+                .ToListAsync();
+
+            // If database has limited specific category items, ensure at least some products display
+            if (!womensCollection.Any())
+            {
+                womensCollection = await _context.Products
+                    .AsNoTracking()
+                    .Where(p => p.IsActive)
+                    .OrderBy(p => p.Id)
+                    .Take(8)
+                    .Select(p => new ProductCardVM
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Price = p.Price,
+                        CategoryName = p.Category != null ? p.Category.Name : "Women's Activewear",
+                        MainImagePath = p.Images
+                            .OrderByDescending(img => img.IsMain)
+                            .ThenBy(img => img.Id)
+                            .Select(img => img.ImagePath)
+                            .FirstOrDefault() ?? string.Empty
+                    })
+                    .ToListAsync();
+            }
+
             var vm = new HomeVM
             {
                 Categories = categories,
                 NewArrivals = newArrivals,
-                MostFavorites = mostFavorites
+                MostFavorites = mostFavorites,
+                WomensCollection = womensCollection
             };
 
             return View(vm);
