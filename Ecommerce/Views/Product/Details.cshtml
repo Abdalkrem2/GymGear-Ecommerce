@@ -364,62 +364,77 @@
                                 <!-- Add Review -->
                                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                                 {
-                                    <form asp-controller="Comment"
-                                          asp-action="Add"
-                                          method="post"
-                                          class="bg-surface-container-low border border-outline-variant rounded-sm p-4 mt-4">
+                                    @if (Model.IsEligibleToReview)
+                                    {
+                                        <form asp-controller="Comment"
+                                              asp-action="Add"
+                                              method="post"
+                                              class="bg-surface-container-low border border-outline-variant rounded-sm p-4 mt-4">
 
-                                        <input type="hidden"
-                                               name="ProductId"
-                                               value="@Model.Id" />
+                                            <input type="hidden"
+                                                   name="ProductId"
+                                                   value="@Model.Id" />
 
-                                        <div class="mb-4">
+                                            <div class="mb-4">
+
+                                                <label class="font-label-caps text-label-caps text-tertiary mb-2 block">
+                                                    YOUR RATING
+                                                </label>
+
+                                                <div class="star-rating"
+                                                     role="radiogroup"
+                                                     aria-label="Choose your rating">
+
+                                                    @for (int rating = 5; rating >= 1; rating--)
+                                                    {
+                                                        <input type="radio"
+                                                               id="rating@rating"
+                                                               name="Rating"
+                                                               value="@rating"
+                                                               required="@(rating == 5 ? "required" : null)" />
+
+                                                        <label for="rating@rating"
+                                                               title="@rating star rating"
+                                                               aria-label="@rating stars">
+                                                            ★
+                                                        </label>
+                                                    }
+                                                </div>
+                                            </div>
 
                                             <label class="font-label-caps text-label-caps text-tertiary mb-2 block">
-                                                YOUR RATING
+                                                YOUR REVIEW
                                             </label>
 
-                                            <div class="star-rating"
-                                                 role="radiogroup"
-                                                 aria-label="Choose your rating">
+                                            <textarea name="Text"
+                                                      class="input-field w-full bg-surface text-on-surface border border-outline-variant p-2 rounded-sm mb-3 focus:ring-primary focus:border-primary"
+                                                      rows="3"
+                                                      maxlength="1000"
+                                                      placeholder="Share your thoughts..."
+                                                      required></textarea>
 
-                                                @for (int rating = 5; rating >= 1; rating--)
-                                                {
-                                                    <input type="radio"
-                                                           id="rating@rating"
-                                                           name="Rating"
-                                                           value="@rating"
-                                                           required="@(rating == 5 ? "required" : null)" />
+                                            <button type="submit"
+                                                    class="w-full bg-primary-container text-on-primary font-label-caps text-label-caps px-6 py-3 rounded-sm hover:opacity-90 transition-opacity">
+                                                SUBMIT REVIEW
+                                            </button>
 
-                                                    <label for="rating@rating"
-                                                           title="@rating star rating"
-                                                           aria-label="@rating stars">
-                                                        ★
-                                                    </label>
-                                                }
+                                            <p class="font-label-caps text-label-caps text-tertiary mt-2">
+                                                Reviews are published after admin approval.
+                                            </p>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-surface-container-low border border-outline-variant/60 rounded-sm p-5 mt-4 text-center">
+                                            <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2.5">
+                                                <span class="material-symbols-outlined text-[22px]">verified</span>
                                             </div>
+                                            <p class="text-on-surface text-sm font-semibold mb-1">Verified Purchase Required</p>
+                                            <p class="text-tertiary text-xs md:text-sm">
+                                                Only verified buyers who have purchased and received this product can leave a review.
+                                            </p>
                                         </div>
-
-                                        <label class="font-label-caps text-label-caps text-tertiary mb-2 block">
-                                            YOUR REVIEW
-                                        </label>
-
-                                        <textarea name="Text"
-                                                  class="input-field w-full bg-surface text-on-surface border border-outline-variant p-2 rounded-sm mb-3 focus:ring-primary focus:border-primary"
-                                                  rows="3"
-                                                  maxlength="1000"
-                                                  placeholder="Share your thoughts..."
-                                                  required></textarea>
-
-                                        <button type="submit"
-                                                class="w-full bg-primary-container text-on-primary font-label-caps text-label-caps px-6 py-3 rounded-sm hover:opacity-90 transition-opacity">
-                                            SUBMIT REVIEW
-                                        </button>
-
-                                        <p class="font-label-caps text-label-caps text-tertiary mt-2">
-                                            Reviews are published after admin approval.
-                                        </p>
-                                    </form>
+                                    }
                                 }
                                 else
                                 {

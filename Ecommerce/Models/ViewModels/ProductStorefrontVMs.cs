@@ -38,5 +38,6 @@ namespace Ecommerce.Models.ViewModels
         public int ReviewCount { get; set; }
         public List<CommentVM> Reviews { get; set; } = new();
         public CommentSubmitVM NewComment { get; set; } = new();
+        public bool IsEligibleToReview { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Ecommerce.Data;
+using Ecommerce.Data;
 using Ecommerce.Models.Entities;
 using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using Stripe.Checkout;
 
 namespace Ecommerce.Controllers

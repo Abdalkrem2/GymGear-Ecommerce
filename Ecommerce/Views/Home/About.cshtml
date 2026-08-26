@@ -24,7 +24,7 @@
 
 <!-- 2. THE MISSION (Split Layout) -->
 <section class="w-full bg-surface py-16 md:py-24">
-    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
+    <div class="w-full px-4 md:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             
             <!-- Text Side -->
@@ -52,36 +52,79 @@
     </div>
 </section>
 
-<!-- 3. TESTIMONIALS (Grid Layout) -->
-<section class="w-full bg-surface-container-lowest py-16 md:py-24 border-t border-outline-variant/30">
-    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
+<!-- 3. TESTIMONIALS (Horizontal Carousel - 3 Cards Per Desktop View) -->
+<section class="w-full bg-surface-container-lowest py-16 md:py-24 border-t border-outline-variant/30 overflow-x-hidden">
+    <div class="w-full px-4 md:px-8">
         
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-4">The Community</h2>
-            <p class="text-tertiary text-lg">Don't just take our word for it.</p>
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+                <span class="text-primary font-bold tracking-[0.2em] uppercase text-xs mb-2 block">Athletes Voice</span>
+                <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight">The Community</h2>
+                <p class="text-tertiary text-base md:text-lg mt-1">Real feedback from athletes who put our gear to the test.</p>
+            </div>
+
+            @if (Model.Testimonials != null && Model.Testimonials.Any())
+            {
+                <!-- Navigation Controls (Desktop & Mobile Arrow Buttons) -->
+                <div class="flex items-center gap-2 self-end md:self-auto">
+                    <button type="button" 
+                            id="prevTestimonialBtn" 
+                            class="w-11 h-11 rounded-full border border-outline-variant bg-surface hover:bg-surface-variant hover:border-primary text-on-surface flex items-center justify-center transition-all focus:outline-none shadow-sm group"
+                            aria-label="Previous Testimonials">
+                        <span class="material-symbols-outlined text-[20px] text-current group-hover:text-primary transition-colors">arrow_back</span>
+                    </button>
+                    <button type="button" 
+                            id="nextTestimonialBtn" 
+                            class="w-11 h-11 rounded-full border border-outline-variant bg-surface hover:bg-surface-variant hover:border-primary text-on-surface flex items-center justify-center transition-all focus:outline-none shadow-sm group"
+                            aria-label="Next Testimonials">
+                        <span class="material-symbols-outlined text-[20px] text-current group-hover:text-primary transition-colors">arrow_forward</span>
+                    </button>
+                </div>
+            }
         </div>
 
         @if (Model.Testimonials != null && Model.Testimonials.Any())
         {
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Smooth Horizontal Carousel Container -->
+            <div id="testimonialsCarousel" 
+                 class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-6 hide-scrollbar scroll-smooth">
                 @foreach (var t in Model.Testimonials)
                 {
-                    <div class="bg-surface p-8 rounded-sm border border-outline-variant/50 hover:border-primary transition-colors flex flex-col justify-between group">
-                        <div class="mb-8">
-                            <!-- Star Rating Visual (Static for aesthetics, can be dynamic later) -->
-                            <div class="flex text-primary mb-4">
-                                @for (int i = 0; i < 5; i++)
-                                {
-                                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                                }
+                    <div class="snap-start shrink-0 w-[85vw] sm:w-[55vw] md:w-[calc(33.333%-1rem)] bg-surface p-6 md:p-8 rounded-sm border border-outline-variant hover:border-primary/60 transition-all duration-300 flex flex-col justify-between shadow-sm group">
+                        <div class="mb-6">
+                            <!-- Star Rating Visual & Verified Badge -->
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="flex text-primary">
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    }
+                                </div>
+                                <span class="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+                                    <span class="material-symbols-outlined text-[14px]">verified</span>
+                                    Verified Athlete
+                                </span>
                             </div>
-                            <p class="text-on-surface text-base italic leading-relaxed">
-                                "&ldquo;@t.Text&rdquo;"
+
+                            <!-- Quote Body -->
+                            <p class="text-on-surface text-base italic leading-relaxed font-normal">
+                                &ldquo;@t.Text&rdquo;
                             </p>
                         </div>
-                        <div class="border-t border-outline-variant/30 pt-4">
-                            <p class="font-bold text-on-surface uppercase tracking-widest text-sm group-hover:text-primary transition-colors">@t.UserFullName</p>
-                            <p class="text-xs text-tertiary uppercase tracking-wider mt-1">@t.CreatedAt.ToString("MMM yyyy")</p>
+
+                        <!-- Author & Date Metadata -->
+                        <div class="border-t border-outline-variant/40 pt-4 flex items-center justify-between">
+                            <div>
+                                <p class="font-bold text-on-surface uppercase tracking-widest text-sm group-hover:text-primary transition-colors">
+                                    @t.UserFullName
+                                </p>
+                                <p class="text-xs text-tertiary uppercase tracking-wider mt-0.5">
+                                    @t.CreatedAt.ToString("MMM yyyy")
+                                </p>
+                            </div>
+                            <span class="material-symbols-outlined text-outline-variant text-2xl group-hover:text-primary/40 transition-colors select-none">
+                                format_quote
+                            </span>
                         </div>
                     </div>
                 }
@@ -100,7 +143,7 @@
 
 <!-- 4. SUBMIT EXPERIENCE (Form) -->
 <section class="w-full bg-surface py-16 md:py-24 border-t border-outline-variant/30">
-    <div class="max-w-[600px] mx-auto px-4 text-center">
+    <div class="max-w-[680px] mx-auto px-4 text-center">
         
         <h2 class="text-2xl md:text-4xl font-black text-on-surface uppercase tracking-tight mb-3">Leave Your Mark</h2>
         <p class="text-tertiary mb-10">Your testimonial will be reviewed before it hits the live wall.</p>
@@ -138,4 +181,25 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const carousel = document.getElementById("testimonialsCarousel");
+            const prevBtn = document.getElementById("prevTestimonialBtn");
+            const nextBtn = document.getElementById("nextTestimonialBtn");
+
+            if (carousel && prevBtn && nextBtn) {
+                prevBtn.addEventListener("click", function () {
+                    const firstCard = carousel.querySelector(".snap-start");
+                    const scrollDistance = firstCard ? firstCard.offsetWidth + 24 : 350;
+                    carousel.scrollBy({ left: -scrollDistance, behavior: "smooth" });
+                });
+
+                nextBtn.addEventListener("click", function () {
+                    const firstCard = carousel.querySelector(".snap-start");
+                    const scrollDistance = firstCard ? firstCard.offsetWidth + 24 : 350;
+                    carousel.scrollBy({ left: scrollDistance, behavior: "smooth" });
+                });
+            }
+        });
+    </script>
 }

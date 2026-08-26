@@ -1,4 +1,6 @@
-﻿using Ecommerce.Data;
+using System.Security.Claims;
+using Ecommerce.Data;
+using Ecommerce.Models.Enums;
 using Ecommerce.Models.ViewModels;
 using GymGear.Web.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -233,6 +235,20 @@ namespace Ecommerce.Controllers
                 })
                 .ToListAsync();
 
+            var isEligibleToReview = false;
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!string.IsNullOrEmpty(currentUserId))
+                {
+                    isEligibleToReview = await _context.Orders
+                        .AsNoTracking()
+                        .AnyAsync(o => o.UserId == currentUserId &&
+                                       o.Status == OrderStatus.Completed &&
+                                       o.OrderItems.Any(oi => oi.ProductId == id));
+                }
+            }
+
             var model = new ProductDetailsVM
             {
                 Id = product.Id,
@@ -267,7 +283,9 @@ namespace Ecommerce.Controllers
                 NewComment = new CommentSubmitVM
                 {
                     ProductId = product.Id
-                }
+                },
+
+                IsEligibleToReview = isEligibleToReview
             };
 
             return View(model);

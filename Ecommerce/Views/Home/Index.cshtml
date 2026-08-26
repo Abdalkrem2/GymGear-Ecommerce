@@ -13,40 +13,40 @@
     </video>
 
     <!-- Hero Content -->
-    <div class="relative z-20 text-center px-4 flex flex-col items-center mt-16">
-        <h1 class="text-white text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
+    <div class="relative z-20 text-center px-4 md:px-8 flex flex-col items-center mt-16 max-w-4xl mx-auto">
+        <h1 class="text-white text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter mb-4">
             Unleash Your <span class="text-primary">Edge</span>
         </h1>
         <p class="text-white/90 text-lg md:text-xl font-medium mb-8 max-w-xl">
             The new standard in performance wear. Engineered to breathe, stretch, and move with you.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <a asp-controller="Product" asp-action="Index" asp-route-category="mens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded-sm hover:bg-gray-200 transition-colors w-full sm:w-auto">
+            <a asp-controller="Product" asp-action="Index" asp-route-category="mens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded-sm hover:bg-gray-200 transition-colors w-full sm:w-auto text-center">
                 Shop Men
             </a>
-            <a asp-controller="Product" asp-action="Index" asp-route-category="womens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded-sm hover:bg-gray-200 transition-colors w-full sm:w-auto">
+            <a asp-controller="Product" asp-action="Index" asp-route-category="womens" class="bg-white text-black font-bold uppercase tracking-widest px-8 py-4 rounded-sm hover:bg-gray-200 transition-colors w-full sm:w-auto text-center">
                 Shop Women
             </a>
         </div>
     </div>
 </section>
 
-<!-- NEW ARRIVALS (Mobile Horizontal Scroll) -->
-<section class="w-full py-16 bg-surface">
-    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
-        <div class="flex justify-between items-end mb-8">
-            <h2 class="text-2xl md:text-3xl font-black text-on-surface uppercase tracking-tight">New Arrivals</h2>
-            <a asp-controller="Product" asp-action="Index" class="text-sm font-bold border-b border-on-surface text-on-surface uppercase pb-1 hover:text-primary hover:border-primary transition-colors">View All</a>
+<!-- NEW ARRIVALS (Full-Bleed Horizontal Carousel) -->
+<section class="w-full py-12 md:py-16 bg-surface overflow-x-hidden">
+    <div class="w-full px-4 md:px-8">
+        <div class="flex justify-between items-end mb-6">
+            <h2 class="text-2xl md:text-4xl font-black text-on-surface uppercase tracking-tight">New Arrivals</h2>
+            <a asp-controller="Product" asp-action="Index" class="text-xs md:text-sm font-bold border-b border-on-surface text-on-surface uppercase pb-1 hover:text-primary hover:border-primary transition-colors tracking-wider">View All</a>
         </div>
 
         <!-- Scrollable Container -->
-        <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
+        <div class="flex overflow-x-auto snap-x snap-mandatory gap-2 md:gap-4 pb-4 hide-scrollbar">
             @if (Model.NewArrivals != null && Model.NewArrivals.Any())
             {
                 @foreach (var product in Model.NewArrivals)
                 {
-                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[65vw] sm:w-[38vw] md:w-[calc(25%-0.75rem)] lg:w-[calc(20%-0.8rem)] xl:w-[calc(16.666%-0.85rem)] flex flex-col group cursor-pointer block">
+                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-3">
                             @if (!string.IsNullOrEmpty(product.MainImagePath))
                             {
                                 <img src="@product.MainImagePath" 
@@ -63,7 +63,7 @@
                         <span class="text-[11px] font-semibold tracking-wider text-tertiary uppercase mb-1">
                             @product.CategoryName
                         </span>
-                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1.5 truncate">
+                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1 truncate">
                             @product.Name
                         </h3>
                         <span class="font-body-md text-sm md:text-base font-medium text-on-surface tracking-tight">
@@ -80,33 +80,33 @@
     </div>
 </section>
 
-<!-- TRENDING SECTION -->
-<section class="w-full py-4 md:py-16 bg-surface-container-lowest border-t border-outline-variant/30">
-    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop text-center">
-        <h2 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-8 md:mb-12">Trending Now</h2>
+<!-- TRENDING SECTION (Full-Bleed 2-Column Lifestyle Grid) -->
+<section class="w-full py-12 md:py-16 bg-surface-container-lowest border-t border-outline-variant/30 overflow-x-hidden">
+    <div class="w-full px-4 md:px-8">
+        <h2 class="text-2xl md:text-4xl font-black text-on-surface uppercase tracking-tight mb-6 md:mb-8 text-center md:text-left">Trending Now</h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
 
             <!-- Trending Block 1: Accessories -->
-            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[550px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
+            <a asp-controller="Product" asp-action="Index" class="relative h-[420px] md:h-[580px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
                 <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80" 
                      alt="Lifting Equipment" 
                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
                 <div class="relative z-20 w-full text-left">
-                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-3 tracking-tight">Lifting Accessories</h3>
+                    <h3 class="text-white text-3xl md:text-5xl font-black uppercase mb-3 tracking-tight">Lifting Accessories</h3>
                     <span class="inline-block bg-white text-black font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-200 transition-colors">Shop Equipment</span>
                 </div>
             </a>
 
             <!-- Trending Block 2: Rest Day / Recovery -->
-            <a asp-controller="Product" asp-action="Index" class="relative h-[400px] md:h-[550px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
+            <a asp-controller="Product" asp-action="Index" class="relative h-[420px] md:h-[580px] rounded-sm overflow-hidden flex items-end p-6 md:p-10 group cursor-pointer block">
                 <img src="https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=1200&q=80" 
                      alt="Rest & Recovery" 
                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
                 <div class="relative z-20 w-full text-left">
-                    <h3 class="text-white text-3xl md:text-4xl font-black uppercase mb-3 tracking-tight">Recovery &amp; Rest</h3>
+                    <h3 class="text-white text-3xl md:text-5xl font-black uppercase mb-3 tracking-tight">Recovery &amp; Rest</h3>
                     <span class="inline-block bg-white text-black font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-200 transition-colors">Shop Rest Day</span>
                 </div>
             </a>
@@ -115,22 +115,22 @@
     </div>
 </section>
 
-<!-- MOST FAVORITES (Mobile Horizontal Scroll) -->
-<section class="w-full py-16 bg-surface border-t border-outline-variant/30">
-    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
-        <div class="flex justify-between items-end mb-8">
-            <h2 class="text-2xl md:text-3xl font-black text-on-surface uppercase tracking-tight">Most Favorites</h2>
-            <a asp-controller="Product" asp-action="Index" class="text-sm font-bold border-b border-on-surface text-on-surface uppercase pb-1 hover:text-primary hover:border-primary transition-colors">View All</a>
+<!-- MOST FAVORITES (Full-Bleed Horizontal Carousel) -->
+<section class="w-full py-12 md:py-16 bg-surface border-t border-outline-variant/30 overflow-x-hidden">
+    <div class="w-full px-4 md:px-8">
+        <div class="flex justify-between items-end mb-6">
+            <h2 class="text-2xl md:text-4xl font-black text-on-surface uppercase tracking-tight">Most Favorites</h2>
+            <a asp-controller="Product" asp-action="Index" class="text-xs md:text-sm font-bold border-b border-on-surface text-on-surface uppercase pb-1 hover:text-primary hover:border-primary transition-colors tracking-wider">View All</a>
         </div>
 
         <!-- Scrollable Container -->
-        <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 hide-scrollbar">
+        <div class="flex overflow-x-auto snap-x snap-mandatory gap-2 md:gap-4 pb-4 hide-scrollbar">
             @if (Model.MostFavorites != null && Model.MostFavorites.Any())
             {
                 @foreach (var product in Model.MostFavorites)
                 {
-                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[75vw] sm:w-[45vw] md:w-[calc(25%-1.125rem)] flex flex-col group cursor-pointer block">
-                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-4">
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="snap-start shrink-0 w-[65vw] sm:w-[38vw] md:w-[calc(25%-0.75rem)] lg:w-[calc(20%-0.8rem)] xl:w-[calc(16.666%-0.85rem)] flex flex-col group cursor-pointer block">
+                        <div class="relative w-full aspect-[4/5] bg-surface-variant overflow-hidden rounded-sm mb-3">
                             @if (!string.IsNullOrEmpty(product.MainImagePath))
                             {
                                 <img src="@product.MainImagePath" 
@@ -147,7 +147,7 @@
                         <span class="text-[11px] font-semibold tracking-wider text-tertiary uppercase mb-1">
                             @product.CategoryName
                         </span>
-                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1.5 truncate">
+                        <h3 class="font-medium text-sm md:text-[15px] text-on-surface group-hover:text-primary transition-colors leading-snug mb-1 truncate">
                             @product.Name
                         </h3>
                         <span class="font-body-md text-sm md:text-base font-medium text-on-surface tracking-tight">
