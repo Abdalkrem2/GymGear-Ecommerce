@@ -43,20 +43,20 @@
             <!-- LEFT COLUMN: Image Gallery -->
             <div class="lg:col-span-7 flex flex-col gap-4">
 
-                <!-- Main Image Stage (Preserves Aspect Ratio, No Cropping) -->
-                <div class="w-full min-h-[380px] max-h-[620px] bg-surface-variant/40 rounded-sm overflow-hidden flex items-center justify-center relative p-2 md:p-4">
+                <!-- Main Image -->
+                <div class="w-full bg-white aspect-[4/5] rounded-sm overflow-hidden flex items-center justify-center relative">
 
                     @if (!string.IsNullOrWhiteSpace(mainImage))
                     {
                         <img src="@mainImage"
                              alt="@Model.Name"
                              id="mainProductImage"
-                             class="w-auto h-auto max-w-full max-h-[580px] object-contain rounded-sm transition-all duration-300"
+                             class="w-full h-full object-contain p-4"
                              loading="eager" />
                     }
                     else
                     {
-                        <span class="font-headline-md text-tertiary uppercase tracking-widest py-32">
+                        <span class="font-headline-md text-tertiary uppercase tracking-widest">
                             NO IMAGE
                         </span>
                     }
@@ -73,11 +73,11 @@
 
                             <button type="button"
                                     onclick="changeProductImage('@image.ImagePath', this)"
-                                    class="product-thumbnail aspect-square bg-surface-variant/40 border rounded-sm overflow-hidden transition-colors focus:outline-none flex items-center justify-center p-1 @(index == 0 ? "border-primary ring-2 ring-primary" : "border-outline-variant hover:border-on-surface")">
+                                    class="product-thumbnail aspect-square bg-white border rounded-sm overflow-hidden transition-colors focus:outline-none @(index == 0 ? "border-primary ring-2 ring-primary" : "border-outline-variant hover:border-on-surface")">
 
                                 <img src="@image.ImagePath"
                                      alt="@Model.Name"
-                                     class="w-full h-full object-contain"
+                                     class="w-full h-full object-contain p-2"
                                      loading="lazy" />
                             </button>
                         }
@@ -150,7 +150,7 @@
                     <form asp-controller="Cart"
                           asp-action="Add"
                           method="post"
-                          class="flex flex-col gap-6 mb-8">
+                          class="flex flex-col gap-6 mb-3">
 
                         <input type="hidden"
                                name="productId"
@@ -166,11 +166,10 @@
                                 <div class="flex gap-2 flex-wrap">
                                     @foreach (var size in sizes)
                                     {
-                                        var isDefault = size == "M";
                                         <button type="button"
                                                 onclick="selectSize(this)"
-                                                data-selected="@(isDefault ? "true" : null)"
-                                                class="size-btn w-12 h-12 border rounded-sm font-label-caps text-label-caps font-bold transition-all @(isDefault ? "bg-on-surface text-background border-on-surface shadow-sm" : "bg-transparent text-on-surface border-outline-variant hover:border-on-surface")">
+                                                data-selected="@(size == "M" ? "true" : null)"
+                                                class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
                                             @size
                                         </button>
                                     }
@@ -215,7 +214,7 @@
                             </div>
                         </div>
 
-                        <!-- Buttons -->
+                        <!-- Add to Cart button -->
                         <div class="flex flex-col gap-3 mt-4">
 
                             @if (Model.Stock > 0)
@@ -243,19 +242,28 @@
                                     </span>
                                 </button>
                             }
-
-                            <a asp-controller="Wishlist"
-                               asp-action="Add"
-                               asp-route-id="@Model.Id"
-                               class="w-full bg-surface border border-outline-variant text-on-surface py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
-
-                                Save to Wishlist
-
-                                <span class="material-symbols-outlined text-[20px]">
-                                    favorite_border
-                                </span>
-                            </a>
                         </div>
+                    </form>
+
+                    <!-- Wishlist form — kept separate from the Cart form on purpose (nested forms are invalid HTML) -->
+                    <form asp-controller="Wishlist"
+                          asp-action="Add"
+                          method="post"
+                          class="w-full mb-8">
+
+                        <input type="hidden"
+                               name="productId"
+                               value="@Model.Id" />
+
+                        <button type="submit"
+                                class="w-full bg-surface border border-outline-variant text-on-surface py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+
+                            Save to Wishlist
+
+                            <span class="material-symbols-outlined text-[20px]">
+                                favorite_border
+                            </span>
+                        </button>
                     </form>
 
                     <!-- Description and Reviews -->
@@ -446,89 +454,130 @@
         gap: 5px;
     }
 
-    .star-rating input {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        opacity: 0;
-        pointer-events: none;
-    }
+        .star-rating input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
 
-    .star-rating label {
-        margin: 0;
-        color: #c9cdd2;
-        font-size: 36px;
-        line-height: 1;
-        cursor: pointer;
-        user-select: none;
-        transition: color 0.2s ease, transform 0.2s ease;
-    }
+        .star-rating label {
+            margin: 0;
+            color: #c9cdd2;
+            font-size: 36px;
+            line-height: 1;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
 
-    .star-rating label:hover,
-    .star-rating label:hover ~ label,
-    .star-rating input:checked ~ label {
-        color: #f4b400;
-    }
+            .star-rating label:hover,
+            .star-rating label:hover ~ label,
+            .star-rating input:checked ~ label {
+                color: #f4b400;
+            }
 
-    .star-rating label:hover {
-        transform: scale(1.12);
-    }
+            .star-rating label:hover {
+                transform: scale(1.12);
+            }
 
-    .star-rating input:focus-visible + label {
-        outline: 2px solid #f4b400;
-        outline-offset: 3px;
-        border-radius: 2px;
-    }
+        .star-rating input:focus-visible + label {
+            outline: 2px solid #f4b400;
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
 </style>
 
 @section Scripts {
     <script>
         // Change Main Product Image
         function changeProductImage(imagePath, button) {
-            const mainImage = document.getElementById("mainProductImage");
+            const mainImage =
+                document.getElementById("mainProductImage");
+
             if (mainImage) {
                 mainImage.src = imagePath;
             }
 
             document.querySelectorAll(".product-thumbnail")
                 .forEach(function(thumbnail) {
-                    thumbnail.classList.remove("border-primary", "ring-2", "ring-primary");
-                    thumbnail.classList.add("border-outline-variant");
+                    thumbnail.classList.remove(
+                        "border-primary",
+                        "ring-2",
+                        "ring-primary"
+                    );
+
+                    thumbnail.classList.add(
+                        "border-outline-variant"
+                    );
                 });
 
-            button.classList.remove("border-outline-variant");
-            button.classList.add("border-primary", "ring-2", "ring-primary");
+            button.classList.remove(
+                "border-outline-variant"
+            );
+
+            button.classList.add(
+                "border-primary",
+                "ring-2",
+                "ring-primary"
+            );
         }
 
-        // Size Selection (Semantic Theme Adaptive)
+        // Size Selection
         function selectSize(button) {
-            const activeClasses = ["bg-on-surface", "text-background", "border-on-surface", "shadow-sm"];
-            const inactiveClasses = ["bg-transparent", "text-on-surface", "border-outline-variant"];
-
             document.querySelectorAll(".size-btn")
                 .forEach(function(sizeButton) {
-                    sizeButton.classList.remove(...activeClasses);
-                    sizeButton.classList.add(...inactiveClasses);
+                    sizeButton.classList.remove(
+                        "border-on-surface",
+                        "bg-on-surface",
+                        "text-on-primary"
+                    );
+
+                    sizeButton.classList.add(
+                        "border-outline-variant",
+                        "text-on-surface"
+                    );
+
                     sizeButton.removeAttribute("data-selected");
                 });
 
-            button.classList.remove(...inactiveClasses);
-            button.classList.add(...activeClasses);
+            button.classList.remove(
+                "border-outline-variant",
+                "text-on-surface"
+            );
+
+            button.classList.add(
+                "border-on-surface",
+                "bg-on-surface",
+                "text-on-primary"
+            );
+
             button.setAttribute("data-selected", "true");
 
-            const hiddenInput = document.getElementById("selectedSizeInput");
+            const hiddenInput =
+                document.getElementById("selectedSizeInput");
+
             if (hiddenInput) {
-                hiddenInput.value = button.textContent.trim();
+                hiddenInput.value =
+                    button.textContent.trim();
             }
         }
 
         // Quantity
         function incrementQty() {
-            const input = document.getElementById("quantity");
-            if (!input) return;
+            const input =
+                document.getElementById("quantity");
 
-            const currentValue = parseInt(input.value) || 1;
-            const maximumValue = parseInt(input.max) || currentValue + 1;
+            if (!input) {
+                return;
+            }
+
+            const currentValue =
+                parseInt(input.value) || 1;
+
+            const maximumValue =
+                parseInt(input.max) || currentValue + 1;
 
             if (currentValue < maximumValue) {
                 input.value = currentValue + 1;
@@ -536,31 +585,74 @@
         }
 
         function decrementQty() {
-            const input = document.getElementById("quantity");
-            if (!input) return;
+            const input =
+                document.getElementById("quantity");
 
-            const currentValue = parseInt(input.value) || 1;
+            if (!input) {
+                return;
+            }
+
+            const currentValue =
+                parseInt(input.value) || 1;
+
             if (currentValue > 1) {
                 input.value = currentValue - 1;
             }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            // Accordion toggles
-            const toggles = document.querySelectorAll(".accordion-toggle");
+
+            // Default Size
+            const selectedSize =
+                document.querySelector(
+                    '.size-btn[data-selected="true"]'
+                );
+
+            if (selectedSize) {
+                selectedSize.classList.remove(
+                    "border-outline-variant",
+                    "text-on-surface"
+                );
+
+                selectedSize.classList.add(
+                    "border-on-surface",
+                    "bg-on-surface",
+                    "text-on-primary"
+                );
+            }
+
+            // Accordion
+            const toggles =
+                document.querySelectorAll(
+                    ".accordion-toggle"
+                );
+
             toggles.forEach(function(toggle) {
                 toggle.addEventListener("click", function() {
-                    const content = toggle.nextElementSibling;
-                    const icon = toggle.querySelector(".accordion-icon");
+
+                    const content =
+                        toggle.nextElementSibling;
+
+                    const icon =
+                        toggle.querySelector(
+                            ".accordion-icon"
+                        );
 
                     if (content.classList.contains("hidden")) {
                         content.classList.remove("hidden");
                         content.classList.add("block");
-                        if (icon) icon.textContent = "remove";
-                    } else {
+
+                        if (icon) {
+                            icon.textContent = "remove";
+                        }
+                    }
+                    else {
                         content.classList.remove("block");
                         content.classList.add("hidden");
-                        if (icon) icon.textContent = "add";
+
+                        if (icon) {
+                            icon.textContent = "add";
+                        }
                     }
                 });
             });
