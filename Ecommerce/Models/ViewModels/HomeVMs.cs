@@ -8,6 +8,7 @@ namespace Ecommerce.Models.ViewModels
         public List<ProductCardVM> NewArrivals { get; set; } = new();
         public List<ProductCardVM> MostFavorites { get; set; } = new();
         public List<ProductCardVM> WomensCollection { get; set; } = new();
+        public List<ProductCardVM> MensCollection { get; set; } = new();
     }
 
     public class CategoryNavVM

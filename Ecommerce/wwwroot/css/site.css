@@ -92,3 +92,24 @@ textarea:-webkit-autofill:focus {
     box-shadow: 0 0 0px 1000px var(--color-surface) inset !important;
     transition: background-color 5000s ease-in-out 0s;
 }
+
+/* Kinetic Infinite Marquee Animation */
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+    will-change: transform;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}

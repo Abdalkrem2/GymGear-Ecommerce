@@ -129,12 +129,56 @@ namespace Ecommerce.Controllers
                     .ToListAsync();
             }
 
+            // 4. Fetch Men's Collection (Men's Activewear & Apparel)
+            var mensCollection = await _context.Products
+                .AsNoTracking()
+                .Where(p => p.IsActive && p.Category != null && (p.Category.Name.StartsWith("Men") || p.Category.Name.Contains("Men") || p.Name.Contains("Men") || p.Name.Contains("Stringer") || p.Name.Contains("Shorts") || p.Name.Contains("Hoodie") || p.Name.Contains("T-Shirt") || p.Name.Contains("Shirt") || p.Name.Contains("Tank")))
+                .OrderByDescending(p => p.CreatedAt)
+                .ThenByDescending(p => p.Id)
+                .Take(16)
+                .Select(p => new ProductCardVM
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    CategoryName = p.Category != null ? p.Category.Name : "Men's Activewear",
+                    MainImagePath = p.Images
+                        .OrderByDescending(img => img.IsMain)
+                        .ThenBy(img => img.Id)
+                        .Select(img => img.ImagePath)
+                        .FirstOrDefault() ?? string.Empty
+                })
+                .ToListAsync();
+
+            if (!mensCollection.Any())
+            {
+                mensCollection = await _context.Products
+                    .AsNoTracking()
+                    .Where(p => p.IsActive)
+                    .OrderByDescending(p => p.Id)
+                    .Take(8)
+                    .Select(p => new ProductCardVM
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Price = p.Price,
+                        CategoryName = p.Category != null ? p.Category.Name : "Men's Activewear",
+                        MainImagePath = p.Images
+                            .OrderByDescending(img => img.IsMain)
+                            .ThenBy(img => img.Id)
+                            .Select(img => img.ImagePath)
+                            .FirstOrDefault() ?? string.Empty
+                    })
+                    .ToListAsync();
+            }
+
             var vm = new HomeVM
             {
                 Categories = categories,
                 NewArrivals = newArrivals,
                 MostFavorites = mostFavorites,
-                WomensCollection = womensCollection
+                WomensCollection = womensCollection,
+                MensCollection = mensCollection
             };
 
             return View(vm);
