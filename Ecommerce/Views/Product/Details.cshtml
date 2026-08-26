@@ -3,434 +3,306 @@
 @{
     ViewData["Title"] = Model.Name;
 
-    var mainImage = Model.Images != null && Model.Images.Any()
-        ? Model.Images.First().ImagePath
-        : null;
-
     var sizes = new[] { "XS", "S", "M", "L", "XL", "XXL" };
 }
 
-<div class="w-full bg-background pt-24 pb-16">
-    <div class="max-w-[1280px] mx-auto px-4 md:px-margin-desktop">
+<div class="w-full bg-background pt-20 pb-24">
+    <div class="w-full max-w-[1400px] mx-auto px-4 md:px-8">
 
         <!-- Breadcrumbs -->
-        <nav aria-label="Breadcrumb"
-             class="flex text-xs font-bold uppercase tracking-widest text-tertiary mb-6">
-
-            <a asp-controller="Home"
-               asp-action="Index"
-               class="hover:text-primary transition-colors">
-                Home
-            </a>
-
+        <nav aria-label="Breadcrumb" class="flex text-xs font-bold uppercase tracking-widest text-tertiary mb-6">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-primary transition-colors">Home</a>
             <span class="mx-2">/</span>
-
-            <a asp-controller="Product"
-               asp-action="Index"
-               class="hover:text-primary transition-colors">
-                @Model.CategoryName
-            </a>
-
+            <a asp-controller="Product" asp-action="Index" class="hover:text-primary transition-colors">@Model.CategoryName</a>
             <span class="mx-2">/</span>
-
-            <span class="text-on-surface">
-                @Model.Name
-            </span>
+            <span class="text-on-surface truncate">@Model.Name</span>
         </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
 
-            <!-- LEFT COLUMN: Image Gallery -->
-            <div class="lg:col-span-7 flex flex-col gap-4">
-
-                <!-- Main Image -->
-                <div class="w-full bg-white aspect-[4/5] rounded-sm overflow-hidden flex items-center justify-center relative">
-
-                    @if (!string.IsNullOrWhiteSpace(mainImage))
-                    {
-                        <img src="@mainImage"
-                             alt="@Model.Name"
-                             id="mainProductImage"
-                             class="w-full h-full object-contain p-4"
-                             loading="eager" />
-                    }
-                    else
-                    {
-                        <span class="font-headline-md text-tertiary uppercase tracking-widest">
-                            NO IMAGE
-                        </span>
-                    }
-                </div>
-
-                <!-- Thumbnails -->
-                @if (Model.Images != null && Model.Images.Count > 1)
+            <!-- LEFT COLUMN: Gymshark-Style Natural Aspect Ratio Image Gallery -->
+            <div class="lg:col-span-7 flex flex-col gap-3 md:gap-4">
+                @if (Model.Images != null && Model.Images.Any())
                 {
-                    <div class="grid grid-cols-4 gap-3">
-
-                        @for (int index = 0; index < Model.Images.Count; index++)
-                        {
-                            var image = Model.Images[index];
-
-                            <button type="button"
-                                    onclick="changeProductImage('@image.ImagePath', this)"
-                                    class="product-thumbnail aspect-square bg-white border rounded-sm overflow-hidden transition-colors focus:outline-none @(index == 0 ? "border-primary ring-2 ring-primary" : "border-outline-variant hover:border-on-surface")">
-
-                                <img src="@image.ImagePath"
-                                     alt="@Model.Name"
-                                     class="w-full h-full object-contain p-2"
-                                     loading="lazy" />
-                            </button>
-                        }
+                    @for (int index = 0; index < Model.Images.Count; index++)
+                    {
+                        var image = Model.Images[index];
+                        <div class="w-full overflow-hidden rounded-sm bg-surface-container-low">
+                            <img src="@image.ImagePath"
+                                 alt="@Model.Name - View @(index + 1)"
+                                 class="w-full h-auto object-cover block"
+                                 loading="@(index == 0 ? "eager" : "lazy")" />
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="w-full aspect-[3/4] bg-surface-container-low border border-outline-variant rounded-sm flex items-center justify-center text-tertiary font-label-caps text-sm">
+                        NO IMAGE AVAILABLE
                     </div>
                 }
             </div>
 
-            <!-- RIGHT COLUMN: Product Details -->
+            <!-- RIGHT COLUMN: Gymshark-Style Sticky Product Details & Actions -->
             <div class="lg:col-span-5 relative">
-                <div class="sticky top-28 flex flex-col">
+                <div class="sticky top-24 flex flex-col gap-6">
 
-                    <!-- Category, Name, Rating and Price -->
-                    <div class="border-b border-outline-variant/30 pb-6 mb-6">
-
-                        <span class="font-label-caps text-label-caps text-primary-container mb-2 block">
-                            @Model.CategoryName?.ToUpper()
+                    <!-- Header: Category, Title, Ratings & Price -->
+                    <div class="border-b border-outline-variant/30 pb-6">
+                        <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">
+                            @Model.CategoryName
                         </span>
 
-                        <h1 class="text-3xl md:text-5xl font-black text-on-surface uppercase tracking-tight mb-4">
+                        <h1 class="text-2xl md:text-4xl font-black text-on-surface uppercase tracking-tight mb-3">
                             @Model.Name
                         </h1>
 
-                        @if (Model.ReviewCount > 0)
-                        {
-                            <div class="flex items-center gap-2 mb-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl md:text-3xl font-black text-on-surface tracking-tight">
+                                @Model.Price.ToString("C")
+                            </span>
 
-                                <div class="flex items-center text-primary-container">
-                                    @for (int i = 1; i <= 5; i++)
-                                    {
-                                        <span class="material-symbols-outlined text-[18px]"
-                                              style="font-variation-settings: 'FILL' @(i <= Math.Round(Model.AverageRating) ? 1 : 0);">
-                                            star
-                                        </span>
-                                    }
-                                </div>
-
-                                <a href="#reviews"
-                                   class="text-sm text-tertiary hover:text-on-surface underline transition-colors">
-                                    @Model.ReviewCount Review@(Model.ReviewCount == 1 ? "" : "s")
+                            @if (Model.ReviewCount > 0)
+                            {
+                                <a href="#reviews" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-tertiary hover:text-primary transition-colors">
+                                    <div class="flex text-primary text-[14px]">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' @(i <= Math.Round(Model.AverageRating) ? 1 : 0);">
+                                                star
+                                            </span>
+                                        }
+                                    </div>
+                                    <span>(@Model.ReviewCount)</span>
                                 </a>
-                            </div>
-                        }
-
-                        <p class="text-xl md:text-2xl font-medium text-on-surface mb-2">
-                            @Model.Price.ToString("C")
-                        </p>
+                            }
+                        </div>
 
                         <!-- Stock Status -->
                         @if (Model.Stock == 0)
                         {
-                            <p class="font-label-caps text-label-caps text-primary-container">
-                                OUT OF STOCK
-                            </p>
+                            <span class="inline-block bg-primary/10 text-primary font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-sm">
+                                Out of Stock
+                            </span>
                         }
                         else if (Model.Stock <= 5)
                         {
-                            <p class="font-label-caps text-label-caps text-primary-container">
-                                ONLY @Model.Stock LEFT — ORDER SOON
-                            </p>
+                            <span class="inline-block bg-amber-500/10 text-amber-500 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-sm">
+                                Only @Model.Stock left in stock
+                            </span>
                         }
                         else
                         {
-                            <p class="font-label-caps text-label-caps text-tertiary">
-                                IN STOCK
-                            </p>
+                            <span class="inline-block bg-emerald-500/10 text-emerald-500 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-sm">
+                                In Stock &amp; Ready to Ship
+                            </span>
                         }
                     </div>
 
-                    <!-- Add to Cart -->
-                    <form asp-controller="Cart"
-                          asp-action="Add"
-                          method="post"
-                          class="flex flex-col gap-6 mb-3">
-
-                        <input type="hidden"
-                               name="productId"
-                               value="@Model.Id" />
+                    <!-- Add to Cart Form -->
+                    <form asp-controller="Cart" asp-action="Add" method="post" class="flex flex-col gap-6">
+                        <input type="hidden" name="productId" value="@Model.Id" />
 
                         @if (Model.HasSizes)
                         {
                             <div>
-                                <label class="text-xs font-bold uppercase tracking-widest text-on-surface mb-3 block">
-                                    Select Size
-                                </label>
+                                <div class="flex justify-between items-center mb-3">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-on-surface">
+                                        Select Size
+                                    </label>
+                                    <span class="text-[11px] font-semibold text-tertiary uppercase tracking-wider">
+                                        True to size
+                                    </span>
+                                </div>
 
-                                <div class="flex gap-2 flex-wrap">
+                                <div class="grid grid-cols-6 gap-2">
                                     @foreach (var size in sizes)
                                     {
                                         <button type="button"
                                                 onclick="selectSize(this)"
                                                 data-selected="@(size == "M" ? "true" : null)"
-                                                class="size-btn w-12 h-12 border border-outline-variant rounded-sm font-label-caps text-label-caps text-on-surface hover:border-on-surface transition-colors">
+                                                class="size-btn py-3 border border-outline-variant rounded-sm font-bold text-xs uppercase tracking-wider text-on-surface hover:border-primary transition-all">
                                             @size
                                         </button>
                                     }
                                 </div>
 
-                                <input type="hidden"
-                                       name="size"
-                                       id="selectedSizeInput"
-                                       value="M" />
+                                <input type="hidden" name="size" id="selectedSizeInput" value="M" />
                             </div>
                         }
 
-                        <!-- Quantity -->
-                        <div class="flex flex-col gap-2">
-
-                            <label for="quantity"
-                                   class="text-xs font-bold uppercase tracking-widest text-on-surface">
+                        <!-- Quantity Selector -->
+                        <div class="flex items-center justify-between">
+                            <label for="quantity" class="text-xs font-bold uppercase tracking-widest text-on-surface">
                                 Quantity
                             </label>
 
-                            <div class="flex items-center border border-outline-variant rounded-sm w-32">
-
-                                <button type="button"
-                                        onclick="decrementQty()"
-                                        class="px-4 py-2 text-tertiary hover:text-on-surface transition-colors focus:outline-none">
+                            <div class="flex items-center border border-outline-variant rounded-sm bg-surface">
+                                <button type="button" onclick="decrementQty()" class="px-3.5 py-2 text-tertiary hover:text-on-surface transition-colors focus:outline-none font-bold">
                                     -
                                 </button>
-
                                 <input type="number"
                                        id="quantity"
                                        name="quantity"
                                        value="1"
                                        min="1"
                                        max="@Model.Stock"
-                                       class="w-full text-center bg-transparent border-none focus:ring-0 text-on-surface font-medium p-0" />
-
-                                <button type="button"
-                                        onclick="incrementQty()"
-                                        class="px-4 py-2 text-tertiary hover:text-on-surface transition-colors focus:outline-none">
+                                       class="w-12 text-center bg-transparent border-none focus:ring-0 text-on-surface font-bold text-sm p-0" />
+                                <button type="button" onclick="incrementQty()" class="px-3.5 py-2 text-tertiary hover:text-on-surface transition-colors focus:outline-none font-bold">
                                     +
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Add to Cart button -->
-                        <div class="flex flex-col gap-3 mt-4">
-
+                        <!-- Add to Bag CTA Button -->
+                        <div>
                             @if (Model.Stock > 0)
                             {
                                 <button type="submit"
-                                        class="w-full bg-primary text-on-primary py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
-
-                                    Add To Cart
-
-                                    <span class="material-symbols-outlined text-[20px]">
-                                        shopping_bag
-                                    </span>
+                                        class="w-full bg-primary text-on-primary py-4 font-black uppercase tracking-widest text-sm rounded-sm hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-sm">
+                                    <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                                    Add to Bag
                                 </button>
                             }
                             else
                             {
                                 <button type="button"
                                         disabled
-                                        class="w-full bg-gray-400 text-white py-4 font-bold uppercase tracking-widest rounded-sm cursor-not-allowed flex items-center justify-center gap-2">
-
-                                    Out Of Stock
-
-                                    <span class="material-symbols-outlined text-[20px]">
-                                        shopping_bag
-                                    </span>
+                                        class="w-full bg-surface-container-low text-tertiary py-4 font-bold uppercase tracking-widest text-sm rounded-sm cursor-not-allowed border border-outline-variant">
+                                    Out of Stock
                                 </button>
                             }
                         </div>
                     </form>
 
-                    <!-- Wishlist form — kept separate from the Cart form on purpose (nested forms are invalid HTML) -->
-                    <form asp-controller="Wishlist"
-                          asp-action="Add"
-                          method="post"
-                          class="w-full mb-8">
-
-                        <input type="hidden"
-                               name="productId"
-                               value="@Model.Id" />
-
+                    <!-- Save to Wishlist -->
+                    <form asp-controller="Wishlist" asp-action="Add" method="post" class="w-full">
+                        <input type="hidden" name="productId" value="@Model.Id" />
                         <button type="submit"
-                                class="w-full bg-surface border border-outline-variant text-on-surface py-4 font-bold uppercase tracking-widest rounded-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
-
-                            Save to Wishlist
-
-                            <span class="material-symbols-outlined text-[20px]">
-                                favorite_border
-                            </span>
+                                class="w-full bg-surface border border-outline-variant text-on-surface py-3.5 font-bold uppercase tracking-wider text-xs rounded-sm hover:bg-surface-variant hover:border-primary transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">favorite_border</span>
+                            Add to Wishlist
                         </button>
                     </form>
 
-                    <!-- Description and Reviews -->
-                    <div class="border-t border-outline-variant/30 flex flex-col"
-                         id="reviews">
+                    <!-- Gymshark PDP Reassurance Strip -->
+                    <div class="grid grid-cols-2 gap-3 py-4 border-y border-outline-variant/30 text-xs">
+                        <div class="flex items-center gap-2 text-tertiary">
+                            <span class="material-symbols-outlined text-primary text-[20px]">local_shipping</span>
+                            <span>Free Express Delivery over $75</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-tertiary">
+                            <span class="material-symbols-outlined text-primary text-[20px]">cycle</span>
+                            <span>Free 30-Day Returns</span>
+                        </div>
+                    </div>
 
-                        <!-- Description -->
-                        <div class="border-b border-outline-variant/30">
+                    <!-- Collapsible Accordions (Description & Reviews) -->
+                    <div class="flex flex-col border-b border-outline-variant/30" id="reviews">
 
-                            <button type="button"
-                                    class="accordion-toggle w-full flex items-center justify-between py-5 focus:outline-none group">
-
-                                <span class="text-sm font-bold uppercase tracking-widest text-on-surface group-hover:text-primary transition-colors">
-                                    Description
+                        <!-- Accordion: Description -->
+                        <div class="border-t border-outline-variant/30">
+                            <button type="button" class="accordion-toggle w-full flex items-center justify-between py-4 focus:outline-none group">
+                                <span class="text-xs font-bold uppercase tracking-widest text-on-surface group-hover:text-primary transition-colors">
+                                    Description &amp; Fit
                                 </span>
-
                                 <span class="material-symbols-outlined text-tertiary group-hover:text-primary transition-colors accordion-icon">
                                     remove
                                 </span>
                             </button>
-
-                            <div class="accordion-content pb-5 text-tertiary-fixed-dim text-sm leading-relaxed block">
-
+                            <div class="accordion-content pb-5 text-tertiary text-sm leading-relaxed block">
                                 @if (!string.IsNullOrWhiteSpace(Model.Description))
                                 {
                                     @Html.Raw(Model.Description)
                                 }
                                 else
                                 {
-                                    <p>
-                                        Engineered for maximum performance and durability.
-                                    </p>
+                                    <p>Engineered for relentless gym performance and uncompromised comfort. Designed with sweat-wicking materials and four-way stretch construction.</p>
                                 }
                             </div>
                         </div>
 
-                        <!-- Reviews -->
-                        <div class="border-b border-outline-variant/30">
-
-                            <button type="button"
-                                    class="accordion-toggle w-full flex items-center justify-between py-5 focus:outline-none group">
-
-                                <span class="text-sm font-bold uppercase tracking-widest text-on-surface group-hover:text-primary transition-colors">
+                        <!-- Accordion: Reviews -->
+                        <div class="border-t border-outline-variant/30">
+                            <button type="button" class="accordion-toggle w-full flex items-center justify-between py-4 focus:outline-none group">
+                                <span class="text-xs font-bold uppercase tracking-widest text-on-surface group-hover:text-primary transition-colors">
                                     Reviews (@Model.ReviewCount)
                                 </span>
-
                                 <span class="material-symbols-outlined text-tertiary group-hover:text-primary transition-colors accordion-icon">
                                     add
                                 </span>
                             </button>
-
-                            <div class="accordion-content pb-5 text-tertiary-fixed-dim text-sm leading-relaxed hidden">
+                            <div class="accordion-content pb-5 text-tertiary text-sm leading-relaxed hidden">
 
                                 <!-- Published Reviews -->
                                 @if (Model.Reviews != null && Model.Reviews.Any())
                                 {
-                                    <div class="flex flex-col gap-5 mb-6">
-
+                                    <div class="flex flex-col gap-4 mb-6">
                                         @foreach (var review in Model.Reviews)
                                         {
-                                            <div class="border-b border-outline-variant pb-5 last:border-0 last:pb-0">
-
-                                                <div class="flex justify-between items-start mb-2">
-
-                                                    <p class="font-body-md text-on-surface font-medium">
-                                                        @review.UserFullName
-                                                    </p>
-
-                                                    <div class="flex items-center text-primary-container">
+                                            <div class="border-b border-outline-variant/40 pb-4 last:border-0 last:pb-0">
+                                                <div class="flex justify-between items-start mb-1">
+                                                    <p class="text-on-surface font-bold text-sm">@review.UserFullName</p>
+                                                    <div class="flex items-center text-primary">
                                                         @for (int i = 1; i <= 5; i++)
                                                         {
-                                                            <span class="material-symbols-outlined text-[14px]"
-                                                                  style="font-variation-settings: 'FILL' @(i <= review.Rating ? 1 : 0);">
+                                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' @(i <= review.Rating ? 1 : 0);">
                                                                 star
                                                             </span>
                                                         }
                                                     </div>
                                                 </div>
-
-                                                <p class="font-body-md text-sm text-tertiary mb-2">
-                                                    @review.CreatedAt.ToString("MMM d, yyyy")
-                                                </p>
-
-                                                <p class="font-body-md text-body-md text-on-surface">
-                                                    @review.Text
-                                                </p>
+                                                <p class="text-xs text-tertiary mb-2">@review.CreatedAt.ToString("MMM d, yyyy")</p>
+                                                <p class="text-on-surface text-sm">@review.Text</p>
                                             </div>
                                         }
                                     </div>
                                 }
                                 else
                                 {
-                                    <p class="mb-4">
-                                        No reviews yet. Be the first to review this gear.
-                                    </p>
+                                    <p class="mb-4 text-xs text-tertiary">No reviews yet. Be the first verified athlete to review this gear.</p>
                                 }
 
-                                <!-- Add Review -->
+                                <!-- Add Review Section -->
                                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                                 {
                                     @if (Model.IsEligibleToReview)
                                     {
-                                        <form asp-controller="Comment"
-                                              asp-action="Add"
-                                              method="post"
-                                              class="bg-surface-container-low border border-outline-variant rounded-sm p-4 mt-4">
+                                        <form asp-controller="Comment" asp-action="Add" method="post" class="bg-surface-container-low border border-outline-variant rounded-sm p-4 mt-2">
+                                            <input type="hidden" name="ProductId" value="@Model.Id" />
 
-                                            <input type="hidden"
-                                                   name="ProductId"
-                                                   value="@Model.Id" />
-
-                                            <div class="mb-4">
-
-                                                <label class="font-label-caps text-label-caps text-tertiary mb-2 block">
-                                                    YOUR RATING
+                                            <div class="mb-3">
+                                                <label class="text-xs font-bold uppercase tracking-wider text-tertiary mb-1.5 block">
+                                                    Your Rating
                                                 </label>
-
-                                                <div class="star-rating"
-                                                     role="radiogroup"
-                                                     aria-label="Choose your rating">
-
+                                                <div class="star-rating" role="radiogroup" aria-label="Choose your rating">
                                                     @for (int rating = 5; rating >= 1; rating--)
                                                     {
-                                                        <input type="radio"
-                                                               id="rating@rating"
-                                                               name="Rating"
-                                                               value="@rating"
-                                                               required="@(rating == 5 ? "required" : null)" />
-
-                                                        <label for="rating@rating"
-                                                               title="@rating star rating"
-                                                               aria-label="@rating stars">
-                                                            ★
-                                                        </label>
+                                                        <input type="radio" id="rating@rating" name="Rating" value="@rating" required="@(rating == 5 ? "required" : null)" />
+                                                        <label for="rating@rating" title="@rating star rating" aria-label="@rating stars">★</label>
                                                     }
                                                 </div>
                                             </div>
 
-                                            <label class="font-label-caps text-label-caps text-tertiary mb-2 block">
-                                                YOUR REVIEW
+                                            <label class="text-xs font-bold uppercase tracking-wider text-tertiary mb-1.5 block">
+                                                Your Review
                                             </label>
+                                            <textarea name="Text" class="w-full bg-surface text-on-surface border border-outline-variant p-3 rounded-sm text-sm mb-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none" rows="3" maxlength="1000" placeholder="Share your experience..." required></textarea>
 
-                                            <textarea name="Text"
-                                                      class="input-field w-full bg-surface text-on-surface border border-outline-variant p-2 rounded-sm mb-3 focus:ring-primary focus:border-primary"
-                                                      rows="3"
-                                                      maxlength="1000"
-                                                      placeholder="Share your thoughts..."
-                                                      required></textarea>
-
-                                            <button type="submit"
-                                                    class="w-full bg-primary-container text-on-primary font-label-caps text-label-caps px-6 py-3 rounded-sm hover:opacity-90 transition-opacity">
-                                                SUBMIT REVIEW
+                                            <button type="submit" class="w-full bg-primary text-on-primary py-3 font-bold uppercase tracking-widest text-xs rounded-sm hover:bg-primary/90 transition-colors">
+                                                Submit Review
                                             </button>
-
-                                            <p class="font-label-caps text-label-caps text-tertiary mt-2">
-                                                Reviews are published after admin approval.
-                                            </p>
+                                            <p class="text-[11px] text-tertiary mt-2 text-center">Reviews are published after admin approval.</p>
                                         </form>
                                     }
                                     else
                                     {
-                                        <div class="bg-surface-container-low border border-outline-variant/60 rounded-sm p-5 mt-4 text-center">
-                                            <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2.5">
-                                                <span class="material-symbols-outlined text-[22px]">verified</span>
+                                        <div class="bg-surface-container-low border border-outline-variant/60 rounded-sm p-4 mt-2 text-center">
+                                            <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2">
+                                                <span class="material-symbols-outlined text-[18px]">verified</span>
                                             </div>
-                                            <p class="text-on-surface text-sm font-semibold mb-1">Verified Purchase Required</p>
-                                            <p class="text-tertiary text-xs md:text-sm">
+                                            <p class="text-on-surface text-xs font-bold mb-1">Verified Purchase Required</p>
+                                            <p class="text-tertiary text-xs">
                                                 Only verified buyers who have purchased and received this product can leave a review.
                                             </p>
                                         </div>
@@ -438,25 +310,19 @@
                                 }
                                 else
                                 {
-                                    <div class="bg-surface-container-low border border-outline-variant rounded-sm p-4 text-center mt-4">
-
-                                        <p class="text-on-surface text-sm">
-
-                                            <a asp-controller="Account"
-                                               asp-action="Login"
-                                               class="text-primary-container font-bold hover:underline">
-                                                Sign in
-                                            </a>
-
-                                            to leave a review.
+                                    <div class="bg-surface-container-low border border-outline-variant rounded-sm p-4 text-center mt-2">
+                                        <p class="text-on-surface text-xs">
+                                            <a asp-controller="Account" asp-action="Login" class="text-primary font-bold hover:underline">Sign in</a> to leave a review.
                                         </p>
                                     </div>
                                 }
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -468,206 +334,100 @@
         justify-content: flex-end;
         gap: 5px;
     }
-
-        .star-rating input {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .star-rating label {
-            margin: 0;
-            color: #c9cdd2;
-            font-size: 36px;
-            line-height: 1;
-            cursor: pointer;
-            user-select: none;
-            transition: color 0.2s ease, transform 0.2s ease;
-        }
-
-            .star-rating label:hover,
-            .star-rating label:hover ~ label,
-            .star-rating input:checked ~ label {
-                color: #f4b400;
-            }
-
-            .star-rating label:hover {
-                transform: scale(1.12);
-            }
-
-        .star-rating input:focus-visible + label {
-            outline: 2px solid #f4b400;
-            outline-offset: 3px;
-            border-radius: 2px;
-        }
+    .star-rating input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .star-rating label {
+        margin: 0;
+        color: #c9cdd2;
+        font-size: 28px;
+        line-height: 1;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+        color: #f4b400;
+    }
+    .star-rating label:hover {
+        transform: scale(1.12);
+    }
+    .star-rating input:focus-visible + label {
+        outline: 2px solid #f4b400;
+        outline-offset: 3px;
+        border-radius: 2px;
+    }
 </style>
 
 @section Scripts {
     <script>
-        // Change Main Product Image
-        function changeProductImage(imagePath, button) {
-            const mainImage =
-                document.getElementById("mainProductImage");
-
-            if (mainImage) {
-                mainImage.src = imagePath;
-            }
-
-            document.querySelectorAll(".product-thumbnail")
-                .forEach(function(thumbnail) {
-                    thumbnail.classList.remove(
-                        "border-primary",
-                        "ring-2",
-                        "ring-primary"
-                    );
-
-                    thumbnail.classList.add(
-                        "border-outline-variant"
-                    );
-                });
-
-            button.classList.remove(
-                "border-outline-variant"
-            );
-
-            button.classList.add(
-                "border-primary",
-                "ring-2",
-                "ring-primary"
-            );
-        }
-
         // Size Selection
         function selectSize(button) {
-            document.querySelectorAll(".size-btn")
-                .forEach(function(sizeButton) {
-                    sizeButton.classList.remove(
-                        "border-on-surface",
-                        "bg-on-surface",
-                        "text-on-primary"
-                    );
+            document.querySelectorAll(".size-btn").forEach(function (sizeButton) {
+                sizeButton.classList.remove("border-primary", "bg-primary", "text-on-primary");
+                sizeButton.classList.add("border-outline-variant", "text-on-surface");
+                sizeButton.removeAttribute("data-selected");
+            });
 
-                    sizeButton.classList.add(
-                        "border-outline-variant",
-                        "text-on-surface"
-                    );
-
-                    sizeButton.removeAttribute("data-selected");
-                });
-
-            button.classList.remove(
-                "border-outline-variant",
-                "text-on-surface"
-            );
-
-            button.classList.add(
-                "border-on-surface",
-                "bg-on-surface",
-                "text-on-primary"
-            );
-
+            button.classList.remove("border-outline-variant", "text-on-surface");
+            button.classList.add("border-primary", "bg-primary", "text-on-primary");
             button.setAttribute("data-selected", "true");
 
-            const hiddenInput =
-                document.getElementById("selectedSizeInput");
-
+            const hiddenInput = document.getElementById("selectedSizeInput");
             if (hiddenInput) {
-                hiddenInput.value =
-                    button.textContent.trim();
+                hiddenInput.value = button.textContent.trim();
             }
         }
 
-        // Quantity
+        // Quantity controls
         function incrementQty() {
-            const input =
-                document.getElementById("quantity");
-
-            if (!input) {
-                return;
-            }
-
-            const currentValue =
-                parseInt(input.value) || 1;
-
-            const maximumValue =
-                parseInt(input.max) || currentValue + 1;
-
+            const input = document.getElementById("quantity");
+            if (!input) return;
+            const currentValue = parseInt(input.value) || 1;
+            const maximumValue = parseInt(input.max) || currentValue + 1;
             if (currentValue < maximumValue) {
                 input.value = currentValue + 1;
             }
         }
 
         function decrementQty() {
-            const input =
-                document.getElementById("quantity");
-
-            if (!input) {
-                return;
-            }
-
-            const currentValue =
-                parseInt(input.value) || 1;
-
+            const input = document.getElementById("quantity");
+            if (!input) return;
+            const currentValue = parseInt(input.value) || 1;
             if (currentValue > 1) {
                 input.value = currentValue - 1;
             }
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-
-            // Default Size
-            const selectedSize =
-                document.querySelector(
-                    '.size-btn[data-selected="true"]'
-                );
-
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initial selected size
+            const selectedSize = document.querySelector('.size-btn[data-selected="true"]');
             if (selectedSize) {
-                selectedSize.classList.remove(
-                    "border-outline-variant",
-                    "text-on-surface"
-                );
-
-                selectedSize.classList.add(
-                    "border-on-surface",
-                    "bg-on-surface",
-                    "text-on-primary"
-                );
+                selectedSize.classList.remove("border-outline-variant", "text-on-surface");
+                selectedSize.classList.add("border-primary", "bg-primary", "text-on-primary");
             }
 
-            // Accordion
-            const toggles =
-                document.querySelectorAll(
-                    ".accordion-toggle"
-                );
-
-            toggles.forEach(function(toggle) {
-                toggle.addEventListener("click", function() {
-
-                    const content =
-                        toggle.nextElementSibling;
-
-                    const icon =
-                        toggle.querySelector(
-                            ".accordion-icon"
-                        );
+            // Accordion toggles
+            const toggles = document.querySelectorAll(".accordion-toggle");
+            toggles.forEach(function (toggle) {
+                toggle.addEventListener("click", function () {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector(".accordion-icon");
 
                     if (content.classList.contains("hidden")) {
                         content.classList.remove("hidden");
                         content.classList.add("block");
-
-                        if (icon) {
-                            icon.textContent = "remove";
-                        }
-                    }
-                    else {
+                        if (icon) icon.textContent = "remove";
+                    } else {
                         content.classList.remove("block");
                         content.classList.add("hidden");
-
-                        if (icon) {
-                            icon.textContent = "add";
-                        }
+                        if (icon) icon.textContent = "add";
                     }
                 });
             });
